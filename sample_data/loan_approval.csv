@@ -1,0 +1,1006 @@
+age,salary,credit_score,years_employed,existing_loans,city,education,marital_status,loan_approved
+25 years,92292,731.0,36.0,3.0,Houston,Master,Married,0
+69,50k,698.0,20.0,4.0,NYC,PhD,Single,0
+46,34158,643.0,17.0,4.0, NYC ,High School,Divorced,1
+32,92680,???,4.0,1.0,LA,Bachelor,Married,1
+60,50309,486.0,2.0,3.0,LA,bachelor,Divorced,1
+25,36970,360.0,22.0,0.0,NYC,High School,Single,0
+78,102474,679.0,25.0,2.0,Phoenix,Bachelor,Married,1
+38,116704,739.0,36.0,1.0,LA,Master,Divorced,1
+56,76540,618.0,23.0,2.0,Phoenix,Bachelor,Married,0
+75,50384,601.0,18.0,0.0,LA,Master,Married,1
+36,48017,643.0,24.0,0.0,Phoenix,Master,Married,0
+40,105880,310.0,20.0,4.0,Chicago,PhD,Divorced,1
+28,135570,361.0,11.0,0.0,Phoenix,PhD,Single,1
+28,38702,525.0,32.0,2.0,Phoenix,Bachelor,Married,0
+41,30384,452.0,3.0,3.0,NYC,High School,Single,0
+70,30404,609.0,6.0,3.0,Chicago,Bachelor,Single,0
+53,70943,542.0,21.0,4.0,Houston,Master,Divorced,0
+57,77926,792.0,32.0,2.0,NYC,PhD,Divorced,1
+41,59189,665.0,16.0,2.0,Houston,Bachelor,Single,1
+20,42763,629.0,23.0,0.0,LA,Bachelor,Married,0
+39,48384,406.0,33.0,2.0,Houston,PhD,Divorced,0
+70,90100,525.0,27.0,1.0,Phoenix,PhD,Married,1
+19,128142,517.0,38.0,0.0,Houston,PhD,Married,1
+41,39860,805.0,,1.0,NYC,Master,Married,0
+61,134293,558.0,16.0,4.0,NYC,PhD,Single,0
+47,110642,816.0,33.0,,Houston,High School,Married,1
+55,80612,353.0,5.0,4.0,NYC,Bachelor,Single,0
+19,53574,346.0,5.0,3.0,NYC,PhD,Single,0
+77,53524,820.0,33.0,4.0,Houston,PhD,Married,1
+38,99172,398.0,0.0,2.0,Chicago,Master,Married,1
+50,40916,319.0,9.0,1.0,Chicago,Master,Married,1
+29,34809,789.0,20.0,3.0,LA,Bachelor,Married,1
+75,62201,718.0,4.0,0.0,NYC,High School,Single,1
+39,83330,361.0,1.0,1.0,Houston,Bachelor,Married,0
+78,43456,444.0,21.0,0.0,NYC,PhD,Married,1
+61,143748,515.0,1.0,1.0,Phoenix,High School,Single,0
+42,86397,302.0,9.0,1.0,NYC,High School,Divorced,0
+66,68765,459.0,33.0,4.0,NYC,High School,Divorced,1
+44,64816,419.0,15.0,3.0,Chicago,High School,Single,1
+76,75106,388.0,38.0,3.0,Houston,Bachelor,Divorced,1
+59,83932,628.0,21.0,1.0,NYC,Master,Single,1
+45,47100,656.0,11.0,,Chicago,Master,Married,0
+77,87091,,23.0,2.0,LA,PhD,Married,0
+33,51949,622.0,39.0,0.0,Chicago,Master,Divorced,1
+32,100080,840.0,37.0,0.0,Chicago,Master,Married,1
+79,67744,494.0,9.0,4.0,Chicago,Master,Divorced,1
+79,75543,631.0,34.0,1.0,NYC,Master,Divorced,1
+64,138319,469.0,31.0,0.0,NYC,PhD,Married,1
+79,122193,820.0,6.0,0.0,LA,Bachelor,Married,1
+68,66187,762.0,20.0,1.0,Phoenix,High School,Divorced,0
+61,142734,,19.0,4.0,Phoenix,Master,Married,1
+72,37239,836.0,25.0,0.0,Phoenix,Bachelor,Single,1
+69,44489,560.0,3.0,4.0,LA,Master,Married,0
+74,144937,694.0,21.0,3.0,Phoenix,Master,Married,1
+20,88017,525.0,14.0,4.0,Phoenix,High School,Single,0
+54,91877,,39.0,,Chicago,High School,Married,1
+68,73125,,20.0,2.0,NYC,High School,Married,0
+24,79922,627.0,14.0,4.0,NYC,Master,Divorced,1
+38,124074,550.0,21.0,2.0,Chicago,Master,Married,0
+26,62049,475.0,27.0,3.0,Chicago,Master,Married,1
+56,67131,753.0,13.0,1.0,Chicago,High School,Single,0
+35,72944,336.0,26.0,2.0,NYC,PhD,Divorced,0
+21,145765,615.0,39.0,2.0,Phoenix,Bachelor,Divorced,1
+42,103963,413.0,27.0,4.0,Chicago,PhD,Divorced,1
+77,136884,,25.0,3.0,LA,Master,Married,0
+31,54285,600.0,1.0,1.0,Chicago,Master,Divorced,0
+67,67626,523.0,24.0,4.0,Houston,PhD,Single,1
+75,72808,617.0,2.0,4.0,Chicago,Master,Divorced,1
+26,118464,648.0,7.0,3.0,NYC,Bachelor,Single,1
+43,83871,414.0,32.0,1.0,Chicago,Master,Divorced,0
+70,49198,,34.0,3.0,Houston,Bachelor,Divorced,1
+19,49758,339.0,5.0,1.0,LA,PhD,Single,0
+37,45254,339.0,38.0,3.0,Phoenix,PhD,Divorced,0
+45,74238,588.0,22.0,4.0,Chicago,Master,Divorced,1
+64,31252,561.0,24.0,4.0,Houston,Bachelor,Divorced,1
+77,69764,515.0,18.0,0.0,Houston,Master,Married,1
+24,107709,446.0,4.0,2.0,LA,High School,Single,0
+61,67441,635.0,10.0,3.0,NYC,High School,Divorced,1
+78,122234,467.0,11.0,0.0,Chicago,High School,Single,1
+25,83682,391.0,9.0,2.0,Houston,High School,Single,1
+64,89494,652.0,7.0,3.0,LA,Master,Single,0
+52,111317,662.0,,1.0,Phoenix,High School,Divorced,0
+31,95215,644.0,27.0,2.0,Houston,Bachelor,Divorced,1
+34,108587,,35.0,4.0,LA,PhD,Single,1
+53,135185,655.0,36.0,0.0,NYC,PhD,Married,0
+67,36949,490.0,20.0,2.0,NYC,High School,Single,1
+57,137825,721.0,7.0,2.0,Houston,High School,Married,0
+21,85393,306.0,,4.0,Houston,High School,Single,1
+19,103553,432.0,14.0,3.0,Chicago,Master,Single,0
+79,36941,330.0,39.0,1.0,LA,PhD,Single,1
+23,55934,834.0,17.0,4.0,Houston,High School,Divorced,1
+71,53386,725.0,19.0,1.0,Chicago,Bachelor,Married,0
+59,91886,693.0,5.0,3.0,Chicago,High School,Married,1
+21,105745,662.0,11.0,2.0,Houston,PhD,Single,1
+71,113251,736.0,1.0,1.0,NYC,High School,Divorced,1
+46,124456,381.0,6.0,0.0,LA,PhD,Divorced,1
+35,83413,655.0,15.0,0.0,LA,High School,Married,0
+43,86800,557.0,2.0,4.0,NYC,Bachelor,Divorced,0
+61,127239,823.0,2.0,3.0,Houston,High School,Married,0
+51,72318,594.0,26.0,4.0,LA,Bachelor,Married,0
+27,149803,523.0,39.0,4.0,Houston,Bachelor,Married,0
+79,100173,824.0,37.0,4.0,Houston,High School,Divorced,0
+53,100390,345.0,32.0,0.0,Chicago,Bachelor,Married,1
+31,82329,412.0,27.0,0.0,NYC,Master,Married,1
+48,73088,532.0,0.0,4.0,Houston,High School,Single,0
+65,146868,,7.0,,Phoenix,High School,Married,0
+32,133196,659.0,36.0,3.0,NYC,Bachelor,Married,1
+25,69811,522.0,31.0,4.0,LA,Bachelor,Single,0
+31,144825,747.0,36.0,0.0,Chicago,High School,Single,0
+40,85479,664.0,3.0,1.0,LA,Master,Divorced,0
+77,115392,625.0,29.0,4.0,LA,Bachelor,Married,1
+74,117369,766.0,5.0,4.0,NYC,Bachelor,Divorced,1
+79,147520,713.0,18.0,3.0,LA,PhD,Divorced,1
+57,49963,754.0,31.0,2.0,Houston,Master,Single,1
+38,85123,532.0,8.0,2.0,LA,Master,Divorced,1
+33,132468,523.0,11.0,3.0,Chicago,High School,Married,1
+62,122705,711.0,10.0,3.0,Chicago,Master,Single,1
+35,103477,634.0,15.0,3.0,Phoenix,High School,Married,1
+64,44388,521.0,0.0,2.0,Chicago,PhD,Married,0
+70,35569,336.0,20.0,3.0,LA,Master,Single,0
+41,99836,577.0,29.0,0.0,Chicago,Bachelor,Married,1
+43,134573,495.0,12.0,4.0,NYC,PhD,Single,1
+42,66586,783.0,33.0,4.0,Chicago,High School,Married,1
+77,42015,541.0,3.0,1.0,Houston,PhD,Single,1
+77,75002,623.0,27.0,1.0,NYC,High School,Divorced,1
+77,146594,491.0,37.0,4.0,Phoenix,PhD,Married,0
+62,36254,316.0,30.0,0.0,Houston,High School,Single,1
+58,47144,,26.0,2.0,LA,Master,Married,1
+46,54214,700.0,4.0,2.0,LA,Bachelor,Married,1
+32,135654,321.0,24.0,,LA,High School,Married,1
+62,110719,773.0,2.0,2.0,Houston,PhD,Single,1
+18,101774,419.0,32.0,3.0,Houston,High School,Divorced,0
+42,36090,,3.0,4.0,Houston,High School,Divorced,1
+24,41637,605.0,24.0,4.0,NYC,High School,Divorced,0
+26,52415,569.0,19.0,0.0,NYC,PhD,Single,1
+41,54071,584.0,33.0,2.0,LA,Bachelor,Divorced,1
+18,88243,526.0,25.0,1.0,Chicago,Master,Single,1
+61,140951,,4.0,,LA,Bachelor,Married,1
+25,138215,759.0,34.0,2.0,Phoenix,High School,Married,1
+41,71240,306.0,27.0,1.0,NYC,PhD,Divorced,1
+28,113807,,28.0,0.0,Houston,Bachelor,Single,0
+68,131570,332.0,8.0,0.0,NYC,High School,Married,1
+34,63434,378.0,37.0,2.0,Houston,Master,Single,1
+25,99724,758.0,5.0,1.0,Phoenix,Master,Single,1
+52,145359,837.0,18.0,0.0,Phoenix,Master,Married,0
+52,105697,,10.0,0.0,NYC,High School,Single,1
+50,58732,729.0,1.0,3.0,Houston,PhD,Married,1
+76,41314,584.0,,3.0,Phoenix,Bachelor,Married,0
+22,53954,815.0,,0.0,LA,Master,Married,0
+59,87108,398.0,23.0,2.0,LA,High School,Single,0
+56,117044,696.0,33.0,4.0,Houston,High School,Married,1
+75,117505,788.0,21.0,4.0,NYC,Bachelor,Single,1
+58,141195,338.0,2.0,0.0,Phoenix,Master,Married,1
+45,133081,570.0,11.0,0.0,NYC,High School,Married,0
+24,66668,456.0,27.0,0.0,LA,Bachelor,Divorced,1
+26,53061,374.0,29.0,2.0,Phoenix,PhD,Divorced,0
+25,109252,429.0,25.0,3.0,NYC,PhD,Divorced,1
+29,69749,383.0,20.0,0.0,Chicago,PhD,Single,1
+51,134680,321.0,27.0,0.0,Houston,Master,Single,0
+50,46907,758.0,25.0,1.0,Houston,Bachelor,Married,1
+65,48777,838.0,32.0,2.0,Chicago,Bachelor,Married,0
+72,123229,681.0,20.0,0.0,LA,High School,Married,1
+40,81745,739.0,,1.0,Phoenix,High School,Married,1
+79,138464,320.0,33.0,4.0,Houston,High School,Single,1
+41,121865,602.0,,0.0,Chicago,Bachelor,Married,0
+54,142428,383.0,10.0,0.0,Chicago,High School,Married,0
+52,111818,752.0,22.0,1.0,LA,Bachelor,Divorced,1
+61,53624,686.0,21.0,2.0,LA,Bachelor,Married,0
+57,53321,806.0,16.0,0.0,NYC,PhD,Married,1
+39,40488,,4.0,4.0,Houston,High School,Married,1
+44,52574,826.0,10.0,0.0,NYC,PhD,Single,0
+52,35240,461.0,29.0,4.0,Chicago,Master,Divorced,0
+18,73221,462.0,14.0,3.0,Phoenix,Master,Married,1
+52,40478,823.0,26.0,3.0,Phoenix,Master,Married,1
+54,85645,570.0,34.0,4.0,LA,Bachelor,Divorced,1
+64,140698,,32.0,2.0,Phoenix,Bachelor,Married,1
+31,49262,507.0,19.0,0.0,Phoenix,Bachelor,Single,1
+20,148831,838.0,15.0,0.0,Phoenix,High School,Married,0
+18,82796,359.0,33.0,3.0,Chicago,PhD,Single,1
+22,34432,729.0,1.0,4.0,Phoenix,Bachelor,Single,1
+43,125257,608.0,34.0,0.0,Phoenix,PhD,Married,0
+72,94291,819.0,39.0,0.0,Phoenix,PhD,Divorced,0
+31,109104,326.0,27.0,2.0,NYC,PhD,Single,0
+56,89399,,38.0,1.0,Chicago,High School,Divorced,0
+44,109714,686.0,5.0,3.0,LA,High School,Married,1
+26,80428,648.0,8.0,3.0,NYC,Master,Single,1
+32,117731,835.0,19.0,,Houston,Master,Married,0
+32,30302,677.0,0.0,0.0,Chicago,PhD,Divorced,0
+43,112558,826.0,7.0,2.0,Chicago,Master,Married,1
+59,30055,452.0,22.0,2.0,Houston,PhD,Married,1
+77,141317,505.0,2.0,3.0,Houston,High School,Single,1
+30,38717,754.0,3.0,2.0,Houston,High School,Married,0
+68,58699,,24.0,1.0,LA,High School,Married,1
+49,103686,535.0,37.0,0.0,Phoenix,Bachelor,Married,1
+56,97661,820.0,14.0,1.0,Chicago,PhD,Single,0
+66,74247,800.0,20.0,4.0,Phoenix,High School,Divorced,0
+69,144049,416.0,34.0,3.0,Phoenix,PhD,Divorced,0
+78,46748,,13.0,2.0,Houston,Master,Married,0
+49,135113,643.0,35.0,4.0,LA,Master,Single,1
+21,34621,694.0,11.0,2.0,NYC,High School,Married,1
+47,45034,363.0,16.0,0.0,LA,PhD,Divorced,1
+54,141927,371.0,38.0,0.0,Phoenix,High School,Single,1
+40,35126,,8.0,0.0,LA,Master,Divorced,1
+56,35122,619.0,34.0,2.0,Houston,High School,Divorced,1
+62,48030,637.0,12.0,4.0,NYC,PhD,Single,1
+32,112838,665.0,14.0,0.0,Houston,Master,Single,0
+60,114717,794.0,17.0,4.0,NYC,Bachelor,Married,1
+46,85658,465.0,,2.0,Phoenix,Master,Married,1
+53,68638,843.0,5.0,4.0,NYC,Bachelor,Divorced,0
+30,97067,310.0,26.0,2.0,NYC,High School,Single,1
+49,136476,600.0,22.0,2.0,NYC,High School,Single,1
+24,148033,401.0,26.0,3.0,LA,PhD,Married,1
+76,135977,724.0,,2.0,LA,Bachelor,Divorced,1
+68,118869,691.0,37.0,2.0,Phoenix,High School,Divorced,1
+39,135186,513.0,13.0,1.0,NYC,Bachelor,Married,1
+45,64674,387.0,35.0,0.0,Chicago,High School,Single,1
+19,65854,700.0,7.0,3.0,Phoenix,Master,Married,1
+59,76271,345.0,34.0,3.0,NYC,High School,Married,1
+62,103688,762.0,18.0,3.0,NYC,PhD,Married,1
+79,68518,609.0,29.0,1.0,LA,Master,Married,1
+74,141076,385.0,13.0,2.0,Phoenix,PhD,Single,1
+70,40267,391.0,19.0,0.0,NYC,Master,Married,1
+23,120825,541.0,24.0,4.0,NYC,Bachelor,Single,0
+45,31062,301.0,39.0,2.0,Phoenix,PhD,Married,0
+45,146664,524.0,23.0,1.0,Chicago,High School,Divorced,0
+61,80448,415.0,13.0,2.0,Phoenix,Bachelor,Single,1
+61,125462,402.0,25.0,2.0,Phoenix,High School,Divorced,0
+37,36229,493.0,37.0,1.0,Chicago,Master,Married,0
+47,86793,465.0,22.0,3.0,Phoenix,Master,Married,1
+79,144813,,21.0,3.0,NYC,High School,Married,0
+28,77915,421.0,18.0,0.0,Phoenix,High School,Single,1
+75,34632,442.0,2.0,0.0,Chicago,Bachelor,Divorced,0
+72,134592,405.0,18.0,3.0,Houston,High School,Single,1
+45,33596,727.0,8.0,4.0,Phoenix,PhD,Single,1
+42,139779,604.0,27.0,2.0,LA,PhD,Married,1
+56,36168,616.0,19.0,4.0,NYC,High School,Divorced,1
+79,138099,308.0,6.0,2.0,NYC,PhD,Married,1
+50,37561,372.0,13.0,3.0,LA,High School,Single,0
+18,103794,658.0,8.0,0.0,LA,Bachelor,Married,0
+74,112152,522.0,18.0,0.0,Phoenix,PhD,Divorced,0
+44,56734,715.0,13.0,4.0,LA,PhD,Married,1
+79,36371,669.0,37.0,0.0,Houston,High School,Divorced,1
+74,148894,563.0,35.0,3.0,Chicago,PhD,Divorced,1
+69,56069,617.0,39.0,4.0,LA,Master,Married,0
+30,109905,383.0,16.0,2.0,LA,Bachelor,Single,1
+58,42910,,29.0,0.0,Houston,Bachelor,Married,1
+20,103479,410.0,8.0,1.0,NYC,PhD,Single,1
+56,107735,550.0,32.0,0.0,NYC,PhD,Single,1
+23,111264,682.0,24.0,2.0,Phoenix,Master,Married,0
+25,53275,306.0,13.0,4.0,Houston,Master,Single,1
+44,102274,758.0,10.0,2.0,Chicago,PhD,Single,1
+26,111449,383.0,34.0,1.0,Chicago,PhD,Married,0
+79,130776,,13.0,,Houston,Master,Married,0
+54,90004,689.0,29.0,0.0,Chicago,High School,Married,1
+50,92981,613.0,3.0,4.0,NYC,Master,Single,1
+68,114659,321.0,3.0,3.0,Chicago,High School,Divorced,1
+59,84553,709.0,27.0,2.0,Chicago,Bachelor,Single,0
+61,78447,814.0,7.0,4.0,Houston,Bachelor,Divorced,1
+41,64529,426.0,1.0,3.0,Houston,Master,Married,1
+32,105703,313.0,21.0,4.0,Chicago,High School,Divorced,1
+76,106090,311.0,15.0,1.0,LA,Master,Married,1
+71,47260,386.0,28.0,1.0,Houston,Master,Married,0
+49,142581,823.0,29.0,0.0,Phoenix,High School,Divorced,1
+49,33812,836.0,11.0,0.0,Phoenix,Master,Married,1
+41,58024,600.0,34.0,1.0,NYC,Bachelor,Divorced,1
+58,88656,542.0,10.0,4.0,Chicago,PhD,Married,1
+69,146148,421.0,20.0,1.0,LA,PhD,Single,1
+66,57285,,20.0,0.0,NYC,Master,Single,1
+79,122436,655.0,4.0,1.0,Chicago,High School,Married,1
+66,146421,608.0,,1.0,Houston,High School,Married,1
+75,31605,,36.0,4.0,Phoenix,Bachelor,Divorced,1
+69,101158,606.0,2.0,3.0,LA,High School,Single,1
+29,102303,848.0,32.0,0.0,Phoenix,High School,Divorced,1
+79,57139,651.0,8.0,4.0,Houston,Bachelor,Married,1
+56,107149,611.0,8.0,1.0,Chicago,Master,Married,0
+19,86138,358.0,3.0,1.0,Houston,PhD,Divorced,1
+20,148205,334.0,34.0,3.0,Houston,Bachelor,Married,0
+66,106125,744.0,16.0,0.0,Phoenix,Master,Single,1
+54,43918,392.0,33.0,0.0,LA,Bachelor,Divorced,0
+66,115655,506.0,23.0,2.0,Houston,Master,Single,1
+73,57446,652.0,31.0,0.0,Phoenix,Bachelor,Single,1
+34,43046,631.0,0.0,3.0,LA,Master,Single,1
+76,54818,458.0,7.0,2.0,Chicago,Bachelor,Divorced,1
+66,130894,323.0,22.0,2.0,Chicago,Master,Married,0
+19,145751,703.0,39.0,,NYC,Bachelor,Single,1
+19,34324,815.0,,1.0,Phoenix,PhD,Single,0
+45,106323,,11.0,0.0,LA,PhD,Single,1
+71,39111,681.0,14.0,2.0,Houston,High School,Married,1
+40,68110,831.0,18.0,1.0,Chicago,Master,Married,1
+54,46389,,25.0,3.0,LA,Bachelor,Divorced,0
+49,71427,719.0,28.0,1.0,Phoenix,Master,Married,0
+50,109579,,,1.0,NYC,PhD,Divorced,1
+18,58746,416.0,39.0,2.0,Chicago,Master,Divorced,1
+36,117886,811.0,20.0,2.0,LA,Bachelor,Divorced,1
+79,137141,634.0,37.0,,LA,Master,Divorced,1
+19,30117,717.0,19.0,3.0,LA,Bachelor,Divorced,1
+70,142221,594.0,28.0,2.0,Phoenix,PhD,Single,0
+61,114471,670.0,3.0,0.0,Phoenix,PhD,Married,1
+43,142613,485.0,6.0,3.0,Phoenix,PhD,Single,1
+49,43234,545.0,27.0,3.0,Houston,High School,Divorced,0
+23,133864,567.0,27.0,2.0,LA,PhD,Married,1
+49,83441,,3.0,3.0,Chicago,Master,Single,0
+72,30846,829.0,21.0,2.0,Phoenix,High School,Single,1
+21,40954,320.0,11.0,1.0,Phoenix,PhD,Divorced,0
+72,109239,819.0,2.0,4.0,LA,Master,Single,1
+28,143689,399.0,21.0,1.0,Phoenix,Master,Single,0
+73,76514,777.0,1.0,2.0,Houston,Master,Single,1
+76,118236,597.0,23.0,2.0,Houston,Bachelor,Single,1
+34,127579,825.0,33.0,1.0,Phoenix,High School,Single,1
+55,36469,633.0,26.0,0.0,LA,Master,Divorced,1
+41,60105,301.0,,0.0,LA,Bachelor,Divorced,1
+22,72101,674.0,7.0,0.0,LA,PhD,Single,0
+69,94323,592.0,22.0,2.0,NYC,Master,Divorced,0
+51,121922,,37.0,3.0,Phoenix,Bachelor,Divorced,0
+23,88067,801.0,5.0,2.0,LA,Master,Married,1
+39,79376,,21.0,3.0,Houston,High School,Single,1
+28,75587,313.0,24.0,1.0,Chicago,High School,Divorced,1
+65,66976,803.0,17.0,4.0,Chicago,PhD,Divorced,1
+33,134587,530.0,16.0,3.0,LA,Master,Single,0
+50,97584,383.0,11.0,0.0,Chicago,Bachelor,Married,0
+26,134537,429.0,,2.0,Chicago,PhD,Single,0
+77,108477,444.0,25.0,1.0,NYC,Master,Married,1
+76,140911,,26.0,0.0,Houston,PhD,Single,0
+23,72533,365.0,,1.0,Houston,Bachelor,Single,0
+33,31828,462.0,18.0,4.0,NYC,PhD,Single,1
+46,31917,528.0,0.0,2.0,NYC,PhD,Single,1
+20,50618,560.0,28.0,2.0,Chicago,PhD,Married,0
+37,62254,748.0,34.0,4.0,Phoenix,Master,Married,0
+77,135292,723.0,39.0,2.0,Chicago,Bachelor,Divorced,0
+76,146714,759.0,13.0,3.0,NYC,High School,Single,1
+53,77362,600.0,34.0,1.0,Houston,Master,Married,1
+36,50128,602.0,19.0,0.0,Chicago,High School,Married,0
+43,141281,586.0,12.0,4.0,Phoenix,High School,Married,0
+20,89383,694.0,37.0,3.0,Chicago,Master,Single,1
+36,95545,309.0,7.0,0.0,LA,Master,Divorced,1
+37,112180,569.0,,0.0,Chicago,Bachelor,Married,0
+49,117958,660.0,32.0,4.0,NYC,Bachelor,Single,1
+24,39865,556.0,25.0,3.0,Houston,PhD,Married,0
+69,32219,432.0,38.0,0.0,Houston,High School,Married,1
+58,69809,575.0,20.0,0.0,NYC,Bachelor,Divorced,1
+50,146748,812.0,8.0,3.0,LA,PhD,Married,1
+57,35287,612.0,23.0,2.0,NYC,Bachelor,Married,1
+56,64387,583.0,36.0,0.0,Chicago,Master,Single,1
+35,38512,420.0,16.0,1.0,NYC,Bachelor,Single,1
+57,31342,406.0,23.0,3.0,NYC,High School,Divorced,1
+18,93076,503.0,20.0,0.0,LA,Bachelor,Single,1
+28,138872,464.0,38.0,4.0,Chicago,High School,Single,1
+45,49216,604.0,38.0,1.0,Phoenix,Master,Divorced,1
+74,147512,796.0,12.0,0.0,Phoenix,High School,Married,0
+42,146682,455.0,10.0,1.0,Houston,Bachelor,Divorced,1
+67,123070,666.0,18.0,1.0,NYC,PhD,Single,1
+40,109767,550.0,10.0,2.0,Houston,Master,Divorced,1
+48,127829,633.0,12.0,1.0,LA,Bachelor,Married,0
+47,56614,810.0,0.0,2.0,Phoenix,Master,Divorced,1
+59,66258,592.0,39.0,3.0,NYC,Master,Single,1
+52,123789,319.0,18.0,2.0,LA,Bachelor,Single,0
+24,72078,581.0,11.0,4.0,LA,Bachelor,Divorced,1
+77,136288,300.0,7.0,0.0,NYC,PhD,Married,0
+33,113524,418.0,7.0,3.0,LA,Master,Divorced,0
+43,126573,334.0,11.0,3.0,NYC,Master,Married,1
+65,42219,497.0,32.0,4.0,NYC,Bachelor,Married,1
+74,30235,784.0,25.0,2.0,Chicago,High School,Divorced,1
+69,72929,358.0,38.0,0.0,Houston,Bachelor,Married,0
+77,97444,460.0,27.0,2.0,LA,Master,Single,1
+66,38567,505.0,4.0,1.0,LA,Bachelor,Divorced,0
+19,131834,311.0,7.0,2.0,Chicago,PhD,Married,0
+18,100792,789.0,24.0,3.0,Chicago,High School,Single,0
+65,95441,575.0,26.0,0.0,Chicago,Bachelor,Divorced,1
+79,114555,541.0,22.0,2.0,Phoenix,PhD,Single,1
+29,103698,515.0,29.0,0.0,Phoenix,Master,Single,1
+22,147248,550.0,22.0,,Phoenix,Bachelor,Single,1
+54,35415,,19.0,1.0,NYC,Master,Married,0
+49,66159,516.0,17.0,1.0,LA,PhD,Divorced,1
+76,73925,605.0,17.0,3.0,Houston,Master,Divorced,1
+72,35951,484.0,1.0,4.0,NYC,PhD,Married,1
+26,117388,338.0,,,LA,PhD,Divorced,0
+58,38007,522.0,29.0,4.0,LA,PhD,Single,1
+52,71832,483.0,32.0,3.0,Chicago,Bachelor,Divorced,1
+36,88596,794.0,35.0,0.0,Chicago,Master,Married,1
+65,60523,726.0,17.0,0.0,NYC,Master,Single,1
+33,118861,477.0,36.0,4.0,Chicago,High School,Married,0
+20,116740,727.0,,2.0,LA,High School,Single,1
+37,45524,593.0,27.0,1.0,Chicago,High School,Single,0
+41,49282,450.0,39.0,2.0,Phoenix,High School,Divorced,1
+71,53930,683.0,19.0,,Chicago,Master,Single,1
+73,30077,,32.0,1.0,LA,PhD,Married,0
+50,135881,635.0,11.0,,NYC,PhD,Divorced,1
+41,50611,674.0,14.0,1.0,Houston,Bachelor,Married,1
+69,46984,307.0,38.0,0.0,Chicago,PhD,Single,0
+28,44060,640.0,1.0,2.0,LA,Master,Married,1
+66,112985,428.0,28.0,1.0,Houston,Master,Married,0
+25,114056,651.0,9.0,1.0,Houston,Master,Single,1
+53,73303,657.0,1.0,1.0,Phoenix,Bachelor,Divorced,1
+55,89207,816.0,10.0,2.0,Houston,High School,Married,1
+57,105046,,12.0,3.0,LA,PhD,Single,1
+37,59287,385.0,,2.0,LA,Master,Divorced,1
+79,123709,474.0,13.0,4.0,Chicago,Master,Divorced,1
+52,69711,492.0,17.0,2.0,Chicago,High School,Divorced,0
+65,41954,610.0,8.0,1.0,Chicago,Master,Married,1
+79,103340,418.0,38.0,0.0,Houston,PhD,Married,1
+42,102101,517.0,27.0,2.0,Houston,Bachelor,Married,0
+52,101520,726.0,2.0,2.0,Phoenix,Master,Divorced,1
+42,117062,713.0,19.0,1.0,Chicago,PhD,Married,1
+46,132974,413.0,,0.0,NYC,Master,Single,1
+35,48574,444.0,26.0,0.0,Phoenix,High School,Married,0
+63,39184,837.0,1.0,4.0,NYC,Master,Married,0
+35,49096,602.0,28.0,2.0,Houston,Master,Divorced,0
+19,97728,644.0,37.0,0.0,Phoenix,Bachelor,Married,1
+71,64016,300.0,2.0,0.0,Phoenix,High School,Single,0
+52,41246,446.0,15.0,3.0,LA,High School,Divorced,1
+33,75558,586.0,29.0,3.0,Houston,Bachelor,Single,0
+78,148721,352.0,39.0,0.0,Houston,Master,Divorced,1
+58,48381,603.0,1.0,4.0,Phoenix,PhD,Divorced,1
+53,66455,368.0,16.0,0.0,Houston,High School,Married,1
+50,122263,,11.0,1.0,Phoenix,High School,Single,0
+21,34018,519.0,34.0,,LA,Master,Divorced,1
+50,41302,460.0,0.0,4.0,Phoenix,Master,Married,0
+31,97506,388.0,14.0,1.0,Houston,High School,Divorced,1
+38,71157,458.0,25.0,4.0,Houston,Master,Divorced,1
+65,84917,788.0,36.0,1.0,Phoenix,PhD,Divorced,0
+37,122738,623.0,20.0,2.0,Phoenix,High School,Divorced,1
+73,126646,,,2.0,Phoenix,PhD,Divorced,1
+25,113122,401.0,24.0,3.0,Chicago,PhD,Divorced,0
+24,54519,793.0,22.0,1.0,Houston,Master,Married,1
+20,126809,,23.0,3.0,Houston,PhD,Divorced,0
+34,117487,753.0,37.0,,Chicago,Master,Single,1
+50,86819,781.0,27.0,3.0,Phoenix,Bachelor,Married,1
+65,110910,696.0,20.0,2.0,LA,Master,Single,0
+29,101324,578.0,17.0,4.0,Phoenix,PhD,Divorced,1
+76,35408,664.0,35.0,3.0,Phoenix,Bachelor,Single,1
+68,89379,630.0,34.0,,Chicago,Master,Divorced,1
+39,55053,643.0,8.0,1.0,Houston,PhD,Divorced,1
+72,39446,754.0,37.0,2.0,Phoenix,High School,Married,1
+39,30922,364.0,29.0,1.0,Houston,High School,Married,1
+63,128723,375.0,33.0,0.0,NYC,Master,Divorced,1
+47,81356,442.0,31.0,4.0,Houston,Master,Married,1
+55,40789,772.0,2.0,3.0,LA,High School,Single,1
+55,127720,716.0,,4.0,LA,PhD,Married,1
+62,96656,604.0,27.0,2.0,Phoenix,PhD,Married,1
+68,74028,796.0,14.0,3.0,Houston,PhD,Single,1
+71,94484,590.0,22.0,3.0,Phoenix,Master,Married,1
+25,62154,401.0,39.0,0.0,Chicago,Bachelor,Divorced,1
+44,112870,566.0,10.0,2.0,LA,Bachelor,Single,0
+44,32336,302.0,31.0,1.0,Phoenix,Bachelor,Divorced,1
+51,133677,384.0,35.0,0.0,Chicago,Bachelor,Single,1
+38,97779,627.0,32.0,0.0,Phoenix,Bachelor,Divorced,0
+47,49029,749.0,23.0,4.0,Houston,Master,Divorced,1
+50,89201,753.0,38.0,4.0,Houston,Master,Married,1
+45,62265,520.0,33.0,4.0,Houston,Bachelor,Divorced,0
+64,132916,453.0,27.0,0.0,Houston,Master,Married,0
+50,142250,311.0,36.0,1.0,NYC,Master,Single,0
+22,146553,432.0,6.0,3.0,Chicago,Bachelor,Divorced,1
+77,73872,603.0,,4.0,Chicago,PhD,Divorced,0
+78,76197,592.0,36.0,1.0,Houston,Master,Single,0
+65,85180,,0.0,2.0,NYC,PhD,Single,1
+36,53710,342.0,0.0,4.0,Houston,Master,Divorced,0
+21,59486,642.0,19.0,3.0,NYC,Master,Single,0
+52,101907,625.0,18.0,2.0,Houston,Bachelor,Married,0
+66,101895,797.0,28.0,2.0,LA,Master,Single,1
+34,94435,663.0,9.0,3.0,LA,High School,Single,1
+61,70631,726.0,,4.0,Phoenix,High School,Divorced,1
+45,131532,320.0,27.0,0.0,Houston,Bachelor,Married,1
+47,50103,706.0,34.0,3.0,Chicago,PhD,Single,1
+46,94772,635.0,30.0,3.0,Phoenix,PhD,Married,1
+63,44382,416.0,26.0,3.0,LA,PhD,Married,0
+70,114291,423.0,10.0,2.0,Houston,High School,Married,0
+23,131195,698.0,,1.0,Phoenix,PhD,Divorced,1
+52,33756,350.0,4.0,0.0,Houston,PhD,Single,1
+77,50609,623.0,7.0,4.0,LA,Bachelor,Divorced,0
+58,144074,440.0,33.0,4.0,Phoenix,PhD,Single,1
+54,46478,769.0,,1.0,LA,High School,Single,0
+41,130978,633.0,37.0,3.0,NYC,High School,Divorced,1
+46,69666,672.0,0.0,0.0,LA,High School,Married,1
+66,105683,793.0,30.0,4.0,Houston,Bachelor,Married,0
+63,129097,838.0,3.0,4.0,Chicago,Bachelor,Single,1
+70,130420,455.0,4.0,3.0,LA,Master,Divorced,0
+48,101315,590.0,29.0,1.0,Chicago,PhD,Married,1
+52,107834,443.0,23.0,0.0,NYC,Bachelor,Married,0
+77,44153,405.0,2.0,1.0,Phoenix,High School,Single,1
+50,139415,719.0,10.0,1.0,Phoenix,High School,Single,0
+69,106325,301.0,3.0,0.0,Chicago,Bachelor,Divorced,1
+78,139701,389.0,25.0,0.0,Phoenix,Bachelor,Single,1
+38,42999,644.0,26.0,4.0,LA,Bachelor,Married,1
+49,85318,649.0,26.0,4.0,Chicago,Master,Married,0
+40,30814,758.0,5.0,0.0,Houston,High School,Married,1
+50,145033,562.0,14.0,2.0,LA,Master,Married,0
+20,106077,650.0,29.0,4.0,LA,Master,Divorced,0
+35,120474,407.0,36.0,2.0,LA,PhD,Divorced,1
+42,32443,338.0,36.0,0.0,Houston,High School,Single,0
+59,105993,458.0,36.0,4.0,NYC,High School,Single,0
+48,105916,611.0,34.0,1.0,Phoenix,Bachelor,Single,1
+71,103319,540.0,22.0,0.0,Chicago,Bachelor,Divorced,1
+75,139777,744.0,5.0,3.0,NYC,PhD,Married,1
+20,47368,597.0,3.0,2.0,Chicago,Master,Single,1
+57,45328,335.0,17.0,0.0,Phoenix,Bachelor,Married,1
+63,86942,383.0,8.0,0.0,Houston,Bachelor,Single,0
+41,121751,751.0,,4.0,LA,High School,Single,1
+67,129131,684.0,12.0,4.0,LA,High School,Single,1
+49,57306,471.0,16.0,4.0,Houston,Bachelor,Single,1
+64,115451,675.0,31.0,3.0,NYC,High School,Single,0
+39,69915,661.0,21.0,4.0,NYC,PhD,Married,1
+40,67219,440.0,3.0,0.0,Chicago,Bachelor,Single,0
+19,110879,417.0,4.0,4.0,Houston,High School,Married,0
+44,141939,576.0,36.0,1.0,NYC,PhD,Divorced,0
+59,94644,519.0,12.0,4.0,Houston,High School,Single,1
+19,90279,325.0,33.0,3.0,Phoenix,High School,Married,1
+43,83028,820.0,21.0,1.0,LA,High School,Divorced,1
+34,134263,309.0,22.0,0.0,LA,Bachelor,Divorced,1
+57,30126,677.0,2.0,0.0,LA,Master,Divorced,0
+50,82329,451.0,33.0,2.0,Houston,High School,Married,0
+26,57632,348.0,31.0,1.0,Houston,PhD,Single,0
+60,137099,453.0,20.0,2.0,Chicago,Bachelor,Single,1
+71,95310,592.0,20.0,1.0,LA,Bachelor,Married,1
+65,139945,,10.0,1.0,Chicago,PhD,Single,1
+56,85176,830.0,38.0,3.0,LA,High School,Married,0
+46,149797,359.0,3.0,2.0,Chicago,Master,Single,0
+59,116066,466.0,0.0,3.0,Chicago,High School,Divorced,0
+72,135500,501.0,27.0,1.0,Phoenix,PhD,Single,1
+43,74327,445.0,23.0,0.0,Chicago,Bachelor,Married,1
+52,98904,738.0,34.0,1.0,Houston,Master,Married,1
+67,33797,541.0,12.0,3.0,Chicago,Bachelor,Divorced,1
+42,77882,782.0,33.0,2.0,LA,PhD,Married,1
+41,43718,407.0,10.0,2.0,Chicago,High School,Single,1
+30,64560,525.0,35.0,3.0,NYC,Master,Single,0
+77,106589,731.0,16.0,2.0,LA,Bachelor,Divorced,1
+75,52116,718.0,34.0,4.0,NYC,Bachelor,Married,1
+24,66244,754.0,17.0,0.0,LA,Bachelor,Divorced,0
+74,131721,459.0,39.0,0.0,Houston,High School,Single,1
+53,31645,822.0,21.0,0.0,Houston,Master,Divorced,1
+62,77523,376.0,23.0,2.0,Houston,High School,Married,1
+37,147718,808.0,18.0,2.0,NYC,High School,Divorced,1
+18,49256,740.0,36.0,1.0,Phoenix,High School,Married,1
+25,131376,553.0,38.0,1.0,LA,PhD,Married,1
+63,130158,619.0,20.0,0.0,Houston,PhD,Single,0
+33,83173,562.0,7.0,4.0,LA,PhD,Single,0
+31,67430,673.0,27.0,1.0,NYC,Master,Single,0
+29,69282,466.0,4.0,1.0,Phoenix,High School,Married,0
+68,149719,758.0,,2.0,NYC,High School,Divorced,1
+40,93374,579.0,36.0,4.0,LA,PhD,Married,1
+32,98244,601.0,35.0,0.0,Phoenix,High School,Single,0
+45,41694,830.0,,1.0,Phoenix,High School,Single,1
+51,86264,517.0,26.0,4.0,NYC,Bachelor,Divorced,0
+19,105060,401.0,33.0,4.0,Houston,High School,Single,0
+49,127416,587.0,10.0,0.0,LA,Bachelor,Single,0
+40,87545,466.0,11.0,4.0,Chicago,High School,Single,1
+39,148195,335.0,20.0,4.0,Chicago,Master,Divorced,0
+68,69224,652.0,10.0,4.0,NYC,PhD,Married,1
+42,132516,,38.0,1.0,LA,Bachelor,Single,1
+75,127945,652.0,27.0,0.0,LA,PhD,Divorced,1
+79,43224,369.0,4.0,4.0,NYC,Bachelor,Single,0
+78,70738,,16.0,4.0,LA,Bachelor,Divorced,0
+39,55150,816.0,19.0,1.0,Houston,Bachelor,Single,0
+75,93731,727.0,11.0,0.0,NYC,Master,Divorced,1
+75,79688,838.0,5.0,,Houston,High School,Single,0
+39,129929,459.0,16.0,1.0,LA,Bachelor,Married,1
+66,138618,448.0,18.0,0.0,NYC,Master,Single,1
+69,103509,529.0,25.0,4.0,LA,Bachelor,Divorced,1
+59,38577,366.0,31.0,0.0,NYC,High School,Single,1
+23,38070,680.0,5.0,0.0,LA,Bachelor,Married,0
+32,38666,357.0,35.0,0.0,Houston,Master,Single,0
+71,87761,558.0,37.0,2.0,Houston,High School,Divorced,0
+60,66368,,10.0,0.0,LA,Master,Divorced,1
+77,36783,429.0,32.0,2.0,NYC,High School,Married,0
+54,141530,,23.0,4.0,Chicago,High School,Divorced,0
+50,71914,508.0,22.0,2.0,Houston,PhD,Single,1
+25,100507,653.0,14.0,,Houston,PhD,Single,0
+70,109026,770.0,26.0,4.0,Chicago,PhD,Single,1
+77,145893,415.0,10.0,2.0,LA,High School,Divorced,1
+61,141255,563.0,16.0,1.0,NYC,Bachelor,Single,0
+61,140616,741.0,13.0,3.0,LA,Master,Single,0
+22,97526,847.0,26.0,0.0,Phoenix,Master,Single,0
+56,100835,752.0,17.0,3.0,Houston,Master,Married,1
+21,75765,776.0,,0.0,Phoenix,PhD,Divorced,1
+23,49956,586.0,3.0,0.0,Houston,High School,Divorced,1
+62,117895,602.0,6.0,4.0,Houston,PhD,Divorced,1
+49,76240,610.0,34.0,0.0,Phoenix,Bachelor,Married,1
+69,67148,507.0,8.0,0.0,Phoenix,High School,Divorced,0
+47,124270,745.0,7.0,2.0,LA,Master,Married,0
+64,34757,354.0,16.0,3.0,Phoenix,PhD,Married,1
+52,49097,311.0,16.0,2.0,LA,PhD,Divorced,0
+72,40395,699.0,32.0,0.0,LA,Bachelor,Single,0
+57,46241,814.0,31.0,4.0,LA,Bachelor,Single,1
+69,133892,841.0,7.0,2.0,Houston,PhD,Divorced,1
+33,57696,536.0,18.0,2.0,Houston,Bachelor,Divorced,1
+30,145654,578.0,37.0,1.0,Phoenix,Master,Married,1
+67,100480,647.0,2.0,0.0,Houston,Bachelor,Divorced,0
+77,76163,403.0,,4.0,Phoenix,Bachelor,Married,1
+59,49816,816.0,12.0,2.0,Houston,PhD,Divorced,0
+47,79840,547.0,30.0,2.0,NYC,PhD,Single,0
+36,132547,663.0,15.0,4.0,NYC,High School,Single,1
+34,82853,620.0,31.0,0.0,Phoenix,High School,Divorced,0
+73,54917,585.0,21.0,1.0,Houston,PhD,Married,1
+36,126731,448.0,28.0,2.0,Houston,Bachelor,Single,0
+45,51566,,21.0,1.0,LA,Bachelor,Married,1
+75,105452,705.0,2.0,3.0,Chicago,High School,Divorced,1
+72,92823,755.0,9.0,0.0,Phoenix,High School,Divorced,1
+43,50806,460.0,20.0,3.0,Chicago,High School,Single,1
+54,105520,759.0,15.0,3.0,Chicago,Master,Divorced,0
+43,31759,849.0,11.0,3.0,Phoenix,Master,Single,1
+70,71949,,1.0,0.0,Houston,High School,Married,1
+79,122374,808.0,23.0,0.0,Phoenix,Bachelor,Single,0
+40,32482,780.0,34.0,4.0,Chicago,High School,Single,1
+26,54442,413.0,29.0,1.0,Houston,Master,Married,1
+29,63719,,29.0,1.0,NYC,Bachelor,Single,0
+70,88066,640.0,34.0,4.0,Phoenix,Master,Single,1
+18,123501,,18.0,4.0,Phoenix,Bachelor,Divorced,0
+75,32079,479.0,7.0,3.0,Houston,Master,Married,1
+75,32717,706.0,25.0,4.0,NYC,Bachelor,Single,0
+18,89676,495.0,39.0,2.0,NYC,Bachelor,Married,1
+64,57952,765.0,6.0,1.0,Houston,Bachelor,Married,1
+51,116444,610.0,29.0,4.0,LA,Bachelor,Single,1
+49,72460,561.0,6.0,2.0,Phoenix,PhD,Divorced,1
+79,120397,718.0,2.0,2.0,Phoenix,Master,Married,1
+71,102847,705.0,0.0,2.0,Chicago,Master,Single,1
+65,123607,442.0,35.0,2.0,Houston,PhD,Married,0
+42,119106,641.0,24.0,3.0,Chicago,Bachelor,Divorced,1
+57,48449,,36.0,2.0,Chicago,Bachelor,Divorced,1
+62,63536,400.0,0.0,3.0,NYC,Master,Divorced,1
+70,94077,543.0,14.0,3.0,Phoenix,PhD,Single,1
+18,68258,789.0,36.0,2.0,Chicago,Bachelor,Single,1
+33,78302,,12.0,1.0,NYC,Bachelor,Divorced,1
+78,58865,538.0,39.0,2.0,Houston,Bachelor,Single,1
+56,36645,341.0,7.0,2.0,Chicago,High School,Divorced,0
+22,149771,728.0,4.0,2.0,Phoenix,PhD,Single,1
+39,68000,457.0,8.0,1.0,Chicago,Bachelor,Divorced,1
+46,56737,515.0,0.0,0.0,Houston,High School,Married,1
+72,41485,761.0,35.0,0.0,Chicago,PhD,Divorced,1
+20,68565,,34.0,3.0,Phoenix,Bachelor,Divorced,0
+29,55522,366.0,1.0,3.0,NYC,Master,Single,1
+43,149614,306.0,39.0,1.0,Phoenix,High School,Single,1
+33,95155,825.0,22.0,4.0,NYC,High School,Single,0
+68,85168,372.0,8.0,0.0,LA,Bachelor,Single,1
+54,82487,698.0,33.0,3.0,Phoenix,Bachelor,Single,0
+39,42342,704.0,13.0,,Phoenix,High School,Single,0
+74,70806,429.0,3.0,1.0,Houston,Master,Married,0
+46,78770,765.0,29.0,1.0,Chicago,Master,Divorced,1
+31,108623,505.0,30.0,4.0,NYC,PhD,Divorced,1
+45,133177,565.0,37.0,4.0,NYC,Bachelor,Divorced,1
+22,129785,836.0,10.0,1.0,Houston,Master,Married,1
+64,105629,552.0,34.0,3.0,Houston,PhD,Divorced,1
+66,82603,588.0,,0.0,Chicago,Master,Married,0
+47,142726,463.0,2.0,2.0,Chicago,Bachelor,Married,0
+63,111974,394.0,13.0,4.0,Phoenix,PhD,Married,1
+79,135947,409.0,12.0,2.0,LA,PhD,Divorced,0
+69,56399,635.0,31.0,3.0,Chicago,PhD,Married,1
+22,115382,537.0,33.0,4.0,Houston,Master,Divorced,1
+29,111244,680.0,18.0,2.0,Chicago,Bachelor,Divorced,1
+33,139575,735.0,37.0,3.0,NYC,PhD,Single,1
+43,145520,782.0,15.0,0.0,LA,High School,Single,0
+43,140904,324.0,1.0,3.0,Phoenix,Bachelor,Married,0
+65,106534,,39.0,4.0,NYC,High School,Married,1
+38,85106,781.0,16.0,1.0,NYC,High School,Divorced,1
+56,142599,691.0,33.0,0.0,LA,PhD,Married,1
+53,60678,836.0,15.0,2.0,Phoenix,PhD,Married,0
+50,106218,378.0,37.0,4.0,Houston,Master,Divorced,1
+79,93230,472.0,1.0,1.0,Phoenix,Master,Married,1
+47,144684,311.0,1.0,3.0,Chicago,Master,Married,1
+54,104055,427.0,25.0,1.0,NYC,Bachelor,Divorced,0
+40,86373,391.0,12.0,4.0,Chicago,Master,Divorced,1
+75,61480,842.0,30.0,4.0,Houston,High School,Single,1
+27,115230,831.0,33.0,1.0,Chicago,Master,Divorced,0
+71,98836,746.0,38.0,3.0,Phoenix,PhD,Single,1
+22,102258,689.0,2.0,1.0,Chicago,Master,Married,1
+53,69986,,,4.0,Houston,Bachelor,Divorced,1
+51,54160,553.0,22.0,4.0,Houston,Bachelor,Divorced,1
+69,115595,,13.0,2.0,Houston,High School,Divorced,0
+48,131358,359.0,26.0,2.0,Phoenix,Bachelor,Married,1
+27,109111,766.0,28.0,0.0,Houston,Master,Single,1
+75,94929,586.0,38.0,4.0,NYC,PhD,Married,1
+36,103506,816.0,38.0,,Houston,Bachelor,Married,1
+75,64911,766.0,0.0,1.0,Chicago,High School,Divorced,1
+49,117127,644.0,16.0,3.0,Chicago,Master,Single,0
+18,61821,681.0,29.0,1.0,Chicago,High School,Married,1
+73,105039,552.0,12.0,3.0,Phoenix,Bachelor,Divorced,1
+22,90535,355.0,20.0,2.0,Chicago,Bachelor,Married,0
+62,143453,762.0,18.0,0.0,Phoenix,High School,Married,1
+21,114458,756.0,18.0,1.0,Phoenix,Master,Divorced,1
+33,42175,382.0,24.0,1.0,Houston,Bachelor,Divorced,1
+41,149235,398.0,21.0,1.0,NYC,PhD,Single,0
+33,84771,448.0,30.0,3.0,Houston,Bachelor,Married,1
+72,136660,628.0,16.0,2.0,Houston,Master,Divorced,0
+19,116925,455.0,22.0,1.0,Phoenix,Bachelor,Divorced,1
+66,143374,489.0,31.0,1.0,Phoenix,High School,Single,1
+45,96358,793.0,9.0,0.0,Chicago,Bachelor,Single,1
+49,47327,562.0,9.0,0.0,Chicago,Bachelor,Divorced,1
+44,77057,379.0,35.0,2.0,Houston,Master,Single,1
+37,36150,699.0,7.0,2.0,LA,High School,Divorced,1
+41,34425,559.0,19.0,4.0,LA,Master,Married,1
+29,46032,400.0,31.0,0.0,Chicago,Bachelor,Single,1
+67,32198,658.0,13.0,4.0,LA,PhD,Married,1
+52,90500,679.0,27.0,3.0,Chicago,Bachelor,Married,1
+77,83394,520.0,23.0,4.0,Phoenix,Master,Married,1
+50,50079,719.0,14.0,1.0,Houston,PhD,Divorced,1
+50,66220,423.0,21.0,4.0,NYC,Master,Married,1
+78,71874,721.0,29.0,2.0,Houston,Master,Married,0
+68,43859,530.0,3.0,3.0,Chicago,High School,Married,0
+60,80460,362.0,12.0,1.0,Chicago,PhD,Divorced,1
+54,61419,784.0,,4.0,Houston,Bachelor,Married,1
+29,148865,782.0,7.0,3.0,Chicago,Master,Married,1
+20,38705,,17.0,3.0,LA,Bachelor,Single,1
+18,72880,454.0,11.0,1.0,LA,High School,Divorced,0
+50,53236,391.0,30.0,4.0,Chicago,High School,Married,1
+57,117955,825.0,13.0,3.0,Chicago,PhD,Single,1
+27,115514,754.0,33.0,3.0,LA,High School,Divorced,1
+60,133145,809.0,17.0,0.0,Chicago,High School,Divorced,1
+61,45358,482.0,,3.0,Chicago,Bachelor,Divorced,0
+46,129713,685.0,10.0,0.0,Houston,High School,Divorced,0
+30,124914,704.0,11.0,4.0,NYC,High School,Divorced,1
+29,132870,545.0,14.0,4.0,LA,Master,Divorced,1
+48,106918,770.0,30.0,4.0,Houston,High School,Married,1
+63,149179,722.0,28.0,2.0,NYC,Master,Married,0
+19,146243,364.0,25.0,4.0,Chicago,High School,Married,0
+78,44596,,17.0,3.0,Chicago,High School,Married,1
+68,63572,512.0,31.0,1.0,Houston,PhD,Single,1
+67,108757,541.0,,0.0,Chicago,PhD,Married,1
+52,31279,,37.0,,Phoenix,Master,Divorced,0
+40,93197,512.0,,4.0,Houston,High School,Married,1
+34,141496,637.0,22.0,4.0,NYC,Bachelor,Married,0
+43,92516,472.0,23.0,1.0,Houston,PhD,Divorced,0
+25,37083,463.0,7.0,1.0,LA,Bachelor,Married,1
+46,139397,764.0,5.0,2.0,Houston,PhD,Married,0
+43,47771,796.0,4.0,0.0,Chicago,PhD,Married,0
+27,59975,694.0,28.0,4.0,Chicago,High School,Single,1
+43,75648,607.0,27.0,2.0,Phoenix,PhD,Married,1
+79,78285,482.0,10.0,3.0,Phoenix,Bachelor,Divorced,1
+51,49063,809.0,0.0,3.0,Phoenix,PhD,Divorced,1
+68,97642,845.0,18.0,2.0,NYC,Master,Married,0
+58,120093,,8.0,4.0,Phoenix,High School,Married,0
+24,144390,735.0,26.0,2.0,NYC,High School,Married,1
+21,116143,721.0,33.0,4.0,Phoenix,Master,Divorced,1
+75,67599,320.0,3.0,1.0,NYC,Master,Divorced,1
+70,81920,696.0,35.0,2.0,Houston,Master,Single,0
+67,58529,404.0,17.0,4.0,Houston,PhD,Single,1
+62,65954,491.0,14.0,2.0,Chicago,High School,Single,0
+28,57856,316.0,12.0,2.0,NYC,Master,Divorced,1
+46,32573,419.0,18.0,4.0,LA,PhD,Single,1
+73,108344,692.0,5.0,4.0,Chicago,Master,Married,1
+53,65367,724.0,11.0,0.0,Houston,Bachelor,Married,1
+42,132337,,36.0,2.0,NYC,Bachelor,Divorced,1
+38,136732,429.0,16.0,3.0,Phoenix,High School,Single,1
+78,129608,328.0,22.0,2.0,LA,PhD,Married,1
+74,90774,396.0,25.0,2.0,Houston,Bachelor,Divorced,0
+53,53752,309.0,28.0,,Chicago,Bachelor,Single,1
+27,85029,541.0,32.0,2.0,NYC,PhD,Married,0
+54,47685,531.0,26.0,2.0,LA,Master,Single,1
+26,81693,583.0,24.0,3.0,NYC,PhD,Divorced,1
+41,146739,499.0,9.0,4.0,Phoenix,Master,Single,1
+52,85961,378.0,22.0,2.0,Chicago,Bachelor,Divorced,1
+66,136937,472.0,20.0,1.0,NYC,Bachelor,Single,0
+52,106908,766.0,,0.0,Houston,Bachelor,Married,1
+65,104532,715.0,12.0,3.0,Chicago,High School,Divorced,1
+53,111994,748.0,36.0,2.0,Houston,High School,Divorced,1
+35,86133,386.0,32.0,1.0,NYC,High School,Divorced,0
+66,127425,400.0,23.0,2.0,Chicago,PhD,Single,1
+56,91268,307.0,10.0,2.0,Houston,Bachelor,Single,1
+49,122201,499.0,16.0,4.0,Phoenix,Bachelor,Married,0
+41,68243,804.0,3.0,4.0,Phoenix,PhD,Divorced,0
+40,87384,386.0,24.0,4.0,NYC,High School,Divorced,1
+79,61653,342.0,29.0,1.0,Chicago,PhD,Single,1
+49,56657,684.0,8.0,2.0,LA,High School,Single,1
+54,69952,734.0,20.0,0.0,Chicago,Bachelor,Married,1
+29,52180,707.0,19.0,3.0,Phoenix,Master,Married,1
+66,127432,782.0,18.0,4.0,Houston,High School,Single,1
+72,108411,316.0,18.0,4.0,LA,Bachelor,Divorced,0
+30,31622,447.0,11.0,2.0,NYC,Bachelor,Married,0
+40,78756,576.0,36.0,2.0,LA,Master,Single,1
+42,70809,531.0,16.0,1.0,NYC,Bachelor,Single,1
+52,46725,665.0,36.0,1.0,LA,Bachelor,Divorced,1
+58,91396,527.0,,4.0,NYC,High School,Single,1
+47,81226,735.0,27.0,2.0,NYC,High School,Single,0
+34,136296,,34.0,0.0,LA,Master,Married,1
+66,111182,510.0,17.0,3.0,LA,Master,Single,0
+79,112565,690.0,13.0,2.0,NYC,Bachelor,Single,1
+37,59402,798.0,34.0,2.0,Phoenix,High School,Married,1
+65,34263,839.0,6.0,1.0,LA,Master,Divorced,1
+42,126523,790.0,12.0,3.0,Chicago,Master,Divorced,1
+39,76828,741.0,17.0,4.0,Houston,PhD,Married,0
+30,77924,,36.0,2.0,NYC,Master,Married,1
+76,104182,,12.0,4.0,NYC,Bachelor,Divorced,0
+36,123065,651.0,35.0,2.0,Houston,High School,Divorced,1
+66,89052,819.0,30.0,4.0,Phoenix,Master,Divorced,1
+53,41664,619.0,1.0,3.0,Houston,PhD,Divorced,1
+29,65737,,15.0,1.0,LA,High School,Divorced,1
+78,131332,849.0,8.0,3.0,Houston,Master,Married,0
+58,119563,667.0,8.0,0.0,NYC,PhD,Single,1
+36,59373,519.0,37.0,1.0,Houston,Master,Divorced,0
+29,147369,636.0,10.0,3.0,Chicago,High School,Divorced,1
+26,66397,522.0,21.0,0.0,LA,High School,Single,0
+24,116145,659.0,32.0,2.0,Houston,High School,Single,0
+45,131371,628.0,,2.0,NYC,Bachelor,Single,1
+31,68709,762.0,22.0,4.0,LA,Master,Single,1
+48,146074,681.0,,1.0,NYC,Bachelor,Single,0
+69,91120,468.0,8.0,2.0,Phoenix,High School,Single,1
+36,49250,516.0,23.0,1.0,Chicago,PhD,Married,1
+75,51172,677.0,7.0,2.0,Phoenix,Master,Single,1
+64,41555,418.0,6.0,4.0,Chicago,Bachelor,Single,0
+33,117410,489.0,35.0,3.0,Houston,Master,Married,1
+70,108617,669.0,17.0,4.0,LA,PhD,Single,1
+22,83276,,2.0,0.0,Houston,Bachelor,Divorced,1
+52,87492,787.0,27.0,,Chicago,High School,Divorced,1
+29,83002,,5.0,0.0,Chicago,Bachelor,Single,1
+42,119599,459.0,20.0,0.0,Chicago,Master,Married,1
+69,102355,650.0,27.0,1.0,NYC,Master,Divorced,1
+76,121248,587.0,39.0,2.0,LA,Master,Married,0
+38,54762,587.0,0.0,0.0,Houston,Master,Divorced,0
+53,41046,525.0,35.0,3.0,Houston,High School,Single,1
+70,126999,822.0,20.0,0.0,Phoenix,Bachelor,Married,0
+40,146021,821.0,34.0,3.0,Chicago,High School,Married,1
+33,58769,572.0,12.0,1.0,Chicago,High School,Married,1
+74,83302,,9.0,0.0,Chicago,High School,Divorced,0
+56,53150,,,4.0,Houston,Master,Divorced,1
+62,98247,787.0,12.0,1.0,Phoenix,Master,Divorced,1
+70,34853,423.0,36.0,3.0,NYC,Master,Single,1
+59,124613,713.0,37.0,1.0,LA,Bachelor,Divorced,1
+75,119399,,23.0,0.0,NYC,PhD,Single,1
+56,51792,587.0,1.0,2.0,Houston,Master,Married,1
+31,89129,734.0,21.0,2.0,Chicago,Bachelor,Married,1
+48,136019,412.0,16.0,3.0,LA,Master,Single,1
+75,104478,421.0,35.0,3.0,Houston,Master,Divorced,0
+22,143811,843.0,13.0,2.0,Houston,High School,Single,0
+52,144130,521.0,9.0,3.0,Houston,High School,Married,1
+40,97298,338.0,34.0,1.0,LA,High School,Married,0
+46,61987,,24.0,4.0,LA,Bachelor,Single,0
+60,45850,532.0,2.0,4.0,Phoenix,PhD,Divorced,1
+28,42112,829.0,37.0,1.0,Phoenix,PhD,Divorced,0
+35,54058,448.0,16.0,4.0,NYC,Bachelor,Single,1
+64,75420,696.0,11.0,0.0,LA,Master,Single,1
+29,68890,601.0,23.0,1.0,LA,Bachelor,Divorced,1
+26,96017,659.0,28.0,3.0,LA,Master,Married,1
+27,77304,537.0,24.0,1.0,Phoenix,Bachelor,Single,0
+75,62921,,35.0,2.0,Houston,Bachelor,Divorced,1
+61,135921,502.0,25.0,3.0,Chicago,Bachelor,Divorced,1
+34,31524,555.0,37.0,2.0,Phoenix,PhD,Married,1
+78,130424,534.0,0.0,3.0,LA,High School,Married,1
+55,45048,644.0,19.0,4.0,Phoenix,Bachelor,Married,0
+24,65111,833.0,27.0,1.0,NYC,PhD,Married,1
+63,67904,765.0,15.0,0.0,LA,High School,Married,0
+30,84912,840.0,16.0,3.0,NYC,High School,Single,1
+57,64008,,39.0,3.0,LA,Bachelor,Divorced,1
+59,30060,762.0,27.0,2.0,Phoenix,Master,Single,0
+26,104666,735.0,11.0,4.0,Houston,Master,Single,0
+67,113559,582.0,26.0,2.0,Chicago,Master,Single,0
+44,85337,762.0,29.0,2.0,NYC,Bachelor,Single,1
+75,140616,706.0,33.0,4.0,Phoenix,Master,Single,1
+19,43350,387.0,36.0,0.0,Houston,PhD,Married,0
+22,54354,343.0,5.0,2.0,Phoenix,PhD,Married,1
+46,75186,760.0,6.0,2.0,NYC,PhD,Divorced,0
+54,58145,577.0,31.0,3.0,Chicago,PhD,Single,1
+55,64020,720.0,,,Phoenix,High School,Divorced,0
+36,116123,652.0,24.0,1.0,LA,PhD,Married,1
+25,136667,814.0,32.0,0.0,Houston,Master,Married,1
+65,105186,318.0,6.0,0.0,Phoenix,Bachelor,Married,1
+62,115469,322.0,11.0,4.0,Houston,Master,Single,1
+18,50581,712.0,15.0,3.0,LA,PhD,Single,1
+39,118929,329.0,15.0,3.0,Chicago,High School,Married,1
+69,53051,407.0,35.0,4.0,Chicago,PhD,Divorced,1
+34,81474,666.0,12.0,3.0,LA,Bachelor,Divorced,1
+24,121748,580.0,6.0,0.0,Houston,Master,Married,1
+42,144618,427.0,35.0,0.0,Phoenix,Bachelor,Divorced,0
+62,99626,528.0,8.0,1.0,LA,Bachelor,Married,1
+21,36960,410.0,31.0,4.0,NYC,Bachelor,Divorced,0
+53,65772,435.0,10.0,,Houston,Master,Married,1
+23,51520,661.0,,2.0,Chicago,PhD,Divorced,1
+77,79481,485.0,32.0,1.0,LA,Bachelor,Single,1
+48,66408,428.0,,1.0,Chicago,Master,Married,0
+36,124006,560.0,24.0,3.0,Houston,High School,Married,0
+78,87134,814.0,7.0,1.0,Chicago,Master,Divorced,1
+61,50491,748.0,21.0,1.0,LA,High School,Married,1
+71,31341,403.0,3.0,2.0,Houston,Master,Married,1
+56,74623,,39.0,3.0,NYC,PhD,Married,1
+44,120327,523.0,2.0,1.0,LA,Bachelor,Single,1
+27,30338,,28.0,1.0,Phoenix,PhD,Single,1
+43,101431,772.0,28.0,3.0,LA,Master,Divorced,0
+36,42254,309.0,33.0,4.0,Houston,Bachelor,Single,1
+56,81860,704.0,33.0,3.0,LA,High School,Divorced,0
+79,41344,601.0,27.0,2.0,NYC,Master,Single,1
+20,31750,530.0,12.0,4.0,NYC,Bachelor,Divorced,0
+62,84756,365.0,14.0,0.0,Phoenix,High School,Single,1
+30,97957,411.0,22.0,3.0,Chicago,High School,Single,0
+67,135423,312.0,25.0,2.0,Houston,PhD,Divorced,0
+45,88053,692.0,3.0,4.0,Houston,Master,Married,1
+79,100855,799.0,25.0,3.0,Chicago,High School,Married,0
+75,45896,533.0,39.0,1.0,NYC,Bachelor,Single,0
+37,85761,613.0,8.0,3.0,NYC,High School,Divorced,1
+45,92552,311.0,4.0,0.0,LA,High School,Married,0
+25,107454,508.0,31.0,3.0,Phoenix,PhD,Divorced,0
+78,148681,313.0,19.0,4.0,Phoenix,PhD,Married,1
+58,120600,717.0,10.0,4.0,Phoenix,Bachelor,Divorced,1
+56,142153,736.0,14.0,3.0,LA,PhD,Single,1
+18,57935,676.0,31.0,4.0,Phoenix,High School,Divorced,1
+20,67641,319.0,27.0,1.0,Chicago,High School,Married,1
+30,59711,369.0,21.0,3.0,LA,PhD,Single,0
+45,100342,510.0,16.0,1.0,Chicago,High School,Divorced,1
+79,136896,400.0,25.0,1.0,LA,High School,Married,1
+74,42182,431.0,,2.0,Phoenix,Bachelor,Single,1
+77,117833,680.0,25.0,3.0,Chicago,PhD,Divorced,1
+66,86276,431.0,24.0,4.0,Chicago,High School,Married,0
+42,49541,319.0,,1.0,Chicago,PhD,Divorced,1
+73,124457,835.0,18.0,2.0,LA,Bachelor,Divorced,1
+50,112310,526.0,10.0,3.0,Houston,PhD,Single,1
+55,74813,453.0,12.0,3.0,Phoenix,High School,Single,0
+70,67198,768.0,7.0,0.0,Chicago,PhD,Married,0
+23,38820,704.0,39.0,0.0,Houston,High School,Single,0
+75,54070,501.0,3.0,1.0,Phoenix,High School,Married,1
+61,99768,337.0,30.0,0.0,Phoenix,High School,Divorced,0
+62,41122,487.0,27.0,1.0,Chicago,Bachelor,Divorced,0
+49,110559,356.0,10.0,4.0,Chicago,PhD,Married,1
+62,103543,319.0,0.0,1.0,LA,Bachelor,Divorced,0
+78,113441,572.0,37.0,0.0,Houston,PhD,Single,1
+64,71786,418.0,23.0,,Houston,Bachelor,Divorced,1
+38,124934,,30.0,0.0,Chicago,Master,Single,1
+33,129804,520.0,25.0,1.0,Phoenix,High School,Married,1
+71,36737,825.0,4.0,2.0,Chicago,High School,Married,1
+38,66062,,19.0,3.0,Phoenix,Bachelor,Divorced,1
+28,84237,635.0,10.0,0.0,Phoenix,Master,Divorced,0
+77,81571,354.0,32.0,1.0,Chicago,High School,Single,0
+54,55510,799.0,37.0,4.0,NYC,PhD,Single,0
+53,49426,835.0,26.0,0.0,Houston,Bachelor,Divorced,1
+52,67265,461.0,33.0,0.0,Phoenix,High School,Divorced,1
+36,47850,458.0,14.0,3.0,Phoenix,High School,Married,1
+37,148249,487.0,31.0,1.0,NYC,Bachelor,Married,1
+74,96150,359.0,20.0,2.0,LA,Bachelor,Married,0
+35,117312,618.0,4.0,4.0,NYC,PhD,Divorced,1
+64,119613,510.0,5.0,,NYC,PhD,Divorced,1
+58,104910,705.0,37.0,4.0,Phoenix,High School,Divorced,0
+66,82375,408.0,21.0,0.0,Houston,High School,Married,1
+31,65435,375.0,17.0,3.0,NYC,Bachelor,Divorced,0
+32,126443,841.0,13.0,3.0,LA,High School,Single,1
+48,87132,613.0,9.0,2.0,Chicago,High School,Divorced,1
+18,108945,416.0,12.0,3.0,NYC,Bachelor,Divorced,0
+70,112050,318.0,30.0,0.0,NYC,High School,Divorced,1
+71,125402,731.0,29.0,2.0,LA,High School,Divorced,0
+71,32983,649.0,2.0,1.0,Houston,Master,Divorced,1
+20,127241,,29.0,3.0,NYC,PhD,Single,1
+33,50662,412.0,5.0,2.0,NYC,Bachelor,Single,0
+40,53510,482.0,28.0,0.0,Houston,Master,Divorced,1
+74,108187,780.0,7.0,4.0,LA,PhD,Married,1
+28,70998,445.0,32.0,4.0,NYC,PhD,Divorced,1
+29,86846,412.0,16.0,,Houston,PhD,Divorced,0
+27,124071,775.0,10.0,0.0,NYC,Master,Divorced,1
+49,36640,602.0,12.0,4.0,Chicago,Master,Married,1
+33,74547,417.0,10.0,2.0,Phoenix,PhD,Married,0
+25,84620,460.0,30.0,4.0,Chicago,High School,Married,0
+55,45317,700.0,27.0,0.0,NYC,High School,Single,0
+29,145608,497.0,5.0,3.0,LA,Master,Married,1
+41,37564,559.0,15.0,1.0,Phoenix,Master,Single,0
+45,57345,346.0,,3.0,Chicago,Master,Single,1
+70,143824,698.0,34.0,3.0,Houston,PhD,Married,1
+25,124223,377.0,25.0,0.0,LA,High School,Married,1
+75,109273,423.0,11.0,4.0,Chicago,Master,Married,1
+45,104859,374.0,10.0,2.0,Houston,Master,Single,1
+53,110765,436.0,36.0,3.0,NYC,Bachelor,Divorced,1
+43,140017,699.0,24.0,4.0,Houston,PhD,Married,0
+25,104038,,17.0,2.0,Chicago,Bachelor,Married,0
+75,82393,799.0,18.0,3.0,Chicago,High School,Married,1
+77,96081,437.0,,2.0,NYC,Bachelor,Single,0
+67,132650,349.0,37.0,4.0,Houston,Bachelor,Single,1
+45,59430,553.0,17.0,1.0,Houston,Bachelor,Divorced,1
+45,105532,725.0,25.0,4.0,NYC,PhD,Married,0
+54,57788,846.0,5.0,0.0,Houston,High School,Single,1
+58,125505,601.0,3.0,2.0,NYC,Bachelor,Divorced,1
+53,78543,648.0,28.0,1.0,LA,PhD,Married,1
+44,43919,348.0,33.0,2.0,Chicago,High School,Single,1
+71,99346,373.0,16.0,2.0,LA,Master,Married,1
+34,126122,560.0,15.0,3.0,Phoenix,Bachelor,Married,0
+26,69974,,1.0,0.0,Phoenix,High School,Single,1
+50,137309,559.0,33.0,2.0,Phoenix,Bachelor,Single,1
+70,46371,594.0,7.0,4.0,NYC,Master,Single,1
+37,75084,612.0,12.0,4.0,Houston,High School,Married,0
+30,59629,481.0,7.0,3.0,LA,PhD,Married,0
+45,81184,663.0,29.0,0.0,LA,High School,Divorced,1
+65,91916,487.0,31.0,0.0,LA,PhD,Married,1
+46,103972,842.0,35.0,4.0,LA,High School,Single,0
+30,92187,847.0,29.0,1.0,Phoenix,PhD,Married,1
+63,42984,707.0,0.0,3.0,LA,Master,Divorced,1
+52,63039,713.0,38.0,3.0,Houston,Master,Divorced,1
+78,115431,641.0,16.0,4.0,Phoenix,Master,Single,0
+23,113691,519.0,19.0,4.0,LA,High School,Single,0
+35,88606,462.0,23.0,1.0,NYC,Master,Divorced,0
+68,40616,519.0,21.0,1.0,Chicago,Bachelor,Divorced,1
+22,132665,569.0,28.0,0.0,Chicago,Master,Divorced,1
+64,135373,699.0,21.0,3.0,Chicago,PhD,Single,1
+42,80072,481.0,8.0,3.0,Phoenix,PhD,Divorced,1
+19,54574,504.0,36.0,4.0,LA,PhD,Divorced,1
+27,33430,527.0,9.0,0.0,Phoenix,High School,Single,1
+73,149123,549.0,35.0,3.0,Houston,Bachelor,Married,1
+47,42676,740.0,36.0,0.0,NYC,Master,Married,0
+67,40816,832.0,27.0,0.0,NYC,Bachelor,Divorced,0
+76,62733,495.0,27.0,4.0,Chicago,Bachelor,Married,1
+62,115680,818.0,20.0,0.0,Chicago,PhD,Married,1
+22,32050,369.0,23.0,1.0,Chicago,PhD,Married,0
+72,139996,698.0,39.0,1.0,LA,PhD,Married,1
+73,63933,502.0,1.0,2.0,Houston,High School,Divorced,1
+50,54951,,7.0,4.0,Houston,Bachelor,Married,0
+71,62413,771.0,26.0,2.0,Houston,Bachelor,Married,0
+18,64801,498.0,21.0,1.0,Houston,High School,Single,0
+35,85619,725.0,36.0,2.0,Chicago,High School,Divorced,1
+49,62913,791.0,26.0,4.0,NYC,High School,Single,0
+64,142573,441.0,28.0,4.0,Chicago,Bachelor,Single,1
+66,149076,612.0,2.0,0.0,Houston,Bachelor,Divorced,1
+25 years,92292,731.0,36.0,3.0,Houston,Master,Married,0
+69,50k,698.0,20.0,4.0,NYC,PhD,Single,0
+46,34158,643.0,17.0,4.0, NYC ,High School,Divorced,1
+32,92680,???,4.0,1.0,LA,Bachelor,Married,1
+60,50309,486.0,2.0,3.0,LA,bachelor,Divorced,1

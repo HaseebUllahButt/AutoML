@@ -1,0 +1,55 @@
+id,mixed_types,with_units,missing_various,whitespace,high_cardinality,constant,target
+1.0,0,10kg,, value ,cat_0,same,1.0
+2.0,1,20kg,N/A,  value,cat_1,same,1.0
+3.0,2,5ft,???,value  ,cat_2,same,1.0
+4.0,3,15kg,--,value,cat_3,same,0.0
+5.0,4,30kg,null, value,cat_4,same,0.0
+6.0,5,10kg,, value ,cat_5,same,1.0
+7.0,6,20kg,missing,  value,cat_6,same,1.0
+8.0,7,5ft,Unknown,value  ,cat_7,same,1.0
+9.0,8,15kg,,value,cat_8,same,1.0
+10.0,9,30kg,N/A, value,cat_9,same,0.0
+11.0,10,10kg,???, value ,cat_10,same,0.0
+12.0,11,20kg,--,  value,cat_11,same,1.0
+13.0,12,5ft,null,value  ,cat_12,same,0.0
+14.0,13,15kg,,value,cat_13,same,1.0
+15.0,14,30kg,missing, value,cat_14,same,1.0
+16.0,15,10kg,Unknown, value ,cat_15,same,0.0
+17.0,16,20kg,,  value,cat_16,same,1.0
+18.0,17,5ft,N/A,value  ,cat_17,same,0.0
+19.0,18,15kg,???,value,cat_18,same,0.0
+20.0,19,30kg,--, value,cat_19,same,1.0
+21.0,20,10kg,null, value ,cat_20,same,1.0
+22.0,21,20kg,,  value,cat_21,same,1.0
+23.0,22,5ft,missing,value  ,cat_22,same,1.0
+24.0,23,15kg,Unknown,value,cat_23,same,1.0
+25.0,24,30kg,, value,cat_24,same,1.0
+26.0,25,10kg,N/A, value ,cat_25,same,1.0
+27.0,26,20kg,???,  value,cat_26,same,0.0
+28.0,27,5ft,--,value  ,cat_27,same,0.0
+29.0,28,15kg,null,value,cat_28,same,1.0
+30.0,29,30kg,, value,cat_29,same,1.0
+31.0,30,10kg,missing, value ,cat_30,same,1.0
+32.0,31,20kg,Unknown,  value,cat_31,same,1.0
+33.0,32,5ft,,value  ,cat_32,same,1.0
+34.0,33,15kg,N/A,value,cat_33,same,0.0
+35.0,34,30kg,???, value,cat_34,same,1.0
+36.0,35,10kg,--, value ,cat_35,same,0.0
+37.0,36,20kg,null,  value,cat_36,same,0.0
+38.0,37,5ft,,value  ,cat_37,same,0.0
+39.0,38,15kg,missing,value,cat_38,same,0.0
+40.0,39,30kg,Unknown, value,cat_39,same,0.0
+41.0,40,10kg,, value ,cat_40,same,0.0
+42.0,41,20kg,N/A,  value,cat_41,same,1.0
+43.0,42,5ft,???,value  ,cat_42,same,1.0
+44.0,43,15kg,--,value,cat_43,same,1.0
+45.0,44,30kg,null, value,cat_44,same,1.0
+46.0,45,10kg,, value ,cat_45,same,0.0
+47.0,46,20kg,missing,  value,cat_46,same,1.0
+48.0,47,5ft,Unknown,value  ,cat_47,same,1.0
+49.0,48,15kg,5,value,cat_48,same,0.0
+50.0,49,30kg,10, value,cat_49,same,0.0
+1.0,0,10kg,, value ,cat_0,same,1.0
+2.0,1,20kg,N/A,  value,cat_1,same,1.0
+3.0,2,5ft,???,value  ,cat_2,same,1.0
+,,,,,,,

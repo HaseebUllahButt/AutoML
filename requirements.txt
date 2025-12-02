@@ -1,0 +1,34 @@
+# Core Data Processing
+pandas>=2.0.0
+numpy>=1.24.0
+scipy>=1.10.0
+
+# Machine Learning
+scikit-learn>=1.3.0
+xgboost>=2.0.0
+lightgbm>=4.0.0
+imbalanced-learn>=0.11.0
+
+# Data Validation & Quality
+chardet>=5.0.0
+python-dateutil>=2.8.0
+
+# Visualization
+matplotlib>=3.7.0
+seaborn>=0.12.0
+plotly>=5.14.0
+
+# UI
+streamlit>=1.28.0
+
+# Reporting
+jinja2>=3.1.0
+
+# Utilities
+tqdm>=4.65.0
+joblib>=1.3.0
+pyyaml>=6.0
+
+# Optional but recommended
+# category-encoders>=2.6.0  # Advanced encoders
+# optuna>=3.0.0  # Better hyperparameter optimization
