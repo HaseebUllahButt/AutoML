@@ -4,7 +4,8 @@ Model registry - defines all available models and their hyperparameter spaces
 
 from sklearn.ensemble import (
     RandomForestClassifier, RandomForestRegressor,
-    GradientBoostingClassifier, GradientBoostingRegressor
+    GradientBoostingClassifier, GradientBoostingRegressor,
+    AdaBoostClassifier, AdaBoostRegressor
 )
 from sklearn.linear_model import (
     LogisticRegression, LinearRegression,
@@ -12,6 +13,7 @@ from sklearn.linear_model import (
 )
 from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
 from sklearn.neighbors import KNeighborsClassifier, KNeighborsRegressor
+from sklearn.svm import SVC, SVR
 from sklearn.naive_bayes import GaussianNB
 from sklearn.dummy import DummyClassifier, DummyRegressor
 
@@ -90,6 +92,22 @@ class ModelRegistry:
                     'n_estimators': [50, 100, 200],
                     'learning_rate': [0.01, 0.1, 0.3],
                     'max_depth': [3, 5, 7],
+                },
+                'fast': False,
+            },
+            'adaboost': {
+                'model': AdaBoostClassifier(random_state=42),
+                'params': {
+                    'n_estimators': [50, 100, 200],
+                    'learning_rate': [0.01, 0.1, 1.0],
+                },
+                'fast': True,
+            },
+            'svm': {
+                'model': SVC(probability=True, random_state=42),
+                'params': {
+                    'C': [0.1, 1, 10],
+                    'kernel': ['rbf', 'linear'],
                 },
                 'fast': False,
             },
@@ -201,6 +219,22 @@ class ModelRegistry:
                     'n_estimators': [50, 100, 200],
                     'learning_rate': [0.01, 0.1, 0.3],
                     'max_depth': [3, 5, 7],
+                },
+                'fast': False,
+            },
+            'adaboost': {
+                'model': AdaBoostRegressor(random_state=42),
+                'params': {
+                    'n_estimators': [50, 100, 200],
+                    'learning_rate': [0.01, 0.1, 1.0],
+                },
+                'fast': True,
+            },
+            'svm': {
+                'model': SVR(),
+                'params': {
+                    'C': [0.1, 1, 10],
+                    'kernel': ['rbf', 'linear'],
                 },
                 'fast': False,
             },

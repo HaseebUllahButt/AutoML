@@ -13,7 +13,7 @@ from ..config.settings import AutoMLConfig
 from ..data.profiling import DataProfiler
 from ..data.validation import ColumnValidator
 from .cleaners import (
-    MissingValueHandler, OutlierHandler, DuplicateRemover,
+    MissingValueHandler, OutlierHandler,
     ConstantFeatureRemover, HighCardinalityHandler,
     DataTypeConverter, RareCategoryCollapser
 )
@@ -55,11 +55,6 @@ class PreprocessingPipelineBuilder:
         
         # Build pipeline steps based on profile
         steps = []
-        
-        # Step 1: Remove duplicates
-        if profile.get('duplicates', {}).get('n_duplicates', 0) > 0:
-            steps.append(('remove_duplicates', DuplicateRemover()))
-            self.preprocessing_steps.append("Remove duplicate rows")
         
         # Step 2: Handle missing values
         if profile.get('missing', {}).get('total_missing', 0) > 0:
@@ -176,6 +171,12 @@ class PreprocessingPipelineBuilder:
                 f"WARNING: Dropping {target_missing} rows with missing target values"
             )
             df = df[df[target_col].notna()].copy()
+            
+        # Remove duplicates
+        n_duplicates = df.duplicated().sum()
+        if n_duplicates > 0:
+            self.warnings.append(f"INFO: Removing {n_duplicates} duplicate rows")
+            df = df.drop_duplicates()
         
         # Separate features and target
         X = df.drop(columns=[target_col]).copy()

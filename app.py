@@ -386,40 +386,45 @@ def main():
             if st.session_state.training_results:
                 results = st.session_state.training_results
                 
-                st.subheader("🏆 Best Model")
-                col1, col2 = st.columns(2)
-                with col1:
-                    st.metric("Model", results.get('best_model_name', 'N/A'))
-                with col2:
-                    st.metric("Score", f"{results.get('best_score', 0):.4f}")
-                
-                st.subheader("📊 All Models Performance")
-                all_results = results.get('all_results', [])
-                
-                if all_results:
-                    # Create results DataFrame
-                    results_data = []
-                    for r in all_results:
-                        if r.get('status') == 'success':
-                            row = {
-                                'Model': r['model_name'],
-                                'Status': '✓',
-                                'Time (s)': r.get('training_time', 0),
-                            }
-                            metrics = r.get('metrics', {})
-                            for key, value in metrics.items():
-                                if value is not None:
-                                    row[key.replace('_', ' ').title()] = value
-                            results_data.append(row)
-                        else:
-                            results_data.append({
-                                'Model': r['model_name'],
-                                'Status': '✗',
-                                'Error': r.get('error', 'Unknown')[:50]
-                            })
+                if 'error' in results:
+                    st.error(f"Training Error: {results['error']}")
+                else:
+                    st.subheader("🏆 Best Model")
+                    col1, col2 = st.columns(2)
+                    with col1:
+                        st.metric("Model", results.get('best_model_name', 'N/A'))
+                    with col2:
+                        st.metric("Score", f"{results.get('best_score', 0):.4f}")
                     
-                    results_df = pd.DataFrame(results_data)
-                    st.dataframe(results_df, use_container_width=True)
+                    st.subheader("📊 All Models Performance")
+                    all_results = results.get('all_results', [])
+                    
+                    if all_results:
+                        # Create results DataFrame
+                        results_data = []
+                        for r in all_results:
+                            if r.get('status') == 'success':
+                                row = {
+                                    'Model': r['model_name'],
+                                    'Status': '✓',
+                                    'Time (s)': r.get('training_time', 0),
+                                }
+                                metrics = r.get('metrics', {})
+                                for key, value in metrics.items():
+                                    if value is not None:
+                                        row[key.replace('_', ' ').title()] = value
+                                results_data.append(row)
+                            else:
+                                results_data.append({
+                                    'Model': r['model_name'],
+                                    'Status': '✗',
+                                    'Error': r.get('error', 'Unknown')[:100]
+                                })
+                        
+                        results_df = pd.DataFrame(results_data)
+                        st.dataframe(results_df, use_container_width=True)
+                    else:
+                        st.warning("No models were trained.")
     
     # ==================== TAB 5: Results & Export ====================
     with tab5:
