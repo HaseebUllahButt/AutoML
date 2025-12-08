@@ -1,5 +1,6 @@
 """
 Model trainer with hyperparameter tuning and comprehensive error handling
+Enhanced with validation, recovery, and detailed error tracking
 """
 
 import pandas as pd
@@ -16,9 +17,13 @@ import time
 import warnings
 from typing import Dict, List, Tuple, Any
 import joblib
+import logging
 
 from ..config.settings import AutoMLConfig
 from .model_registry import ModelRegistry
+from ..utils.error_handlers import (
+    TrainingException, ErrorContext, retry, InputValidator, TimeoutError
+)
 
 
 class ModelTrainer:
@@ -36,7 +41,7 @@ class ModelTrainer:
     def train_models(self, X: pd.DataFrame, y: pd.Series, 
                      task_type: str = 'auto', fast_only: bool = False) -> Dict:
         """
-        Train multiple models and return results
+        Train multiple models and return results with comprehensive validation
         
         Args:
             X: Feature matrix
@@ -46,64 +51,104 @@ class ModelTrainer:
             
         Returns:
             Dictionary with training results
+        
+        Raises:
+            TrainingException: If validation fails
         """
         self.warnings = []
         self.all_results = []
         
-        # Determine task type
-        if task_type == 'auto':
-            self.task_type = self._infer_task_type(y)
-        else:
-            self.task_type = task_type
-        
-        self.warnings.append(f"INFO: Task type: {self.task_type}")
-        
-        # Split data
         try:
-            X_train, X_test, y_train, y_test = self._split_data(X, y)
-        except Exception as e:
-            self.warnings.append(f"ERROR: Failed to split data: {e}")
-            return {'error': str(e), 'warnings': self.warnings}
-        
-        # Get models
-        registry = ModelRegistry()
-        if self.task_type == 'classification':
-            models = registry.get_classification_models(fast_only=fast_only)
-        else:
-            models = registry.get_regression_models(fast_only=fast_only)
-        
-        self.warnings.append(f"INFO: Training {len(models)} models")
-        
-        # Train each model
-        for model_name, model_config in models.items():
-            self.warnings.append(f"INFO: Training {model_name}...")
+            # Validate inputs
+            if X is None or y is None:
+                raise TrainingException("X and y cannot be None", {'has_X': X is not None, 'has_y': y is not None})
             
-            try:
-                result = self._train_single_model(
-                    model_name, model_config,
-                    X_train, X_test, y_train, y_test
+            if not isinstance(X, (pd.DataFrame, np.ndarray)):
+                raise TrainingException(f"X must be DataFrame or ndarray, got {type(X).__name__}")
+            
+            if not isinstance(y, (pd.Series, np.ndarray)):
+                raise TrainingException(f"y must be Series or ndarray, got {type(y).__name__}")
+            
+            if len(X) != len(y):
+                raise TrainingException(
+                    f"X and y have different lengths: {len(X)} vs {len(y)}",
+                    {'X_len': len(X), 'y_len': len(y)}
                 )
-                self.all_results.append(result)
+            
+            if len(X) == 0:
+                raise TrainingException("X and y are empty", {'len': 0})
+            
+            # Determine task type
+            if task_type == 'auto':
+                self.task_type = self._infer_task_type(y)
+            else:
+                self.task_type = task_type
+            
+            self.warnings.append(f"INFO: Task type: {self.task_type}")
+            
+            # Split data
+            try:
+                X_train, X_test, y_train, y_test = self._split_data(X, y)
             except Exception as e:
-                self.warnings.append(f"WARNING: {model_name} failed: {str(e)[:200]}")
-                self.all_results.append({
-                    'model_name': model_name,
-                    'error': str(e)[:200],
-                    'status': 'failed',
-                })
+                raise TrainingException(f"Failed to split data: {str(e)[:200]}")
+            
+            # Get models
+            registry = ModelRegistry()
+            if self.task_type == 'classification':
+                models = registry.get_classification_models(fast_only=fast_only)
+            else:
+                models = registry.get_regression_models(fast_only=fast_only)
+            
+            if not models:
+                raise TrainingException(f"No models available for {self.task_type}")
+            
+            self.warnings.append(f"INFO: Training {len(models)} models")
+            
+            # Train each model with error recovery
+            for model_name, model_config in models.items():
+                self.warnings.append(f"INFO: Training {model_name}...")
+                
+                try:
+                    result = self._train_single_model(
+                        model_name, model_config,
+                        X_train, X_test, y_train, y_test
+                    )
+                    self.all_results.append(result)
+                except TimeoutError as e:
+                    self.warnings.append(f"WARNING: {model_name} training timed out: {str(e)[:200]}")
+                    self.all_results.append({
+                        'model_name': model_name,
+                        'error': f"Training timed out: {str(e)[:200]}",
+                        'status': 'timeout',
+                    })
+                except Exception as e:
+                    self.warnings.append(f"WARNING: {model_name} failed: {str(e)[:200]}")
+                    self.all_results.append({
+                        'model_name': model_name,
+                        'error': str(e)[:200],
+                        'status': 'failed',
+                    })
+            
+            # Select best model
+            self._select_best_model()
+            
+            return {
+                'task_type': self.task_type,
+                'best_model_name': self.best_model_name,
+                'best_score': self.best_score,
+                'all_results': self.all_results,
+                'warnings': self.warnings,
+                'X_train_shape': X_train.shape,
+                'X_test_shape': X_test.shape,
+            }
         
-        # Select best model
-        self._select_best_model()
-        
-        return {
-            'task_type': self.task_type,
-            'best_model_name': self.best_model_name,
-            'best_score': self.best_score,
-            'all_results': self.all_results,
-            'warnings': self.warnings,
-            'X_train_shape': X_train.shape,
-            'X_test_shape': X_test.shape,
-        }
+        except TrainingException:
+            raise
+        except Exception as e:
+            raise TrainingException(
+                f"Unexpected error during training: {str(e)[:200]}",
+                {'error_type': type(e).__name__}
+            )
     
     def _infer_task_type(self, y: pd.Series) -> str:
         """Infer whether task is classification or regression"""

@@ -1,6 +1,7 @@
 """
 Robust CSV ingestion with extreme edge case handling
 Handles all file format nightmares, encoding issues, delimiter problems, etc.
+Enhanced with comprehensive error handling and recovery mechanisms.
 """
 
 import pandas as pd
@@ -13,8 +14,12 @@ import warnings
 from pathlib import Path
 from typing import Tuple, Optional, List
 import re
+import logging
 
 from ..config.settings import AutoMLConfig
+from ..utils.error_handlers import (
+    IngestException, ErrorContext, retry, InputValidator
+)
 
 
 class DataIngestor:
@@ -79,29 +84,51 @@ class DataIngestor:
             return None, self.warnings + self.info_messages
     
     def _validate_file(self, file_path: str) -> bool:
-        """Check file exists and isn't too large"""
-        path = Path(file_path)
+        """Check file exists and isn't too large with comprehensive validation"""
+        try:
+            path = Path(file_path)
+            
+            # Check file existence
+            if not path.exists():
+                raise IngestException(
+                    f"File does not exist: {file_path}",
+                    {'file_path': file_path}
+                )
+            
+            # Check is file (not directory)
+            if not path.is_file():
+                raise IngestException(
+                    f"Path is not a file: {file_path}",
+                    {'file_path': file_path, 'is_dir': path.is_dir()}
+                )
+            
+            # Check file size
+            size_mb = path.stat().st_size / (1024 * 1024)
+            
+            if size_mb == 0:
+                raise IngestException(
+                    "File is empty (0 bytes)",
+                    {'file_path': file_path, 'size_bytes': 0}
+                )
+            
+            if size_mb > self.config.MAX_FILE_SIZE_MB:
+                raise IngestException(
+                    f"File too large ({size_mb:.1f}MB > {self.config.MAX_FILE_SIZE_MB}MB)",
+                    {'file_path': file_path, 'size_mb': size_mb, 'max_mb': self.config.MAX_FILE_SIZE_MB}
+                )
+            
+            if size_mb > 100:
+                self.warnings.append(f"WARNING: Large file ({size_mb:.1f}MB), processing may be slow")
+            
+            self.info_messages.append(f"INFO: File validation passed ({size_mb:.1f}MB)")
+            return True
         
-        if not path.exists():
-            self.warnings.append("ERROR: File does not exist")
+        except IngestException as e:
+            self.warnings.append(f"ERROR: {e.message}")
             return False
-        
-        if not path.is_file():
-            self.warnings.append("ERROR: Path is not a file")
+        except Exception as e:
+            self.warnings.append(f"ERROR: Unexpected validation error: {str(e)[:100]}")
             return False
-        
-        size_mb = path.stat().st_size / (1024 * 1024)
-        
-        if size_mb == 0:
-            self.warnings.append("ERROR: File is empty (0 bytes)")
-            return False
-        
-        if size_mb > self.config.MAX_FILE_SIZE_MB:
-            self.warnings.append(f"ERROR: File too large ({size_mb:.1f}MB > {self.config.MAX_FILE_SIZE_MB}MB)")
-            return False
-        
-        if size_mb > 100:
-            self.warnings.append(f"WARNING: Large file ({size_mb:.1f}MB), processing may be slow")
         
         return True
     
@@ -168,34 +195,43 @@ class DataIngestor:
         return file_path
     
     def _detect_encoding(self, file_path: str) -> str:
-        """Try multiple encodings with chardet as fallback"""
-        # Quick detection with chardet
+        """Try multiple encodings with chardet as fallback - with comprehensive error handling"""
         try:
-            with open(file_path, 'rb') as f:
-                raw = f.read(min(100000, Path(file_path).stat().st_size))  # Sample first 100KB
-            
-            result = chardet.detect(raw)
-            detected = result['encoding']
-            confidence = result['confidence']
-            
-            if confidence > 0.7 and detected:
-                self.info_messages.append(f"INFO: Detected encoding '{detected}' (confidence: {confidence:.2f})")
-                return detected
-        except Exception as e:
-            self.warnings.append(f"WARNING: Chardet encoding detection failed: {e}")
-        
-        # Fallback: try each encoding manually
-        for enc in self.config.ENCODING_ATTEMPTS:
+            # Quick detection with chardet
             try:
-                with open(file_path, 'r', encoding=enc) as f:
-                    f.read(10000)  # Try reading 10K chars
-                self.info_messages.append(f"INFO: Using encoding '{enc}'")
-                return enc
-            except (UnicodeDecodeError, UnicodeError):
-                continue
+                with open(file_path, 'rb') as f:
+                    raw = f.read(min(100000, Path(file_path).stat().st_size))  # Sample first 100KB
+                
+                result = chardet.detect(raw)
+                detected = result['encoding']
+                confidence = result['confidence']
+                
+                if confidence > 0.7 and detected:
+                    self.info_messages.append(f"INFO: Detected encoding '{detected}' (confidence: {confidence:.2f})")
+                    return detected
+            except Exception as e:
+                self.warnings.append(f"WARNING: Chardet detection failed: {str(e)[:100]}")
+            
+            # Fallback: try each encoding manually with timeout protection
+            for enc in self.config.ENCODING_ATTEMPTS:
+                try:
+                    with open(file_path, 'r', encoding=enc, errors='strict') as f:
+                        f.read(10000)  # Try reading 10K chars
+                    self.info_messages.append(f"INFO: Using encoding '{enc}'")
+                    return enc
+                except (UnicodeDecodeError, UnicodeError):
+                    continue
+                except Exception as e:
+                    self.warnings.append(f"WARNING: Encoding test '{enc}' failed: {str(e)[:100]}")
+                    continue
+            
+            # Final fallback
+            self.warnings.append("WARNING: Could not detect encoding reliably, using utf-8 with error replacement")
+            return 'utf-8'
         
-        self.warnings.append("WARNING: Could not detect encoding reliably, using utf-8 with error replacement")
-        return 'utf-8'
+        except Exception as e:
+            self.warnings.append(f"ERROR: Encoding detection error: {str(e)[:100]}")
+            return 'utf-8'
     
     def _detect_delimiter(self, file_path: str, encoding: str) -> str:
         """Detect delimiter by sampling and counting"""
@@ -241,13 +277,13 @@ class DataIngestor:
             return ','
     
     def _safe_read(self, file_path: str, encoding: str, delimiter: str) -> Optional[pd.DataFrame]:
-        """Read CSV with maximum safety and error handling"""
+        """Read CSV with maximum safety and error handling with multiple fallback strategies"""
         read_params = {
             'filepath_or_buffer': file_path,
             'encoding': encoding,
             'delimiter': delimiter,
             'on_bad_lines': 'skip',  # Skip malformed rows
-            'encoding_errors': 'replace',  # Replace bad chars with �
+            'encoding_errors': 'replace',  # Replace bad chars with replacement character
             'low_memory': False,
             'na_values': self.config.MISSING_INDICATORS,
             'keep_default_na': True,
@@ -258,6 +294,10 @@ class DataIngestor:
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore")
                 df = pd.read_csv(**read_params)
+            
+            if df is None or len(df) == 0:
+                raise IngestException("CSV parsed but result is empty", {'file_path': file_path})
+            
             self.info_messages.append(f"INFO: Read {len(df)} rows with C engine")
             return df
         
@@ -271,6 +311,10 @@ class DataIngestor:
                 with warnings.catch_warnings():
                     warnings.simplefilter("ignore")
                     df = pd.read_csv(**read_params)
+                
+                if df is None or len(df) == 0:
+                    raise IngestException("Python engine parsed but result is empty", {'file_path': file_path})
+                
                 self.info_messages.append(f"INFO: Read {len(df)} rows with Python engine (fallback)")
                 return df
             except Exception as e2:

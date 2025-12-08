@@ -56,7 +56,11 @@ class MissingValueHandler(BaseEstimator, TransformerMixin):
         # Apply imputers
         for col, imputer in self.imputers_.items():
             if col in X.columns:
-                X[col] = imputer.transform(X[[col]])
+                transformed = imputer.transform(X[[col]])
+                # SimpleImputer returns 2D array; flatten to Series to avoid pandas ValueError
+                if hasattr(transformed, 'ndim') and transformed.ndim > 1:
+                    transformed = transformed[:, 0]
+                X[col] = transformed
         
         return X
 

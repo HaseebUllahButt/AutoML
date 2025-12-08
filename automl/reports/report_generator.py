@@ -1,6 +1,7 @@
 """
 Report generation system
 Creates comprehensive HTML reports with visualizations and explanations
+Enhanced with comprehensive error handling and validation
 """
 
 import pandas as pd
@@ -9,6 +10,8 @@ from typing import Dict, List, Any
 from datetime import datetime
 import base64
 from io import BytesIO
+import logging
+import traceback
 
 try:
     import matplotlib
@@ -20,6 +23,9 @@ except ImportError:
     MATPLOTLIB_AVAILABLE = False
 
 from ..config.settings import AutoMLConfig
+from ..utils.error_handlers import (
+    ReportException, ErrorContext, InputValidator
+)
 
 
 class ReportGenerator:
@@ -35,7 +41,7 @@ class ReportGenerator:
                        target_col: str,
                        output_path: str = 'automl_report.html') -> str:
         """
-        Generate a comprehensive HTML report
+        Generate a comprehensive HTML report with validation
         
         Args:
             profile: Data profile from DataProfiler
@@ -46,13 +52,57 @@ class ReportGenerator:
             
         Returns:
             Path to generated report
+        
+        Raises:
+            ReportException: If report generation fails
         """
-        html = self._generate_html(profile, preprocessing_steps, training_results, target_col)
+        try:
+            # Validate inputs
+            if profile is None:
+                raise ReportException("Profile is None", {'operation': 'generate_report'})
+            
+            if training_results is None:
+                raise ReportException("Training results is None", {'operation': 'generate_report'})
+            
+            if not isinstance(output_path, str) or not output_path.endswith('.html'):
+                raise ReportException(
+                    f"output_path must be a string ending with '.html', got {output_path}",
+                    {'output_path': output_path}
+                )
+            
+            # Generate HTML content
+            html = self._generate_html(profile, preprocessing_steps, training_results, target_col)
+            
+            if not html or len(html) == 0:
+                raise ReportException("Generated HTML is empty", {'output_path': output_path})
+            
+            # Write to file with error handling
+            try:
+                from pathlib import Path
+                Path(output_path).parent.mkdir(parents=True, exist_ok=True)
+                
+                with open(output_path, 'w', encoding='utf-8') as f:
+                    f.write(html)
+            except IOError as e:
+                raise ReportException(
+                    f"Failed to write report to {output_path}: {str(e)[:200]}",
+                    {'output_path': output_path, 'error': str(e)[:100]}
+                )
+            except Exception as e:
+                raise ReportException(
+                    f"Unexpected error writing report: {str(e)[:200]}",
+                    {'output_path': output_path, 'error_type': type(e).__name__}
+                )
+            
+            return output_path
         
-        with open(output_path, 'w', encoding='utf-8') as f:
-            f.write(html)
-        
-        return output_path
+        except ReportException:
+            raise
+        except Exception as e:
+            raise ReportException(
+                f"Unexpected error during report generation: {str(e)[:200]}",
+                {'error_type': type(e).__name__}
+            )
     
     def _generate_html(self, profile, preprocessing_steps, training_results, target_col) -> str:
         """Generate the HTML content"""

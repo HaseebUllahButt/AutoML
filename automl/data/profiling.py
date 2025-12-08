@@ -1,6 +1,7 @@
 """
 Comprehensive data profiling and quality analysis
 Detects all data quality issues, leakage, outliers, and generates detailed reports
+Enhanced with comprehensive error handling and validation
 """
 
 import pandas as pd
@@ -9,8 +10,12 @@ from typing import Dict, List, Tuple, Any, Optional
 from scipy import stats
 from collections import Counter
 import re
+import logging
 
 from ..config.settings import AutoMLConfig
+from ..utils.error_handlers import (
+    ProfilingException, ErrorContext, InputValidator
+)
 
 
 class DataProfiler:
@@ -24,7 +29,7 @@ class DataProfiler:
         
     def profile_dataset(self, df: pd.DataFrame, target_col: str = None) -> Dict[str, Any]:
         """
-        Generate comprehensive data profile
+        Generate comprehensive data profile with validation
         
         Args:
             df: Input DataFrame
@@ -32,29 +37,66 @@ class DataProfiler:
             
         Returns:
             Dictionary containing all profiling information
+        
+        Raises:
+            ProfilingException: If input validation fails
         """
         self.warnings = []
         self.recommendations = []
         
-        self.profile = {
-            'basic': self._profile_basic(df),
-            'missing': self._profile_missing(df),
-            'dtypes': self._profile_dtypes(df),
-            'cardinality': self._profile_cardinality(df),
-            'duplicates': self._profile_duplicates(df),
-            'outliers': self._profile_outliers(df),
-            'statistics': self._profile_statistics(df),
-            'correlations': self._profile_correlations(df),
-        }
+        try:
+            # Validate input
+            if df is None:
+                raise ProfilingException("DataFrame is None", {'operation': 'profile_dataset'})
+            
+            if not isinstance(df, pd.DataFrame):
+                raise ProfilingException(
+                    f"Expected DataFrame, got {type(df).__name__}",
+                    {'expected': 'pd.DataFrame', 'got': type(df).__name__}
+                )
+            
+            if len(df) == 0:
+                raise ProfilingException("DataFrame is empty (0 rows)", {'operation': 'profile_dataset'})
+            
+            if len(df.columns) == 0:
+                raise ProfilingException("DataFrame has no columns", {'operation': 'profile_dataset'})
+            
+            # Validate target column if provided
+            if target_col and target_col not in df.columns:
+                raise ProfilingException(
+                    f"Target column '{target_col}' not found in DataFrame",
+                    {'target_col': target_col, 'available_cols': list(df.columns)}
+                )
+            
+            # Profile with error handling for each section
+            self.profile = {
+                'basic': self._profile_basic(df),
+                'missing': self._profile_missing(df),
+                'dtypes': self._profile_dtypes(df),
+                'cardinality': self._profile_cardinality(df),
+                'duplicates': self._profile_duplicates(df),
+                'outliers': self._profile_outliers(df),
+                'statistics': self._profile_statistics(df),
+                'correlations': self._profile_correlations(df),
+            }
+            
+            if target_col and target_col in df.columns:
+                self.profile['target'] = self._profile_target(df, target_col)
+                self.profile['leakage'] = self._profile_leakage(df, target_col)
+            
+            self.profile['warnings'] = self.warnings
+            self.profile['recommendations'] = self.recommendations
+            self.profile['target_column'] = target_col
+            
+            return self.profile
         
-        if target_col and target_col in df.columns:
-            self.profile['target'] = self._profile_target(df, target_col)
-            self.profile['leakage'] = self._profile_leakage(df, target_col)
-        
-        self.profile['warnings'] = self.warnings
-        self.profile['recommendations'] = self.recommendations
-        
-        return self.profile
+        except ProfilingException:
+            raise
+        except Exception as e:
+            raise ProfilingException(
+                f"Unexpected error during profiling: {str(e)[:200]}",
+                {'error_type': type(e).__name__}
+            )
     
     def _profile_basic(self, df: pd.DataFrame) -> Dict:
         """Basic dataset statistics"""

@@ -1,6 +1,7 @@
 """
 Streamlit UI for AutoML System
 User-friendly interface with comprehensive error handling and state management
+Enhanced with detailed error tracking, validation, and recovery mechanisms
 """
 
 import streamlit as st
@@ -10,6 +11,8 @@ from pathlib import Path
 import tempfile
 import os
 import time
+import logging
+import traceback
 
 # Import our AutoML components
 from automl.config.settings import AutoMLConfig
@@ -18,6 +21,12 @@ from automl.data.profiling import DataProfiler
 from automl.preprocessing.pipeline_builder import PreprocessingPipelineBuilder
 from automl.models.trainer import ModelTrainer
 from automl.reports.report_generator import ReportGenerator
+
+# Import error handling utilities
+from automl.utils.error_handlers import (
+    IngestException, ProfilingException, PreprocessingException, TrainingException,
+    ReportException, ErrorContext, ErrorCollector
+)
 
 
 # Page configuration
@@ -101,17 +110,84 @@ def initialize_session_state():
 
 
 def display_messages():
-    """Display collected messages"""
+    """Display collected messages with enhanced formatting"""
     if st.session_state.messages:
         for msg in st.session_state.messages[-20:]:  # Show last 20 messages
-            if 'ERROR' in msg or 'CRITICAL' in msg:
-                st.markdown(f'<div class="error-box">❌ {msg}</div>', unsafe_allow_html=True)
-            elif 'WARNING' in msg:
-                st.markdown(f'<div class="warning-box">⚠️ {msg}</div>', unsafe_allow_html=True)
-            elif 'INFO' in msg or '✓' in msg:
-                st.markdown(f'<div class="info-box">ℹ️ {msg}</div>', unsafe_allow_html=True)
-            else:
-                st.info(msg)
+            try:
+                if 'ERROR' in msg or 'CRITICAL' in msg:
+                    st.markdown(f'<div class="error-box">❌ {msg}</div>', unsafe_allow_html=True)
+                elif 'WARNING' in msg:
+                    st.markdown(f'<div class="warning-box">⚠️ {msg}</div>', unsafe_allow_html=True)
+                elif 'INFO' in msg or '✓' in msg:
+                    st.markdown(f'<div class="info-box">ℹ️ {msg}</div>', unsafe_allow_html=True)
+                else:
+                    st.info(msg)
+            except Exception as e:
+                # Fallback if markdown rendering fails
+                st.write(msg)
+
+
+def log_exception_details(exc, severity: str = "ERROR"):
+    """Record exception context for debugging."""
+    context = getattr(exc, 'context', None)
+    if context:
+        context_str = repr(context)
+        st.session_state.messages.append(f"{severity}: Details -> {context_str[:500]}")
+        logging.error("Exception context (%s): %s", exc.__class__.__name__, context_str)
+
+
+def safe_ui_operation(operation_name: str, operation_func, *args, **kwargs):
+    """
+    Safely execute a UI operation with comprehensive error handling
+    
+    Args:
+        operation_name: Name of the operation for error tracking
+        operation_func: Function to execute
+        args, kwargs: Arguments for the function
+    
+    Returns:
+        Tuple of (success: bool, result: Any, error_message: str)
+    """
+    try:
+        with ErrorContext(operation_name):
+            result = operation_func(*args, **kwargs)
+        return True, result, None
+    
+    except IngestException as e:
+        error_msg = f"Data Ingestion Error: {e.message}"
+        st.session_state.messages.append(f"ERROR: {error_msg}")
+        log_exception_details(e)
+        return False, None, error_msg
+    
+    except ProfilingException as e:
+        error_msg = f"Profiling Error: {e.message}"
+        st.session_state.messages.append(f"ERROR: {error_msg}")
+        log_exception_details(e)
+        return False, None, error_msg
+    
+    except PreprocessingException as e:
+        error_msg = f"Preprocessing Error: {e.message}"
+        st.session_state.messages.append(f"ERROR: {error_msg}")
+        log_exception_details(e)
+        return False, None, error_msg
+    
+    except TrainingException as e:
+        error_msg = f"Training Error: {e.message}"
+        st.session_state.messages.append(f"ERROR: {error_msg}")
+        log_exception_details(e)
+        return False, None, error_msg
+    
+    except ReportException as e:
+        error_msg = f"Report Generation Error: {e.message}"
+        st.session_state.messages.append(f"ERROR: {error_msg}")
+        log_exception_details(e)
+        return False, None, error_msg
+    
+    except Exception as e:
+        error_msg = f"Unexpected error in {operation_name}: {str(e)[:200]}"
+        st.session_state.messages.append(f"CRITICAL: {error_msg}")
+        logging.error("%s failed: %s", operation_name, traceback.format_exc())
+        return False, None, error_msg
 
 
 def main():
@@ -171,46 +247,64 @@ def main():
         )
         
         if uploaded_file is not None:
-            # Save to temporary file
-            with tempfile.NamedTemporaryFile(delete=False, suffix='.csv') as tmp_file:
-                tmp_file.write(uploaded_file.getvalue())
-                tmp_path = tmp_file.name
-            
+            # Validate file before saving
             try:
-                with st.spinner("🔄 Ingesting data..."):
-                    ingestor = DataIngestor(st.session_state.config)
-                    df, messages = ingestor.ingest(tmp_path)
+                if uploaded_file.size == 0:
+                    st.error("❌ Uploaded file is empty")
+                    st.session_state.messages.append("ERROR: Uploaded file is empty (0 bytes)")
+                elif uploaded_file.size > 500 * 1024 * 1024:  # 500MB
+                    st.error("❌ File is too large (max 500MB)")
+                    st.session_state.messages.append(f"ERROR: File too large ({uploaded_file.size / (1024**2):.1f}MB)")
+                else:
+                    # Save to temporary file
+                    with tempfile.NamedTemporaryFile(delete=False, suffix='.csv') as tmp_file:
+                        tmp_file.write(uploaded_file.getvalue())
+                        tmp_path = tmp_file.name
                     
-                    st.session_state.messages = messages
+                    try:
+                        with st.spinner("🔄 Ingesting data..."):
+                            ingestor = DataIngestor(st.session_state.config)
+                            df, messages = ingestor.ingest(tmp_path)
+                            
+                            st.session_state.messages = messages
+                            
+                            if df is not None:
+                                st.session_state.df = df
+                                st.markdown('<div class="success-box">✅ Data loaded successfully!</div>', unsafe_allow_html=True)
+                                
+                                # Display preview
+                                st.subheader("Data Preview")
+                                st.dataframe(df.head(100), use_container_width=True)
+                                
+                                col1, col2, col3 = st.columns(3)
+                                with col1:
+                                    st.metric("Rows", f"{len(df):,}")
+                                with col2:
+                                    st.metric("Columns", len(df.columns))
+                                with col3:
+                                    st.metric("Memory", f"{df.memory_usage(deep=True).sum() / (1024**2):.1f} MB")
+                            else:
+                                st.markdown('<div class="error-box">❌ Failed to load data. Check messages below.</div>', unsafe_allow_html=True)
                     
-                    if df is not None:
-                        st.session_state.df = df
-                        st.markdown('<div class="success-box">✅ Data loaded successfully!</div>', unsafe_allow_html=True)
-                        
-                        # Display preview
-                        st.subheader("Data Preview")
-                        st.dataframe(df.head(100), use_container_width=True)
-                        
-                        col1, col2, col3 = st.columns(3)
-                        with col1:
-                            st.metric("Rows", f"{len(df):,}")
-                        with col2:
-                            st.metric("Columns", len(df.columns))
-                        with col3:
-                            st.metric("Memory", f"{df.memory_usage(deep=True).sum() / (1024**2):.1f} MB")
-                    else:
-                        st.markdown('<div class="error-box">❌ Failed to load data. Check messages below.</div>', unsafe_allow_html=True)
-                
-            except Exception as e:
-                st.error(f"Critical error: {e}")
-                st.session_state.messages.append(f"ERROR: {e}")
+                    except IngestException as e:
+                        st.error(f"❌ Data Ingestion Error: {e.message}")
+                        st.session_state.messages.append(f"ERROR: {e.message}")
+                    except Exception as e:
+                        st.error(f"❌ Critical error: {str(e)[:200]}")
+                        st.session_state.messages.append(f"CRITICAL: {str(e)[:200]}")
+                        logging.error(f"Upload failed: {traceback.format_exc()}")
+                    
+                    finally:
+                        # Clean up temp file
+                        try:
+                            if 'tmp_path' in locals():
+                                os.unlink(tmp_path)
+                        except Exception as cleanup_error:
+                            logging.warning(f"Failed to clean up temp file: {cleanup_error}")
             
-            finally:
-                # Clean up temp file
-                try:
-                    os.unlink(tmp_path)
-                except:
-                    pass
+            except Exception as e:
+                st.error(f"❌ File upload validation failed: {str(e)[:200]}")
+                st.session_state.messages.append(f"ERROR: File validation failed: {str(e)[:200]}")
         
         # Display messages
         if st.session_state.messages:
@@ -334,9 +428,14 @@ def main():
                         with col2:
                             st.metric("Processed Features", len(X_processed.columns) if hasattr(X_processed, 'columns') else X_processed.shape[1])
                         
+                    except PreprocessingException as e:
+                        st.error(f"Preprocessing failed: {e.message}")
+                        log_exception_details(e)
                     except Exception as e:
-                        st.error(f"Preprocessing failed: {e}")
-                        st.session_state.messages.append(f"ERROR: {e}")
+                        error_text = f"Preprocessing failed: {str(e)[:200]}"
+                        st.error(error_text)
+                        st.session_state.messages.append(f"CRITICAL: {error_text}")
+                        logging.error("Preprocessing pipeline unexpected error: %s", traceback.format_exc())
             
             # Display messages
             if st.session_state.messages:
