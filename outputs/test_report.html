@@ -1,0 +1,247 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoML Report</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+        
+        h2 {
+            color: #34495e;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            border-left: 4px solid #3498db;
+            padding-left: 15px;
+        }
+        
+        h3 {
+            color: #7f8c8d;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        
+        .summary-box {
+            background: #ecf0f1;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .metric-card {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        .metric-card .value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #3498db;
+        }
+        
+        .metric-card .label {
+            color: #7f8c8d;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+        
+        .warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 3px;
+        }
+        
+        .error {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 3px;
+        }
+        
+        .info {
+            background: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 3px;
+        }
+        
+        .success {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 3px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        th {
+            background: #3498db;
+            color: white;
+            font-weight: 600;
+        }
+        
+        tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .best-model {
+            background: #d4edda !important;
+        }
+        
+        ul {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+        
+        li {
+            margin: 8px 0;
+        }
+        
+        .timestamp {
+            text-align: right;
+            color: #7f8c8d;
+            font-size: 0.9em;
+            margin-top: 40px;
+        }
+        
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .code-block {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🤖 AutoML System Report</h1>
+
+
+        <div class="summary-box">
+            <h2>📊 Executive Summary</h2>
+            <p><strong>Target Column:</strong> <code>loan_approved</code></p>
+            <p><strong>Task Type:</strong> Classification</p>
+            <p><strong>Best Model:</strong> dummy (Score: 0.65)</p>
+            
+            <div class="metric-grid">
+                <div class="metric-card">
+                    <div class="value">1,005</div>
+                    <div class="label">Rows</div>
+                </div>
+                <div class="metric-card">
+                    <div class="value">9</div>
+                    <div class="label">Columns</div>
+                </div>
+                <div class="metric-card">
+                    <div class="value">0.3 MB</div>
+                    <div class="label">Memory Usage</div>
+                </div>
+                <div class="metric-card">
+                    <div class="value">2</div>
+                    <div class="label">Target Classes/Values</div>
+                </div>
+            </div>
+        </div>
+
+<h2>🔍 Data Quality Analysis</h2>
+        <h3>Missing Values</h3>
+        <p>Total missing values: <strong>158</strong></p>
+        
+        <h3>Duplicate Rows</h3>
+        <div class="warning">
+            Found 5 duplicate rows (0.5%)
+        </div>
+<h3>Data Quality Warnings</h3><div class="warning">WARNING: Column 'age' appears numeric but has non-numeric values (e.g., '10k', '5+', 'N/A')</div><div class="warning">WARNING: Column 'salary' appears numeric but has non-numeric values (e.g., '10k', '5+', 'N/A')</div><div class="warning">WARNING: Column 'salary' has very high cardinality (998 unique values, 99.3%) - likely an ID column</div><div class="warning">WARNING: 5 duplicate rows found (0.5%)</div>
+<h2>⚙️ Preprocessing Pipeline</h2><p>The following preprocessing steps were applied:</p><ol><li>Impute missing values</li><li>Remove constant/low-variance features</li><li>Handle high-cardinality features</li><li>Collapse rare categories</li><li>Convert data types</li><li>Encode categorical variables</li><li>Scale numeric features</li><li>Create engineered features</li></ol>
+<h2>🎯 Model Training Results</h2><table><thead><tr><th>Model</th><th>Status</th><th>Training Time (s)</th><th>Test Accuracy</th><th>Test F1</th><th>Test Precision</th><th>Test Recall</th></tr></thead><tbody><tr class="best-model"><td><strong>dummy</strong></td><td>✓ Success</td><td>0.09</td><td>0.65</td><td>0.5121</td><td>0.4225</td><td>0.65</td></tr><tr><td><strong>logistic_regression</strong></td><td>✓ Success</td><td>0.88</td><td>0.615</td><td>0.5029</td><td>0.4541</td><td>0.615</td></tr><tr><td><strong>decision_tree</strong></td><td>✓ Success</td><td>1.30</td><td>0.61</td><td>0.5439</td><td>0.5377</td><td>0.61</td></tr><tr><td><strong>naive_bayes</strong></td><td>✓ Success</td><td>0.38</td><td>0.35</td><td>0.1815</td><td>0.1225</td><td>0.35</td></tr><tr><td><strong>adaboost</strong></td><td>✓ Success</td><td>28.64</td><td>0.65</td><td>0.5121</td><td>0.4225</td><td>0.65</td></tr><tr><td><strong>lightgbm</strong></td><td>✓ Success</td><td>5.29</td><td>0.65</td><td>0.5121</td><td>0.4225</td><td>0.65</td></tr></tbody></table>
+        <div class="success">
+            <strong>🏆 Best Model:</strong> dummy with score 0.65
+        </div>
+
+<h2>💡 Recommendations & Next Steps</h2><h3>Data Quality Improvements</h3><ul><li>INFO: Column 'age' has 63 categories - will use target encoding or hashing instead of one-hot</li><li>INFO: Column 'salary' has 998 categories - will use target encoding or hashing instead of one-hot</li><li>INFO: Column 'marital_status' has very low variance (3 unique values)</li><li>INFO: Column 'loan_approved' has very low variance (2 unique values)</li><li>INFO: Duplicate rows will be removed during preprocessing</li></ul><h3>Model Improvement Suggestions</h3><ul><li>Try feature engineering to create domain-specific features</li><li>Collect more data if possible (especially for minority classes)</li><li>Consider ensemble methods for better performance</li><li>Perform more extensive hyperparameter tuning</li><li>Check for data leakage in features</li></ul>
+        <h3>How to Use This Model</h3>
+        <div class="code-block">
+            <pre><code>import joblib
+
+# Load the model
+model = joblib.load('best_model.pkl')
+
+# Make predictions
+predictions = model.predict(X_new)
+</code></pre>
+        </div>
+
+
+        <div class="timestamp">
+            Report generated on 2025-12-14 12:45:04 by AutoML System v1.0
+        </div>
+    </div>
+</body>
+</html>

@@ -8,6 +8,7 @@ import time
 import signal
 import logging
 import traceback
+import concurrent.futures
 from typing import Callable, Any, Optional, Type, Union, Tuple
 from contextlib import contextmanager
 import inspect
@@ -185,7 +186,7 @@ def validate_ranges(**range_specs):
 
 def timeout(seconds: int):
     """
-    Decorator to add timeout to a function (Unix-like systems only)
+    Decorator to add timeout to a function (cross-platform with fallback)
     
     Usage:
         @timeout(300)
@@ -198,26 +199,37 @@ def timeout(seconds: int):
     def decorator(func: Callable) -> Callable:
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
-            # Define timeout handler
-            def timeout_handler(signum, frame):
-                raise TimeoutError(
-                    f"Function '{func.__name__}' timed out after {seconds} seconds",
-                    {'function': func.__name__, 'timeout_seconds': seconds}
-                )
-            
-            # Set up alarm
-            old_handler = signal.signal(signal.SIGALRM, timeout_handler)
-            signal.alarm(seconds)
-            
-            try:
-                result = func(*args, **kwargs)
-            finally:
-                # Disable alarm
-                signal.alarm(0)
-                signal.signal(signal.SIGALRM, old_handler)
-            
-            return result
-        
+            if seconds <= 0:
+                return func(*args, **kwargs)
+
+            if hasattr(signal, 'SIGALRM'):
+                def timeout_handler(signum, frame):
+                    raise TimeoutError(
+                        f"Function '{func.__name__}' timed out after {seconds} seconds",
+                        {'function': func.__name__, 'timeout_seconds': seconds}
+                    )
+
+                old_handler = signal.signal(signal.SIGALRM, timeout_handler)
+                signal.alarm(seconds)
+
+                try:
+                    result = func(*args, **kwargs)
+                finally:
+                    signal.alarm(0)
+                    signal.signal(signal.SIGALRM, old_handler)
+
+                return result
+            else:
+                with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
+                    future = executor.submit(func, *args, **kwargs)
+                    try:
+                        return future.result(timeout=seconds)
+                    except concurrent.futures.TimeoutError:
+                        raise TimeoutError(
+                            f"Function '{func.__name__}' timed out after {seconds} seconds",
+                            {'function': func.__name__, 'timeout_seconds': seconds}
+                        )
+
         return wrapper
     return decorator
 
