@@ -48,6 +48,8 @@ class AutoMLConfig:
     TEST_SIZE = 0.2
     MAX_TRAINING_TIME_SECONDS = 300  # 5 minutes per model
     EARLY_STOPPING_PATIENCE = 10
+    MAX_PARALLEL_JOBS = 1  # Prevent over-parallelizing on low-resource machines
+    MAX_TRAINING_ROWS = 5000  # Sample large datasets when training to limit memory/CPU
     
     # ==================== MEMORY MANAGEMENT ====================
     CHUNK_SIZE = 10000  # For large file processing
@@ -87,6 +89,7 @@ class AutoMLConfig:
     # ==================== HYPERPARAMETER SEARCH ====================
     HP_SEARCH_METHOD = 'random'  # 'grid', 'random', or 'bayesian'
     HP_SEARCH_ITERATIONS = 20  # For random/bayesian search
+    HP_SEARCH_N_JOBS = 1  # Limit hyperparameter search parallelism
     HP_SEARCH_CV = 3  # Cross-validation folds during HP search
     
     # ==================== FEATURE ENGINEERING ====================

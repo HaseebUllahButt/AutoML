@@ -9,6 +9,7 @@ from sklearn.model_selection import (
     train_test_split, cross_val_score, GridSearchCV, RandomizedSearchCV,
     StratifiedKFold, KFold
 )
+from sklearn.base import clone
 from sklearn.metrics import (
     accuracy_score, f1_score, roc_auc_score, precision_score, recall_score,
     mean_squared_error, mean_absolute_error, r2_score
@@ -83,6 +84,8 @@ class ModelTrainer:
                 self.task_type = self._infer_task_type(y)
             else:
                 self.task_type = task_type
+
+            X, y = self._limit_training_data(X, y)
             
             self.warnings.append(f"INFO: Task type: {self.task_type}")
             
@@ -197,13 +200,39 @@ class ModelTrainer:
         )
         
         return X_train, X_test, y_train, y_test
+
+    def _limit_training_data(self, X, y):
+        """Sample down large datasets to keep training lightweight"""
+        max_rows = getattr(self.config, 'MAX_TRAINING_ROWS', None)
+        if not max_rows or len(X) <= max_rows:
+            return X, y
+
+        rng = np.random.default_rng(self.config.RANDOM_STATE)
+        indices = np.sort(rng.choice(len(X), size=max_rows, replace=False))
+        limited_X = self._select_rows(X, indices)
+        limited_y = self._select_rows(y, indices)
+
+        self.warnings.append(
+            f"WARNING: Dataset truncated from {len(X)} to {len(limited_X)} rows to limit resource usage"
+        )
+        return limited_X, limited_y
+
+    @staticmethod
+    def _select_rows(data, indices):
+        if isinstance(data, pd.DataFrame):
+            return data.iloc[indices].copy()
+        if isinstance(data, pd.Series):
+            return data.iloc[indices].copy()
+        array = np.asarray(data)
+        return array[indices]
     
     def _train_single_model(self, model_name: str, model_config: Dict,
                             X_train, X_test, y_train, y_test) -> Dict:
         """Train a single model with hyperparameter tuning"""
         start_time = time.time()
         
-        model = model_config['model']
+        model = clone(model_config['model'])
+        model = self._apply_parallel_limits(model)
         param_grid = model_config['params']
         
         # Hyperparameter tuning if params provided
@@ -212,12 +241,16 @@ class ModelTrainer:
                 model = self._tune_hyperparameters(
                     model, param_grid, X_train, y_train
                 )
+                model = self._apply_parallel_limits(model)
+                self._check_training_time(start_time, "hyperparameter tuning")
             except Exception as e:
                 self.warnings.append(
                     f"WARNING: Hyperparameter tuning failed for {model_name}: {str(e)[:100]}"
                 )
                 # Continue with default model
         
+        self._check_training_time(start_time, "before training")
+
         # Train model
         try:
             with warnings.catch_warnings():
@@ -226,6 +259,8 @@ class ModelTrainer:
         except Exception as e:
             raise Exception(f"Training failed: {e}")
         
+        self._check_training_time(start_time, "training fit")
+
         # Evaluate
         try:
             metrics = self._evaluate_model(model, X_train, X_test, y_train, y_test)
@@ -261,12 +296,14 @@ class ModelTrainer:
                 random_state=self.config.RANDOM_STATE
             )
         
+        search_jobs = getattr(self.config, 'HP_SEARCH_N_JOBS', 1) or 1
+
         # Choose search method
         if self.config.HP_SEARCH_METHOD == 'grid':
             search = GridSearchCV(
                 model, param_grid,
                 cv=cv,
-                n_jobs=-1,
+                n_jobs=search_jobs,
                 verbose=0
             )
         else:  # random
@@ -274,7 +311,7 @@ class ModelTrainer:
                 model, param_grid,
                 n_iter=min(self.config.HP_SEARCH_ITERATIONS, len(param_grid) * 5),
                 cv=cv,
-                n_jobs=-1,
+                n_jobs=search_jobs,
                 random_state=self.config.RANDOM_STATE,
                 verbose=0
             )
@@ -353,6 +390,31 @@ class ModelTrainer:
             metrics['test_r2'] = round(r2_score(y_test, y_test_pred), 4)
         
         return metrics
+
+    def _check_training_time(self, start_time: float, phase: str):
+        max_seconds = getattr(self.config, 'MAX_TRAINING_TIME_SECONDS', None)
+        if not max_seconds:
+            return
+
+        elapsed = time.time() - start_time
+        if elapsed > max_seconds:
+            raise TimeoutError(
+                f"Model training exceeded {max_seconds}s during {phase}",
+                {'phase': phase, 'elapsed_seconds': elapsed}
+            )
+
+    def _apply_parallel_limits(self, model):
+        limit = getattr(self.config, 'MAX_PARALLEL_JOBS', None)
+        if limit is None or limit < 1:
+            return model
+
+        if hasattr(model, 'set_params'):
+            try:
+                model.set_params(n_jobs=limit)
+            except (ValueError, TypeError):
+                pass
+
+        return model
     
     def _select_best_model(self):
         """Select the best model based on test performance"""
