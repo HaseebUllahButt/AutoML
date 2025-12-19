@@ -270,3 +270,89 @@ class ModelRegistry:
             models = {k: v for k, v in models.items() if v['fast']}
         
         return models
+
+    @staticmethod
+    def get_model_info():
+        """Get metadata about all available models for display"""
+        return {
+            'dummy': {
+                'type': 'Baseline',
+                'description': 'Simple baseline model (most frequent class / mean value)',
+                'category': 'baseline',
+            },
+            'logistic_regression': {
+                'type': 'Linear',
+                'description': 'Linear logistic regression with L2 regularization',
+                'category': 'linear',
+            },
+            'linear_regression': {
+                'type': 'Linear',
+                'description': 'Simple linear regression baseline',
+                'category': 'linear',
+            },
+            'decision_tree': {
+                'type': 'Tree',
+                'description': 'Standalone decision tree classifier/regressor',
+                'category': 'tree',
+            },
+            'knn': {
+                'type': 'Distance',
+                'description': 'K-Nearest Neighbors (slower on large datasets)',
+                'category': 'distance',
+            },
+            'naive_bayes': {
+                'type': 'Probabilistic',
+                'description': 'Gaussian Naive Bayes classifier',
+                'category': 'probabilistic',
+            },
+            'random_forest': {
+                'type': 'Ensemble',
+                'description': 'Ensemble of decision trees',
+                'category': 'tree-ensemble',
+            },
+            'gradient_boosting': {
+                'type': 'Ensemble',
+                'description': 'Gradient Boosting (sequential ensemble)',
+                'category': 'boosting',
+            },
+            'adaboost': {
+                'type': 'Ensemble',
+                'description': 'Adaptive Boosting (adaptive ensemble)',
+                'category': 'boosting',
+            },
+            'svm': {
+                'type': 'Kernel',
+                'description': 'Support Vector Machine (slower on large datasets)',
+                'category': 'kernel',
+            },
+            'xgboost': {
+                'type': 'Ensemble',
+                'description': 'Extreme Gradient Boosting (fast & powerful)',
+                'category': 'boosting',
+            },
+            'lightgbm': {
+                'type': 'Ensemble',
+                'description': 'Light Gradient Boosting (fast & efficient)',
+                'category': 'boosting',
+            },
+            'ridge': {
+                'type': 'Linear',
+                'description': 'Ridge Regression (L2 regularization)',
+                'category': 'linear',
+            },
+            'lasso': {
+                'type': 'Linear',
+                'description': 'Lasso Regression (L1 regularization & feature selection)',
+                'category': 'linear',
+            },
+            'elastic_net': {
+                'type': 'Linear',
+                'description': 'Elastic Net (combined L1+L2 regularization)',
+                'category': 'linear',
+            },
+        }
+
+    @staticmethod
+    def is_baseline_model(model_name: str) -> bool:
+        """Check if a model is a baseline (dummy) model"""
+        return model_name == 'dummy'
