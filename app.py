@@ -1,17 +1,18 @@
 """
-Streamlit UI for AutoML System – Professional, Modern Design
-Clean hierarchy, refined typography, and comprehensive error handling
+CS-245 AutoML System for Classification
+Complete Implementation with All Requirements
 """
 
 import streamlit as st
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
 from pathlib import Path
 import tempfile
 import os
-import time
-import logging
-import traceback
+from typing import Optional
+from sklearn.metrics import confusion_matrix, roc_curve, auc
 
 from automl.config.settings import AutoMLConfig
 from automl.data.ingestion import DataIngestor
@@ -20,889 +21,693 @@ from automl.preprocessing.pipeline_builder import PreprocessingPipelineBuilder
 from automl.models.trainer import ModelTrainer
 from automl.reports.report_generator import ReportGenerator
 
-from automl.utils.error_handlers import (
-    IngestException, ProfilingException, PreprocessingException, TrainingException,
-    ReportException, ErrorContext
-)
+# Configure matplotlib for better plots
+plt.style.use('seaborn-v0_8-darkgrid')
+sns.set_palette("husl")
 
 # ==================== PAGE SETUP ====================
 st.set_page_config(
-    page_title="AutoML",
+    page_title="CS-245 AutoML System",
     page_icon="🤖",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# ==================== THEME & STYLING ====================
-THEME_CSS = """
+# ==================== CLEAN STYLING ====================
+st.markdown("""
 <style>
-    :root {
-        --primary: #0f172a;
-        --secondary: #1e293b;
-        --accent: #3b82f6;
-        --success: #10b981;
-        --warning: #f59e0b;
-        --error: #ef4444;
-        --bg: #f8fafc;
-        --card: #ffffff;
-        --border: #e2e8f0;
-        --text: #0f172a;
-        --muted: #64748b;
-    }
-
-    * {
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-    }
-
+    /* MAIN APP - WHITE BACKGROUND, BLACK TEXT */
     .stApp {
-        background-color: var(--bg);
+        background: #ffffff !important;
     }
-
-    .block-container {
-        padding-left: 2rem;
-        padding-right: 2rem;
-        padding-top: 1rem;
-        padding-bottom: 1rem;
+    
+    body, html {
+        background: #ffffff !important;
     }
-
-    /* Typography */
-    h1, h2, h3, h4, h5, h6 {
-        color: var(--primary);
-        font-weight: 600;
-        letter-spacing: -0.02em;
+    
+    /* Text colors */
+    h1, h2, h3 {
+        color: #1a1d2e !important;
+        font-weight: 700 !important;
     }
-
-    p, span, label {
-        color: #000000;
+    
+    p, div, span, li {
+        color: #000000 !important;
     }
-
-    .stMarkdown {
-        color: #000000;
-    }
-
-    /* Hero Section */
-    .hero {
-        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-        color: white;
-        border-radius: 16px;
-        padding: 3rem;
-        margin-bottom: 2rem;
-    }
-
-    .hero h1 {
-        color: white;
-        font-size: 2.5rem;
-        margin-bottom: 0.5rem;
-    }
-
-    .hero p {
-        color: #000000;
-        font-size: 1.1rem;
-        line-height: 1.6;
-        margin-bottom: 2rem;
-        max-width: 600px;
-    }
-
-    .hero-stats {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-        gap: 2rem;
-        margin-top: 2rem;
-    }
-
-    .stat {
-        background-color: #f8f9fa;
-        border: 2px solid #e0e0e0;
-        border-radius: 8px;
-        padding: 1.5rem 1rem;
-        text-align: center;
-    }
-
-    .stat-value {
-        font-size: 2rem;
-        font-weight: 700;
-        color: #000000;
-        display: block;
-    }
-
-    .stat-label {
-        font-size: 0.9rem;
-        color: #1a1a1a;
-        margin-top: 0.5rem;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        font-weight: 600;
-    }
-
-    /* Card Styles */
-    .card {
-        background: var(--card);
-        border: 1px solid var(--border);
-        border-radius: 12px;
-        padding: 1.5rem;
-        margin-bottom: 1.5rem;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    }
-
-    .card-title {
-        font-size: 1.125rem;
-        font-weight: 600;
-        color: #000000;
-        margin-bottom: 0.75rem;
-    }
-
-    .card-subtitle {
-        font-size: 0.95rem;
-        color: #000000;
-        line-height: 1.5;
-    }
-
-    /* Status Cards */
-    .status-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 1rem;
-        margin-bottom: 2rem;
-    }
-
-    .status-card {
-        background: var(--card);
-        border: 2px solid var(--border);
-        border-radius: 12px;
-        padding: 1.25rem;
-        text-align: center;
-        transition: all 0.2s ease;
-    }
-
-    .status-card.ready {
-        border-color: var(--success);
-        background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, transparent 100%);
-    }
-
-    .status-card.pending {
-        border-color: var(--warning);
-        background: linear-gradient(135deg, rgba(245, 158, 11, 0.05) 0%, transparent 100%);
-    }
-
-    .status-label {
-        font-size: 0.9rem;
-        font-weight: 600;
-        color: #000000;
-        margin-bottom: 0.5rem;
-    }
-
-    .status-badge {
-        display: inline-block;
-        padding: 0.35rem 0.75rem;
-        border-radius: 999px;
-        font-size: 0.8rem;
-        font-weight: 600;
-        text-transform: capitalize;
-    }
-
-    .status-badge.ready {
-        background: var(--success);
-        color: white;
-    }
-
-    .status-badge.pending {
-        background: var(--warning);
-        color: white;
-    }
-
-    .status-hint {
-        font-size: 0.85rem;
-        color: #000000;
-        margin-top: 0.5rem;
-    }
-
-    /* Messages */
-    .message-panel {
-        background: var(--card);
-        border: 1px solid var(--border);
-        border-radius: 12px;
-        padding: 1.5rem;
-        margin-bottom: 2rem;
-    }
-
-    .message-panel-title {
-        font-size: 0.95rem;
-        font-weight: 600;
-        color: #000000;
-        margin-bottom: 1rem;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-    }
-
-    .message {
-        padding: 0.75rem 1rem;
-        border-radius: 8px;
-        margin-bottom: 0.5rem;
-        font-size: 0.9rem;
-        line-height: 1.5;
-    }
-
-    .message.info {
-        background: #eff6ff;
-        color: #0c4a6e;
-        border-left: 3px solid var(--accent);
-    }
-
-    .message.success {
-        background: #f0fdf4;
-        color: #15803d;
-        border-left: 3px solid var(--success);
-    }
-
-    .message.warning {
-        background: #fffbeb;
-        color: #92400e;
-        border-left: 3px solid var(--warning);
-    }
-
-    .message.error {
-        background: #fef2f2;
-        color: #7f1d1d;
-        border-left: 3px solid var(--error);
-    }
-
-    /* Buttons */
-    .stButton button {
-        background: linear-gradient(135deg, var(--accent) 0%, #2563eb 100%);
-        color: white;
-        border: none;
-        border-radius: 8px;
-        padding: 0.75rem 1.75rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        text-transform: none;
-        box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
-    }
-
-    .stButton button:hover {
-        background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-        box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
-        transform: translateY(-2px);
-    }
-
-    .stButton button:active {
-        transform: translateY(0);
-    }
-
+    
     /* Tabs */
     .stTabs [data-baseweb="tab-list"] {
-        gap: 0;
-        border-bottom: 2px solid var(--border);
+        gap: 8px;
+        background: #f5f5f5 !important;
+        padding: 8px !important;
+        border-radius: 8px !important;
     }
-
+    
     .stTabs [data-baseweb="tab"] {
-        background: transparent;
-        border: none;
-        border-bottom: none;
-        color: #000000;
-        padding: 1rem 1.5rem;
-        font-weight: 500;
-        font-size: 0.95rem;
-        transition: all 0.2s ease;
+        background: transparent !important;
+        color: #000000 !important;
+        padding: 12px 24px !important;
+        font-weight: 600 !important;
+        border-radius: 6px !important;
     }
-
+    
     .stTabs [data-baseweb="tab"]:hover {
-        color: #000000;
+        background: #e0e0e0 !important;
     }
-
+    
     .stTabs [aria-selected="true"] {
-        color: var(--accent);
-        border-bottom: 3px solid var(--accent);
-        box-shadow: 0 3px 0 0 var(--accent) inset;
+        background: #ffffff !important;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
     }
-
-    /* Forms */
-    .stSelectbox, .stTextInput, .stTextArea {
-        border-radius: 8px;
+    
+    /* Buttons */
+    .stButton button {
+        background: #2196F3 !important;
+        color: #ffffff !important;
+        padding: 12px 32px !important;
+        border-radius: 8px !important;
+        font-weight: 600 !important;
+        border: none !important;
     }
-
-    .stSelectbox>div>div, .stTextInput>div>div, .stTextArea>div>textarea {
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        background: white;
-        color: #000000;
+    
+    .stButton button:hover {
+        background: #1976D2 !important;
+        transform: translateY(-1px) !important;
     }
-
-    .stSelectbox>div>div:focus-within, .stTextInput>div>div:focus-within {
-        border-color: var(--accent);
-        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    
+    /* Dropdowns */
+    [role="option"] {
+        background: #ffffff !important;
+        color: #000000 !important;
     }
-
-    .stFileUploader {
-        border: 2px dashed var(--border);
-        border-radius: 12px;
-        padding: 2rem;
-        background: linear-gradient(135deg, rgba(59, 130, 246, 0.02) 0%, transparent 100%);
+    
+    [role="option"]:hover {
+        background: #e3f2fd !important;
+        color: #000000 !important;
     }
-
-    .stFileUploader:hover {
-        border-color: var(--accent);
-        background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, transparent 100%);
+    
+    [aria-selected="true"][role="option"] {
+        background: #2196F3 !important;
+        color: #ffffff !important;
     }
-
-    /* Sidebar */
-    .stSidebar {
-        background: linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%);
-        border-right: 1px solid var(--border);
+    
+    /* Inputs and selects */
+    input, textarea, select {
+        background: #ffffff !important;
+        color: #000000 !important;
+        border: 2px solid #e0e0e0 !important;
     }
-
-    .stSidebar .stMarkdown {
-        color: var(--text);
+    
+    /* All labels */
+    label, [data-testid="stWidgetLabel"] {
+        color: #000000 !important;
+        font-weight: 600 !important;
     }
-
-    .stSidebar h3 {
-        color: var(--primary);
-        margin-top: 1.5rem;
-        margin-bottom: 1rem;
-        font-size: 1.1rem;
-    }
-
-    .sidebar-section {
-        padding: 1.5rem 0;
-        border-bottom: 1px solid var(--border);
-    }
-
-    .sidebar-section:last-child {
-        border-bottom: none;
-    }
-
-    .sidebar-section > strong {
-        display: block;
-        color: var(--primary);
-        font-size: 0.9rem;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        margin-bottom: 0.75rem;
-    }
-
+    
     /* Metrics */
-    .metric-container {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-        gap: 1rem;
-        margin: 1.5rem 0;
+    [data-testid="stMetric"] {
+        background: #f8f9fa !important;
+        padding: 20px !important;
+        border-radius: 12px !important;
+        border: 1px solid #e0e0e0 !important;
     }
-
-    .metric-card {
-        background: var(--card);
-        border: 1px solid var(--border);
-        border-radius: 12px;
-        padding: 1.25rem;
-        text-align: center;
+    
+    [data-testid="stMetric"] * {
+        color: #000000 !important;
     }
-
-    .stMetric {
-        background: linear-gradient(135deg, rgba(59, 130, 246, 0.02) 0%, transparent 100%);
-        border-radius: 12px;
-        padding: 1.25rem;
-        border: 1px solid var(--border);
+    
+    /* SIDEBAR */
+    .stSidebar {
+        background: #f8f9fa !important;
     }
-
-    .stMetricValue {
-        font-size: 1.75rem;
-        font-weight: 700;
-        color: #000000;
-        display: block;
+    
+    .stSidebar * {
+        color: #000000 !important;
     }
-
-    .stMetricLabel {
-        font-size: 0.85rem;
-        color: #000000;
-        margin-top: 0.5rem;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
+    
+    .stSidebar h2, .stSidebar h3 {
+        color: #1a1d2e !important;
     }
-
-    /* Data preview */
-    .dataframe-container {
-        background: var(--card);
-        border-radius: 12px;
-        overflow: hidden;
-        border: 1px solid var(--border);
+    
+    /* FILE UPLOADER */
+    [data-testid="stFileUploader"] {
+        background: #f8f9fa !important;
+        padding: 20px !important;
+        border-radius: 8px !important;
     }
-
-    /* Alerts */
+    
+    [data-testid="stFileUploader"] * {
+        color: #000000 !important;
+    }
+    
+    [data-testid="stFileUploadDropzone"] {
+        background: #ffffff !important;
+        border: 2px dashed #2196F3 !important;
+        border-radius: 8px !important;
+    }
+    
+    /* Markdown containers */
+    [data-testid="stMarkdownContainer"] {
+        color: #000000 !important;
+    }
+    
+    /* Expanders */
+    .streamlit-expanderHeader {
+        color: #000000 !important;
+        background: #f8f9fa !important;
+    }
+    
+    /* Dataframes */
+    [data-testid="stDataFrame"] {
+        background: #ffffff !important;
+    }
+    
+    /* Info/warning/error boxes */
     .stAlert {
-        border-radius: 8px;
-        padding: 1rem;
-        margin: 1rem 0;
-        border-left: 4px solid;
+        background: #f8f9fa !important;
     }
-
-    .stAlert > div > div > div {
-        color: var(--text);
+    
+    .stAlert * {
+        color: #000000 !important;
     }
 </style>
-"""
-
-st.markdown(THEME_CSS, unsafe_allow_html=True)
+""", unsafe_allow_html=True)
 
 # ==================== SESSION STATE ====================
-def init_session_state():
+def init_session():
     defaults = {
         'config': AutoMLConfig(),
         'df': None,
         'profile': None,
-        'preprocessing_pipeline': None,
+        'issues': [],
+        'preprocessing_config': {},
         'X_processed': None,
         'y': None,
+        'pipeline': None,
         'training_results': None,
         'best_model': None,
-        'messages': [],
     }
-    for key, value in defaults.items():
+    for key, val in defaults.items():
         if key not in st.session_state:
-            st.session_state[key] = value
+            st.session_state[key] = val
 
-init_session_state()
-
-# ==================== UTILITIES ====================
-def format_size(value, default="—"):
-    return str(value) if value not in (None, "") else default
-
-def format_memory(df):
-    if df is None:
-        return "—"
-    try:
-        return f"{df.memory_usage(deep=True).sum() / (1024**2):.1f} MB"
-    except:
-        return "—"
-
-def log_message(msg, level="info"):
-    st.session_state.messages.append({"text": msg, "level": level})
-
-def render_messages():
-    if not st.session_state.messages:
-        return
-
-    with st.container():
-        st.markdown('<div class="message-panel">', unsafe_allow_html=True)
-        st.markdown('<div class="message-panel-title">📋 Status & Insights</div>', unsafe_allow_html=True)
-
-        for msg_obj in st.session_state.messages[-8:]:
-            msg = msg_obj["text"]
-            level = msg_obj.get("level", "info")
-            st.markdown(f'<div class="message {level}">{msg}</div>', unsafe_allow_html=True)
-
-        st.markdown('</div>', unsafe_allow_html=True)
-
-def render_status_overview():
-    df_ready = st.session_state.df is not None
-    pipeline_ready = st.session_state.preprocessing_pipeline is not None
-    model_ready = st.session_state.best_model is not None
-
-    statuses = [
-        {"label": "Data Upload", "ready": df_ready, "hint": "CSV file loaded and validated"},
-        {"label": "Preprocessing", "ready": pipeline_ready, "hint": "Pipeline built and ready"},
-        {"label": "Model Training", "ready": model_ready, "hint": "Models trained and exported"},
-    ]
-
-    st.markdown('<div class="status-grid">', unsafe_allow_html=True)
-    cols = st.columns(3, gap="medium")
-
-    for col, status in zip(cols, statuses):
-        with col:
-            state = "ready" if status["ready"] else "pending"
-            badge_text = "✓ Ready" if status["ready"] else "○ Pending"
-            
-            st.markdown(f"""
-            <div class='status-card {state}'>
-                <div class='status-label'>{status['label']}</div>
-                <span class='status-badge {state}'>{badge_text}</span>
-                <div class='status-hint'>{status['hint']}</div>
-            </div>
-            """, unsafe_allow_html=True)
-
-    st.markdown('</div>', unsafe_allow_html=True)
-
-def render_hero():
-    df = st.session_state.df
-    rows = format_size(len(df) if df is not None else None)
-    cols = format_size(df.shape[1] if df is not None else None)
-    memory = format_memory(df)
-
-    st.markdown(f"""
-    <div class='hero'>
-        <h1>AutoML Workspace</h1>
-        <p>Build, train, and deploy machine learning models with a single pipeline. No configuration required.</p>
-        <div class='hero-stats'>
-            <div class='stat'>
-                <span class='stat-value'>{rows}</span>
-                <span class='stat-label'>Rows</span>
-            </div>
-            <div class='stat'>
-                <span class='stat-value'>{cols}</span>
-                <span class='stat-label'>Features</span>
-            </div>
-            <div class='stat'>
-                <span class='stat-value'>{memory}</span>
-                <span class='stat-label'>Memory</span>
-            </div>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
+init_session()
 
 # ==================== MAIN APP ====================
 def main():
-    # Sidebar
+    st.title("🤖 CS-245 AutoML System")
+    st.markdown("### Automated Classification Pipeline")
+    st.markdown("---")
+    
+    # Sidebar configuration
     with st.sidebar:
-        st.markdown("### ⚙️ Settings")
+        st.markdown("## ⚙️ Configuration")
+        st.markdown("---")
         
-        with st.container():
-            st.markdown('<div class="sidebar-section">', unsafe_allow_html=True)
-            st.markdown("**Training**")
-            fast_only = st.checkbox("Fast models only", value=False, help="Skip slow models for quick prototyping")
-            st.markdown('</div>', unsafe_allow_html=True)
-
-        with st.container():
-            st.markdown('<div class="sidebar-section">', unsafe_allow_html=True)
-            st.markdown("**Feature Engineering**")
-            st.session_state.config.ENABLE_AUTO_FEATURE_ENGINEERING = st.checkbox(
-                "Auto features",
-                value=True,
-                help="Polynomial & interaction features"
-            )
-            st.markdown('</div>', unsafe_allow_html=True)
-
-        with st.container():
-            st.markdown('<div class="sidebar-section">', unsafe_allow_html=True)
-            st.markdown("**About**")
-            st.caption("Professional AutoML for everyone. Quiet, predictable, reproducible.")
-            st.markdown('</div>', unsafe_allow_html=True)
-
-    # Header
-    render_hero()
-    render_status_overview()
-
-    # Two-column layout
-    col_main, col_panel = st.columns([3, 1], gap="large")
-
-    with col_panel:
-        render_messages()
-
-    with col_main:
-        tab1, tab2, tab3, tab4, tab5 = st.tabs([
-            "📁 Upload",
-            "🔍 Profile",
-            "⚙️ Prepare",
-            "🎯 Train",
-            "📊 Export"
-        ])
-
-        # TAB 1: UPLOAD
-        with tab1:
-            st.markdown("### Upload Dataset")
-            st.markdown("Drag and drop a CSV file, or click to select one.")
-
-            uploaded_file = st.file_uploader("Choose a file", type=['csv', 'txt', 'tsv'], label_visibility="hidden")
-
-            if uploaded_file:
-                try:
-                    if uploaded_file.size == 0:
-                        st.error("File is empty")
-                        log_message("ERROR: Empty file uploaded", "error")
-                    elif uploaded_file.size > 500 * 1024 * 1024:
-                        st.error("File too large (max 500MB)")
-                        log_message(f"ERROR: File {uploaded_file.size / (1024**2):.1f}MB exceeds limit", "error")
+        st.markdown("### Preprocessing")
+        missing_strategy = st.selectbox(
+            "Missing Value Imputation",
+            ["median", "mean", "mode", "constant"],
+            help="Strategy for handling missing values"
+        )
+        
+        scaler_type = st.selectbox(
+            "Feature Scaling",
+            ["StandardScaler", "MinMaxScaler", "None"],
+            help="Method to scale numerical features"
+        )
+        
+        encoding_method = st.selectbox(
+            "Categorical Encoding",
+            ["One-Hot", "Ordinal"],
+            help="Method to encode categorical variables"
+        )
+        
+        test_size = st.slider(
+            "Test Set Size (%)",
+            min_value=10,
+            max_value=40,
+            value=20,
+            step=5,
+            help="Percentage of data for testing"
+        ) / 100
+        
+        st.session_state.preprocessing_config = {
+            'missing_strategy': missing_strategy,
+            'scaler': scaler_type,
+            'encoding': encoding_method,
+            'test_size': test_size
+        }
+        
+        st.markdown("---")
+        st.markdown("### Model Training")
+        fast_mode = st.checkbox("Fast Mode", help="Train only quick models")
+        
+        st.markdown("---")
+        st.caption("CS-245 ML Project | AutoML System")
+    
+    # Main tabs
+    tabs = st.tabs([
+        "📤 Upload",
+        "📊 EDA & Issues",
+        "⚙️ Preprocessing",
+        "🎯 Training",
+        "📈 Results",
+        "💾 Export"
+    ])
+    
+    # TAB 1: UPLOAD
+    with tabs[0]:
+        st.markdown("## Dataset Upload")
+        st.markdown("Upload a CSV file for classification")
+        
+        uploaded_file = st.file_uploader("Choose CSV file", type=['csv'])
+        
+        if uploaded_file:
+            try:
+                with tempfile.NamedTemporaryFile(delete=False, suffix='.csv') as tmp:
+                    tmp.write(uploaded_file.getvalue())
+                    tmp_path = tmp.name
+                
+                with st.spinner("Loading dataset..."):
+                    ingestor = DataIngestor(st.session_state.config)
+                    df, messages = ingestor.ingest(tmp_path)
+                    
+                    if df is not None:
+                        st.session_state.df = df
+                        st.success(f"✅ Loaded: {len(df):,} rows × {df.shape[1]} columns")
+                        
+                        col1, col2, col3 = st.columns(3)
+                        with col1:
+                            st.metric("Rows", f"{len(df):,}")
+                        with col2:
+                            st.metric("Columns", df.shape[1])
+                        with col3:
+                            mem = df.memory_usage(deep=True).sum() / (1024**2)
+                            st.metric("Memory", f"{mem:.1f} MB")
+                        
+                        st.markdown("### Preview")
+                        st.dataframe(df.head(20), width="stretch")
+                        
+                        st.markdown("### Column Types")
+                        types_df = pd.DataFrame({
+                            'Column': df.dtypes.index,
+                            'Type': df.dtypes.values.astype(str)
+                        })
+                        st.dataframe(types_df, width="stretch")
                     else:
-                        with tempfile.NamedTemporaryFile(delete=False, suffix='.csv') as tmp:
-                            tmp.write(uploaded_file.getvalue())
-                            tmp_path = tmp.name
-
-                        try:
-                            with st.spinner("Loading dataset..."):
-                                ingestor = DataIngestor(st.session_state.config)
-                                df, messages = ingestor.ingest(tmp_path)
-                                st.session_state.messages = [{"text": m, "level": "info"} for m in messages]
-
-                                if df is not None:
-                                    st.session_state.df = df
-                                    st.success("✓ Dataset loaded successfully!")
-                                    log_message(f"Loaded {len(df):,} rows × {df.shape[1]} columns", "success")
-
-                                    st.markdown("### Preview")
-                                    st.dataframe(df.head(100), use_container_width=True)
-
-                                    cols = st.columns(3)
-                                    with cols[0]:
-                                        st.metric("Rows", f"{len(df):,}")
-                                    with cols[1]:
-                                        st.metric("Columns", df.shape[1])
-                                    with cols[2]:
-                                        st.metric("Memory", f"{format_memory(df)}")
-                                else:
-                                    st.error("Failed to load dataset")
-                                    log_message("ERROR: Data ingestion failed", "error")
-                        except Exception as e:
-                            st.error(f"Error: {str(e)[:100]}")
-                            log_message(f"ERROR: {str(e)[:100]}", "error")
-                        finally:
-                            try:
-                                os.unlink(tmp_path)
-                            except:
-                                pass
+                        st.error("Failed to load dataset")
+                
+                os.unlink(tmp_path)
+            except Exception as e:
+                st.error(f"Error: {str(e)}")
+    
+    # TAB 2: EDA & ISSUES
+    with tabs[1]:
+        st.markdown("## Exploratory Data Analysis & Issue Detection")
+        
+        if st.session_state.df is None:
+            st.info("Please upload a dataset first")
+        else:
+            df = st.session_state.df
+            
+            # Target selection
+            target_col = st.selectbox("Select Target Column", df.columns.tolist())
+            
+            if st.button("🔍 Analyze Dataset", type="primary"):
+                with st.spinner("Analyzing..."):
+                    profiler = DataProfiler(st.session_state.config)
+                    profile = profiler.profile_dataset(df, target_col)
+                    st.session_state.profile = profile
+                    st.session_state.profile['target_column'] = target_col
+                    
+                    # Detect issues
+                    issues = []
+                    
+                    # Missing values
+                    missing = df.isnull().sum()
+                    if missing.sum() > 0:
+                        issues.append({
+                            'type': 'Missing Values',
+                            'severity': 'High',
+                            'count': int(missing.sum()),
+                            'description': f"{missing.sum()} total missing values across {(missing > 0).sum()} features",
+                            'fix': f"Impute using {missing_strategy}"
+                        })
+                    
+                    # Outliers
+                    numerical_cols = df.select_dtypes(include=[np.number]).columns
+                    outlier_count = 0
+                    for col in numerical_cols:
+                        Q1 = df[col].quantile(0.25)
+                        Q3 = df[col].quantile(0.75)
+                        IQR = Q3 - Q1
+                        outliers = ((df[col] < Q1 - 1.5*IQR) | (df[col] > Q3 + 1.5*IQR)).sum()
+                        outlier_count += outliers
+                    
+                    if outlier_count > 0:
+                        issues.append({
+                            'type': 'Outliers',
+                            'severity': 'Medium',
+                            'count': outlier_count,
+                            'description': f"{outlier_count} outliers detected using IQR method",
+                            'fix': "Apply capping or removal"
+                        })
+                    
+                    # Class imbalance
+                    if profile['target']['task_type'] == 'classification':
+                        class_dist = pd.Series(profile['target']['class_distribution'])
+                        imbalance_ratio = class_dist.max() / class_dist.min() if class_dist.min() > 0 else float('inf')
+                        if imbalance_ratio > 3:
+                            issues.append({
+                                'type': 'Class Imbalance',
+                                'severity': 'Medium',
+                                'count': 0,
+                                'description': f"Imbalance ratio: {imbalance_ratio:.1f}:1",
+                                'fix': "Consider resampling techniques"
+                            })
+                    
+                    st.session_state.issues = issues
+                    st.success("✅ Analysis complete!")
+            
+            if st.session_state.profile:
+                profile = st.session_state.profile
+                
+                # Summary stats
+                st.markdown("### 📋 Dataset Summary")
+                col1, col2, col3, col4 = st.columns(4)
+                with col1:
+                    st.metric("Rows", f"{profile['basic']['n_rows']:,}")
+                with col2:
+                    st.metric("Features", profile['basic']['n_cols'])
+                with col3:
+                    st.metric("Memory (MB)", f"{profile['basic']['memory_mb']:.1f}")
+                with col4:
+                    st.metric("Target Classes", profile['target'].get('n_unique', 'N/A'))
+                
+                # Class distribution
+                if 'class_distribution' in profile['target']:
+                    st.markdown("### 🎯 Target Distribution")
+                    class_dist = pd.Series(profile['target']['class_distribution'])
+                    fig, ax = plt.subplots(figsize=(10, 4))
+                    class_dist.plot(kind='bar', ax=ax, color='#2196F3')
+                    ax.set_title('Class Distribution')
+                    ax.set_ylabel('Count')
+                    plt.xticks(rotation=45, ha='right')
+                    plt.tight_layout()
+                    st.pyplot(fig)
+                    plt.close()
+                
+                # Missing values
+                st.markdown("### 🔍 Missing Values")
+                missing = df.isnull().sum()
+                missing_df = pd.DataFrame({
+                    'Feature': missing.index,
+                    'Missing': missing.values,
+                    'Percent': (missing / len(df) * 100).round(2).values
+                })
+                missing_df = missing_df[missing_df['Missing'] > 0]
+                
+                if len(missing_df) > 0:
+                    st.dataframe(missing_df, width="stretch")
+                else:
+                    st.success("✅ No missing values")
+                
+                # Outliers
+                st.markdown("### 📐 Outlier Detection (IQR Method)")
+                numerical_cols = df.select_dtypes(include=[np.number]).columns
+                outlier_data = []
+                for col in numerical_cols:
+                    Q1 = df[col].quantile(0.25)
+                    Q3 = df[col].quantile(0.75)
+                    IQR = Q3 - Q1
+                    outliers = ((df[col] < Q1 - 1.5*IQR) | (df[col] > Q3 + 1.5*IQR)).sum()
+                    if outliers > 0:
+                        outlier_data.append({
+                            'Feature': col,
+                            'Outliers': outliers,
+                            'Percent': round(outliers / len(df) * 100, 2)
+                        })
+                
+                if outlier_data:
+                    st.dataframe(pd.DataFrame(outlier_data), width="stretch")
+                else:
+                    st.success("✅ No outliers detected")
+                
+                # Correlation matrix
+                if len(numerical_cols) > 1:
+                    st.markdown("### 🔗 Correlation Matrix")
+                    corr = df[numerical_cols].corr()
+                    fig, ax = plt.subplots(figsize=(10, 8))
+                    sns.heatmap(corr, annot=True, fmt='.2f', cmap='coolwarm', center=0, 
+                               square=True, linewidths=1, ax=ax, cbar_kws={"shrink": 0.8})
+                    ax.set_title('Feature Correlations')
+                    plt.tight_layout()
+                    st.pyplot(fig)
+                    plt.close()
+                
+                # Distribution plots
+                st.markdown("### 📊 Numerical Distributions")
+                display_cols = list(numerical_cols)[:4]
+                cols_per_row = 2
+                for i in range(0, len(display_cols), cols_per_row):
+                    cols = st.columns(cols_per_row)
+                    for j, col_name in enumerate(display_cols[i:i+cols_per_row]):
+                        with cols[j]:
+                            fig, ax = plt.subplots(figsize=(6, 4))
+                            df[col_name].hist(bins=30, ax=ax, color='#2196F3', edgecolor='black')
+                            ax.set_title(col_name, fontweight='bold')
+                            ax.set_xlabel('Value')
+                            ax.set_ylabel('Frequency')
+                            plt.tight_layout()
+                            st.pyplot(fig)
+                            plt.close()
+                
+                # Categorical plots
+                categorical_cols = df.select_dtypes(include=['object', 'category']).columns
+                if len(categorical_cols) > 0:
+                    st.markdown("### 📊 Categorical Distributions")
+                    for cat_col in list(categorical_cols)[:3]:
+                        value_counts = df[cat_col].value_counts().head(10)
+                        fig, ax = plt.subplots(figsize=(10, 4))
+                        value_counts.plot(kind='bar', ax=ax, color='#059669', edgecolor='black')
+                        ax.set_title(f'{cat_col} (Top 10)')
+                        ax.set_ylabel('Count')
+                        plt.xticks(rotation=45, ha='right')
+                        plt.tight_layout()
+                        st.pyplot(fig)
+                        plt.close()
+                
+                # Issues & user approval
+                if st.session_state.issues:
+                    st.markdown("### ⚠️ Detected Issues & Suggested Fixes")
+                    for issue in st.session_state.issues:
+                        severity_color = {
+                            'High': '🔴',
+                            'Medium': '🟡',
+                            'Low': '🟢'
+                        }
+                        with st.expander(f"{severity_color[issue['severity']]} {issue['type']} ({issue['severity']} Priority)"):
+                            st.write(f"**Description:** {issue['description']}")
+                            st.info(f"**Suggested Fix:** {issue['fix']}")
+                            if st.button(f"✅ Approve Fix", key=f"fix_{issue['type']}"):
+                                st.success(f"Fix approved for {issue['type']}")
+    
+    # TAB 3: PREPROCESSING
+    with tabs[2]:
+        st.markdown("## Preprocessing Pipeline")
+        
+        if st.session_state.profile is None:
+            st.info("Complete EDA first")
+        else:
+            st.markdown("### Selected Configuration")
+            config = st.session_state.preprocessing_config
+            col1, col2 = st.columns(2)
+            with col1:
+                st.metric("Missing Value Strategy", config['missing_strategy'])
+                st.metric("Scaler", config['scaler'])
+            with col2:
+                st.metric("Encoding", config['encoding'])
+                st.metric("Test Split", f"{config['test_size']*100:.0f}%")
+            
+            if st.button("⚙️ Build Pipeline", type="primary"):
+                with st.spinner("Building..."):
+                    target_col = st.session_state.profile['target_column']
+                    builder = PreprocessingPipelineBuilder(st.session_state.config)
+                    
+                    X, y, _ = builder.prepare_data(st.session_state.df, target_col)
+                    pipeline = builder.build_pipeline(X, target_col, st.session_state.profile)
+                    X_processed = builder.fit_transform(X, y)
+                    
+                    st.session_state.X_processed = X_processed
+                    st.session_state.y = y
+                    st.session_state.pipeline = pipeline
+                    
+                    st.success("✅ Pipeline built!")
+                    
+                    col1, col2, col3 = st.columns(3)
+                    with col1:
+                        st.metric("Input Features", len(X.columns))
+                    with col2:
+                        st.metric("Output Features", X_processed.shape[1])
+                    with col3:
+                        st.metric("Samples", len(X_processed))
+    
+    # TAB 4: TRAINING
+    with tabs[3]:
+        st.markdown("## Model Training")
+        
+        if st.session_state.X_processed is None:
+            st.info("Build preprocessing pipeline first")
+        else:
+            if st.button("🎯 Train Models", type="primary"):
+                trainer = ModelTrainer(st.session_state.config)
+                task_type = st.session_state.profile['target']['task_type']
+                
+                progress = st.progress(0)
+                status = st.empty()
+                
+                def update_progress(msg, pct):
+                    if pct is not None:
+                        progress.progress(int(pct * 100))
+                    status.text(msg)
+                
+                try:
+                    results = trainer.train_models(
+                        st.session_state.X_processed,
+                        st.session_state.y,
+                        task_type=task_type,
+                        fast_only=fast_mode,
+                        progress_callback=update_progress
+                    )
+                    
+                    st.session_state.training_results = results['all_results']
+                    st.session_state.best_model = trainer.best_model
+                    
+                    progress.progress(100)
+                    status.success("✅ Training complete!")
+                    
+                    if trainer.best_model_name:
+                        st.markdown(f"### 🏆 Best Model: {trainer.best_model_name}")
+                        st.metric("Score", f"{trainer.best_score:.4f}")
+                
                 except Exception as e:
-                    st.error(f"File error: {str(e)[:100]}")
-                    log_message(f"ERROR: {str(e)[:100]}", "error")
-
-        # TAB 2: PROFILE
-        with tab2:
-            st.markdown("### Data Quality Analysis")
-
-            if st.session_state.df is None:
-                st.info("Upload a dataset first (Tab: Upload)")
-            else:
-                target_col = st.selectbox(
-                    "Select target column",
-                    options=st.session_state.df.columns.tolist(),
-                    help="Column to predict"
+                    st.error(f"Training failed: {str(e)}")
+    
+    # TAB 5: RESULTS
+    with tabs[4]:
+        st.markdown("## Model Comparison & Results")
+        
+        if st.session_state.training_results:
+            results = st.session_state.training_results
+            successful = [r for r in results if r.get('status') == 'success']
+            
+            if successful:
+                # Metrics table
+                st.markdown("### 📊 Model Comparison")
+                display_data = []
+                for r in successful:
+                    metrics = r.get('metrics', {})
+                    display_data.append({
+                        'Model': r.get('model_name'),
+                        'Accuracy': metrics.get('test_accuracy', 0),
+                        'F1-Score': metrics.get('test_f1', 0),
+                        'Precision': metrics.get('test_precision', 0),
+                        'Recall': metrics.get('test_recall', 0),
+                        'Time (s)': r.get('training_time', 0)
+                    })
+                
+                results_df = pd.DataFrame(display_data)
+                results_df = results_df.sort_values('Accuracy', ascending=False)
+                st.dataframe(results_df, width="stretch")
+                
+                # Download CSV
+                csv = results_df.to_csv(index=False)
+                st.download_button(
+                    "📥 Download Results CSV",
+                    csv,
+                    "model_results.csv",
+                    "text/csv",
+                    type="primary"
                 )
-
-                if st.button("Analyze Dataset", type="primary"):
-                    with st.spinner("Analyzing..."):
-                        profiler = DataProfiler(st.session_state.config)
-                        profile = profiler.profile_dataset(st.session_state.df, target_col)
-
-                        st.session_state.profile = profile
-                        st.session_state.profile['target_column'] = target_col
-                        st.session_state.messages = [{"text": m, "level": "info"} for m in profiler.warnings]
-
-                        st.success("✓ Analysis complete!")
-
-                if st.session_state.profile:
-                    profile = st.session_state.profile
-                    basic = profile.get('basic', {})
-
-                    st.markdown("### Dataset Overview")
-                    cols = st.columns(4)
-                    with cols[0]:
-                        st.metric("Rows", f"{basic.get('n_rows', 0):,}")
-                    with cols[1]:
-                        st.metric("Columns", basic.get('n_cols', 0))
-                    with cols[2]:
-                        st.metric("Memory", f"{basic.get('memory_mb', 0):.1f} MB")
-                    with cols[3]:
-                        missing = profile.get('missing', {})
-                        st.metric("Missing", f"{missing.get('total_missing', 0):,}")
-
-                    if 'target' in profile:
-                        target_info = profile['target']
-                        st.markdown("### Target Variable")
-                        cols = st.columns(2)
-                        with cols[0]:
-                            st.metric("Type", target_info.get('task_type', '?').title())
-                        with cols[1]:
-                            st.metric("Unique", target_info.get('n_unique', 0))
-
-                        if 'class_distribution' in target_info:
-                            st.bar_chart(pd.Series(target_info['class_distribution']))
-
-                    warnings = profile.get('warnings', [])
-                    if warnings:
-                        st.markdown("### Quality Issues")
-                        for w in warnings[:10]:
-                            if 'CRITICAL' in w or 'ERROR' in w:
-                                st.error(w)
-                            elif 'WARNING' in w:
-                                st.warning(w)
-                            else:
-                                st.info(w)
-
-        # TAB 3: PREPARE
-        with tab3:
-            st.markdown("### Preprocessing")
-
-            if st.session_state.profile is None:
-                st.info("Complete profiling first (Tab: Profile)")
-            else:
-                if st.button("Build Pipeline", type="primary"):
-                    with st.spinner("Building..."):
-                        try:
-                            target_col = st.session_state.profile['target_column']
-                            builder = PreprocessingPipelineBuilder(st.session_state.config)
-                            X, y, warnings = builder.prepare_data(st.session_state.df, target_col)
-                            st.session_state.messages.extend([{"text": w, "level": "info"} for w in warnings])
-
-                            pipeline = builder.build_pipeline(X, target_col, st.session_state.profile)
-                            st.session_state.messages.extend([{"text": w, "level": "info"} for w in builder.warnings])
-
-                            X_processed = builder.fit_transform(X, y)
-
-                            st.session_state.preprocessing_pipeline = pipeline
-                            st.session_state.X_processed = X_processed
-                            st.session_state.y = y
-
-                            st.success("✓ Pipeline ready!")
-                            log_message(f"Pipeline: {len(X.columns)} → {X_processed.shape[1]} features", "success")
-
-                            st.markdown("### Steps Applied")
-                            for i, step in enumerate(builder.preprocessing_steps, 1):
-                                st.caption(f"{i}. {step}")
-
-                            cols = st.columns(2)
-                            with cols[0]:
-                                st.metric("Input Features", len(X.columns))
-                            with cols[1]:
-                                st.metric("Output Features", X_processed.shape[1])
-
-                        except PreprocessingException as e:
-                            st.error(f"Preprocessing failed: {e.message}")
-                            log_message(f"ERROR: {e.message}", "error")
-                        except Exception as e:
-                            st.error(f"Error: {str(e)[:100]}")
-                            log_message(f"ERROR: {str(e)[:100]}", "error")
-
-        # TAB 4: TRAIN
-        with tab4:
-            st.markdown("### Model Training")
-
-            if st.session_state.X_processed is None:
-                st.info("Complete preprocessing first (Tab: Prepare)")
-            else:
-                if st.button("Train Models", type="primary"):
-                    with st.spinner("Training..."):
-                        try:
-                            trainer = ModelTrainer(st.session_state.config)
-                            results = trainer.train_models(
-                                st.session_state.X_processed,
-                                st.session_state.y,
-                                task_type='auto',
-                                fast_only=fast_only
+                
+                # Metric comparison bar chart
+                st.markdown("### 📈 Metric Comparison")
+                fig, ax = plt.subplots(figsize=(12, 6))
+                x = np.arange(len(results_df))
+                width = 0.2
+                ax.bar(x - width, results_df['Accuracy'], width, label='Accuracy', color='#2196F3')
+                ax.bar(x, results_df['F1-Score'], width, label='F1-Score', color='#4CAF50')
+                ax.bar(x + width, results_df['Precision'], width, label='Precision', color='#FF9800')
+                ax.set_xlabel('Models')
+                ax.set_ylabel('Score')
+                ax.set_title('Model Performance Comparison')
+                ax.set_xticks(x)
+                ax.set_xticklabels(results_df['Model'], rotation=45, ha='right')
+                ax.legend()
+                ax.grid(axis='y', alpha=0.3)
+                plt.tight_layout()
+                st.pyplot(fig)
+                plt.close()
+                
+                # Confusion matrix for best model
+                if st.session_state.best_model:
+                    st.markdown("### 🎯 Best Model Confusion Matrix")
+                    trainer = ModelTrainer(st.session_state.config)
+                    trainer.best_model = st.session_state.best_model
+                    
+                    from sklearn.model_selection import train_test_split
+                    X_train, X_test, y_train, y_test = train_test_split(
+                        st.session_state.X_processed,
+                        st.session_state.y,
+                        test_size=0.2,
+                        random_state=42
+                    )
+                    
+                    y_pred = st.session_state.best_model.predict(X_test)
+                    cm = confusion_matrix(y_test, y_pred)
+                    
+                    fig, ax = plt.subplots(figsize=(8, 6))
+                    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', ax=ax)
+                    ax.set_title('Confusion Matrix')
+                    ax.set_ylabel('True Label')
+                    ax.set_xlabel('Predicted Label')
+                    plt.tight_layout()
+                    st.pyplot(fig)
+                    plt.close()
+        else:
+            st.info("Train models first")
+    
+    # TAB 6: EXPORT
+    with tabs[5]:
+        st.markdown("## Export Results")
+        
+        if st.session_state.best_model:
+            if st.button("📄 Generate Report", type="primary"):
+                with st.spinner("Generating..."):
+                    try:
+                        report_gen = ReportGenerator(st.session_state.config)
+                        report_path = report_gen.generate_report(
+                            profile=st.session_state.profile,
+                            preprocessing_steps=st.session_state.pipeline,
+                            results=st.session_state.training_results,
+                            best_pipeline=st.session_state.best_model
+                        )
+                        
+                        st.success(f"✅ Report: {report_path}")
+                        
+                        with open(report_path, 'rb') as f:
+                            st.download_button(
+                                "⬇️ Download Report",
+                                f,
+                                file_name=Path(report_path).name,
+                                mime='application/pdf',
+                                type="primary"
                             )
-
-                            st.session_state.training_results = results
-                            st.session_state.best_model = trainer.best_model
-                            st.session_state.messages.extend([{"text": w, "level": "info"} for w in trainer.warnings])
-
-                            st.success("✓ Training complete!")
-
-                        except Exception as e:
-                            st.error(f"Training failed: {str(e)[:100]}")
-                            log_message(f"ERROR: {str(e)[:100]}", "error")
-
-                if st.session_state.training_results:
-                    results = st.session_state.training_results
-
-                    st.markdown("### Best Model")
-                    cols = st.columns(2)
-                    with cols[0]:
-                        st.metric("Model", results.get('best_model_name', 'N/A'))
-                    with cols[1]:
-                        st.metric("Score", f"{results.get('best_score', 0):.4f}")
-
-                    all_results = results.get('all_results', [])
-                    if all_results:
-                        st.markdown("### All Models")
-                        results_data = []
-                        for r in all_results:
-                            if r.get('status') == 'success':
-                                row = {
-                                    'Model': r['model_name'],
-                                    'Status': '✓',
-                                    'Time (s)': r.get('training_time', 0),
-                                }
-                                metrics = r.get('metrics', {})
-                                for k, v in metrics.items():
-                                    if v is not None:
-                                        row[k.replace('_', ' ').title()] = v
-                                results_data.append(row)
-                            else:
-                                results_data.append({
-                                    'Model': r['model_name'],
-                                    'Status': '✗',
-                                    'Error': r.get('error', '?')[:50]
-                                })
-
-                        st.dataframe(pd.DataFrame(results_data), use_container_width=True)
-
-        # TAB 5: EXPORT
-        with tab5:
-            st.markdown("### Export & Deploy")
-
-            if st.session_state.best_model is None:
-                st.info("Train models first (Tab: Train)")
-            else:
-                st.success("✓ Model ready!")
-
-                cols = st.columns(2)
-
-                with cols[0]:
-                    st.markdown("#### Save Model")
-                    if st.button("Export (.pkl)", type="primary"):
-                        try:
-                            import joblib
-                            Path("outputs").mkdir(exist_ok=True)
-                            model_path = "outputs/best_model.pkl"
-
-                            joblib.dump({
-                                'pipeline': st.session_state.preprocessing_pipeline,
-                                'model': st.session_state.best_model,
-                                'config': st.session_state.config,
-                            }, model_path)
-
-                            st.success(f"✓ Saved to {model_path}")
-
-                            with open(model_path, 'rb') as f:
-                                st.download_button(
-                                    "Download Model",
-                                    data=f,
-                                    file_name="automl_model.pkl",
-                                    mime="application/octet-stream"
-                                )
-                        except Exception as e:
-                            st.error(f"Export failed: {str(e)[:100]}")
-
-                with cols[1]:
-                    st.markdown("#### Generate Report")
-                    if st.button("Export Report", type="primary"):
-                        try:
-                            Path("outputs").mkdir(exist_ok=True)
-                            report_path = "outputs/report.html"
-
-                            generator = ReportGenerator(st.session_state.config)
-
-                            if hasattr(st.session_state.preprocessing_pipeline, 'steps'):
-                                steps = [name for name, _ in st.session_state.preprocessing_pipeline.steps]
-                            else:
-                                steps = ["Preprocessing applied"]
-
-                            generator.generate_report(
-                                profile=st.session_state.profile,
-                                preprocessing_steps=steps,
-                                training_results=st.session_state.training_results,
-                                target_col=st.session_state.profile.get('target_column', 'target'),
-                                output_path=report_path
-                            )
-
-                            st.success(f"✓ Report saved: {report_path}")
-
-                            with open(report_path, 'r', encoding='utf-8') as f:
-                                st.download_button(
-                                    "Download Report",
-                                    data=f,
-                                    file_name="automl_report.html",
-                                    mime="text/html"
-                                )
-                        except Exception as e:
-                            st.error(f"Report failed: {str(e)[:100]}")
-
-                st.markdown("#### Usage Example")
-                st.code("""
-import joblib
-import pandas as pd
-
-model_data = joblib.load('automl_model.pkl')
-X_new = pd.read_csv('new_data.csv')
-X_processed = model_data['pipeline'].transform(X_new)
-predictions = model_data['model'].predict(X_processed)
-print(predictions)
-""", language='python')
+                    except Exception as e:
+                        st.error(f"Error: {str(e)}")
+        else:
+            st.info("Train models first")
 
 if __name__ == "__main__":
     main()

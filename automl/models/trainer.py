@@ -16,7 +16,7 @@ from sklearn.metrics import (
 )
 import time
 import warnings
-from typing import Dict, List, Tuple, Any
+from typing import Callable, Dict, List, Optional, Tuple, Any
 import joblib
 import logging
 
@@ -40,7 +40,8 @@ class ModelTrainer:
         self.warnings = []
         
     def train_models(self, X: pd.DataFrame, y: pd.Series, 
-                     task_type: str = 'auto', fast_only: bool = False) -> Dict:
+                     task_type: str = 'auto', fast_only: bool = False,
+                     progress_callback: Optional[Callable[[str, Optional[float]], None]] = None) -> Dict:
         """
         Train multiple models and return results with comprehensive validation
         
@@ -88,6 +89,10 @@ class ModelTrainer:
             X, y = self._limit_training_data(X, y)
             
             self.warnings.append(f"INFO: Task type: {self.task_type}")
+
+            def _notify(message: str, progress: Optional[float] = None):
+                if progress_callback:
+                    progress_callback(message, progress)
             
             # Split data
             try:
@@ -106,10 +111,16 @@ class ModelTrainer:
                 raise TrainingException(f"No models available for {self.task_type}")
             
             self.warnings.append(f"INFO: Training {len(models)} models")
-            
+            total_models = len(models)
+
             # Train each model with error recovery
-            for model_name, model_config in models.items():
-                self.warnings.append(f"INFO: Training {model_name}...")
+            for idx, (model_name, model_config) in enumerate(models.items(), 1):
+                model_type = model_config.get('model').__class__.__name__
+                before_ratio = (idx - 1) / total_models
+                progress_ratio = idx / total_models
+                progress_message = f"[{idx}/{len(models)}] ▶️ Training {model_name} ({model_type})"
+                self.warnings.append(progress_message)
+                _notify(progress_message, before_ratio)
                 
                 try:
                     result = self._train_single_model(
@@ -117,23 +128,39 @@ class ModelTrainer:
                         X_train, X_test, y_train, y_test
                     )
                     self.all_results.append(result)
+                    main_metric = 'test_accuracy' if self.task_type == 'classification' else 'test_r2'
+                    test_score = result['metrics'].get(main_metric, 'N/A')
+                    success_message = f"   ✓ {model_name}: {main_metric}={test_score} ({result['training_time']}s)"
+                    self.warnings.append(success_message)
+                    _notify(success_message, progress_ratio)
                 except TimeoutError as e:
-                    self.warnings.append(f"WARNING: {model_name} training timed out: {str(e)[:200]}")
+                    timeout_message = f"⏱️  TIMEOUT: {model_name} exceeded time limit"
+                    self.warnings.append(timeout_message)
+                    _notify(timeout_message, progress_ratio)
                     self.all_results.append({
                         'model_name': model_name,
-                        'error': f"Training timed out: {str(e)[:200]}",
+                        'model_type': model_type,
+                        'error': f"Training exceeded {self.config.MAX_TRAINING_TIME_SECONDS}s time limit",
                         'status': 'timeout',
                     })
                 except Exception as e:
-                    self.warnings.append(f"WARNING: {model_name} failed: {str(e)[:200]}")
+                    error_msg = f"{type(e).__name__}: {str(e)[:300]}"
+                    failure_message = f"❌ FAILED: {model_name} - {error_msg[:100]}"
+                    self.warnings.append(failure_message)
+                    _notify(failure_message, progress_ratio)
                     self.all_results.append({
                         'model_name': model_name,
-                        'error': str(e)[:200],
+                        'model_type': model_type,
+                        'error': error_msg,
                         'status': 'failed',
                     })
             
             # Select best model
             self._select_best_model()
+            if self.best_model_name:
+                _notify(f"Training complete: best model {self.best_model_name}", 1.0)
+            else:
+                _notify("Training complete: no successful models", 1.0)
             
             return {
                 'task_type': self.task_type,
@@ -148,9 +175,11 @@ class ModelTrainer:
         except TrainingException:
             raise
         except Exception as e:
+            import traceback
+            error_detail = traceback.format_exc()[:800]
             raise TrainingException(
-                f"Unexpected error during training: {str(e)[:200]}",
-                {'error_type': type(e).__name__}
+                f"Unexpected training error: {type(e).__name__} - {str(e)[:350]}\n{error_detail[:200]}",
+                {'error_type': type(e).__name__, 'full_error': str(e)[:500]}
             )
     
     def _infer_task_type(self, y: pd.Series) -> str:
@@ -230,6 +259,7 @@ class ModelTrainer:
                             X_train, X_test, y_train, y_test) -> Dict:
         """Train a single model with hyperparameter tuning"""
         start_time = time.time()
+        model_type = model_config['model'].__class__.__name__
         
         model = clone(model_config['model'])
         model = self._apply_parallel_limits(model)
@@ -243,11 +273,14 @@ class ModelTrainer:
                 )
                 model = self._apply_parallel_limits(model)
                 self._check_training_time(start_time, "hyperparameter tuning")
+            except TimeoutError:
+                raise
             except Exception as e:
+                # Continue with default model if tuning fails
+                error_detail = f"{type(e).__name__}: {str(e)[:150]}"
                 self.warnings.append(
-                    f"WARNING: Hyperparameter tuning failed for {model_name}: {str(e)[:100]}"
+                    f"   └─ ⚠️  Hyperparameter tuning skipped ({error_detail}), using defaults"
                 )
-                # Continue with default model
         
         self._check_training_time(start_time, "before training")
 
@@ -256,8 +289,11 @@ class ModelTrainer:
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore")
                 model.fit(X_train, y_train)
+        except TimeoutError:
+            raise
         except Exception as e:
-            raise Exception(f"Training failed: {e}")
+            error_detail = f"{type(e).__name__}: {str(e)[:300]}"
+            raise Exception(f"Model fitting failed - {error_detail}")
         
         self._check_training_time(start_time, "training fit")
 
@@ -265,12 +301,14 @@ class ModelTrainer:
         try:
             metrics = self._evaluate_model(model, X_train, X_test, y_train, y_test)
         except Exception as e:
-            raise Exception(f"Evaluation failed: {e}")
+            error_detail = f"{type(e).__name__}: {str(e)[:300]}"
+            raise Exception(f"Model evaluation failed - {error_detail}")
         
         training_time = time.time() - start_time
         
         return {
             'model_name': model_name,
+            'model_type': model_type,
             'model': model,
             'metrics': metrics,
             'training_time': round(training_time, 2),
@@ -417,28 +455,45 @@ class ModelTrainer:
         return model
     
     def _select_best_model(self):
-        """Select the best model based on test performance"""
+        """Select the best model based on test performance, excluding dummy baseline"""
         successful_results = [r for r in self.all_results if r.get('status') == 'success']
         
         if not successful_results:
-            self.warnings.append("ERROR: No models trained successfully!")
+            self.warnings.append("❌ ERROR: No models trained successfully!")
             return
+        
+        # Filter out dummy model for fair comparison (dummy is only for baseline reference)
+        competing_models = [r for r in successful_results if r.get('model_name') != 'dummy']
+        
+        if not competing_models:
+            self.warnings.append("⚠️  WARNING: Only dummy model succeeded, using it as fallback")
+            competing_models = successful_results
         
         # Determine scoring metric
         if self.task_type == 'classification':
             metric_key = 'test_accuracy'
-            best_result = max(successful_results, key=lambda x: x['metrics'].get(metric_key, 0))
+            best_result = max(competing_models, key=lambda x: x['metrics'].get(metric_key, -np.inf))
         else:
             metric_key = 'test_r2'
-            best_result = max(successful_results, key=lambda x: x['metrics'].get(metric_key, -np.inf))
+            best_result = max(competing_models, key=lambda x: x['metrics'].get(metric_key, -np.inf))
         
         self.best_model = best_result['model']
         self.best_model_name = best_result['model_name']
         self.best_score = best_result['metrics'].get(metric_key)
         
-        self.warnings.append(
-            f"✓ Best model: {self.best_model_name} ({metric_key}={self.best_score})"
-        )
+        # Find dummy score for comparison
+        dummy_result = next((r for r in successful_results if r.get('model_name') == 'dummy'), None)
+        if dummy_result:
+            dummy_score = dummy_result['metrics'].get(metric_key)
+            improvement = ((self.best_score - dummy_score) / abs(dummy_score) * 100) if dummy_score != 0 else 0
+            self.warnings.append(
+                f"✓ Best model: {self.best_model_name} ({metric_key}={self.best_score:.4f}) "
+                f"[+{improvement:.1f}% vs baseline]"
+            )
+        else:
+            self.warnings.append(
+                f"✓ Best model: {self.best_model_name} ({metric_key}={self.best_score:.4f})"
+            )
     
     def predict(self, X):
         """Make predictions with best model"""
