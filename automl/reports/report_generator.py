@@ -71,7 +71,7 @@ class ReportGenerator:
                 )
             
             # Generate HTML content
-            html = self._generate_html(profile, preprocessing_steps, training_results, target_col)
+            html = self._generate_html(profile, preprocessing_steps, results, target_col)
             
             if not html or len(html) == 0:
                 raise ReportException("Generated HTML is empty", {'output_path': output_path})

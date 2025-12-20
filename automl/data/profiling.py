@@ -219,7 +219,7 @@ class DataProfiler:
         
         # Try to convert to datetime
         try:
-            pd.to_datetime(non_null, errors='raise', infer_datetime_format=True)
+            pd.to_datetime(non_null, errors='raise')
             return 'datetime'
         except:
             pass

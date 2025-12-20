@@ -88,6 +88,27 @@ class ModelTrainer:
 
             X, y = self._limit_training_data(X, y)
             
+            # STRICT DATA VALIDATION
+            # Check for NaNs
+            if np.isnan(X).any().any():
+                raise TrainingException(
+                    "Input data contains NaN values after preprocessing. Please check your missing value imputation strategy.", 
+                    {'nan_count': np.isnan(X).sum().sum()}
+                )
+            
+            # Check for Infinite values
+            if not np.isfinite(X).all().all():
+                 raise TrainingException(
+                    "Input data contains infinite values. Please check your feature scaling strategy or for division by zero.",
+                    {'inf_count': np.isinf(X).sum().sum()}
+                )
+
+            # Ensure data is numeric
+            try:
+                X = X.astype(float)
+            except ValueError:
+                 raise TrainingException("Input data contains non-numeric values that could not be converted to float. Check your categorical encoding.")
+            
             self.warnings.append(f"INFO: Task type: {self.task_type}")
 
             def _notify(message: str, progress: Optional[float] = None):
