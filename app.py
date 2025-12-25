@@ -30,7 +30,7 @@ sns.set_palette("husl")
 # ==================== PAGE SETUP ====================
 st.set_page_config(
     page_title="CS-245 AutoML System",
-    page_icon="🤖",
+    page_icon=None,
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -38,176 +38,172 @@ st.set_page_config(
 # ==================== CLEAN STYLING ====================
 st.markdown("""
 <style>
-    /* MAIN APP - WHITE BACKGROUND, BLACK TEXT */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    
+    /* GLOBAL RESET & FONT */
+    html, body, [class*="css"] {
+        font-family: 'Inter', sans-serif !important;
+        color: #1e293b !important;
+    }
+    
+    /* RICH BACKGROUND */
     .stApp {
-        background: #ffffff !important;
+        background: radial-gradient(circle at 10% 20%, #eff6ff 0%, #f1f5f9 90%) !important;
     }
     
-    body, html {
-        background: #ffffff !important;
-    }
-    
-    /* TEXT VISIBILITY - CAREFUL OVERRIDES */
-    h1, h2, h3, h4, h5, h6 {
-        color: #1a1d2e !important;
+    /* TYPOGRAPHY */
+    h1, h2, h3, h4, h5, h6, .stMarkdown h1, .stMarkdown h2, .stMarkdown h3 {
+        color: #0f172a !important;
+        font-family: 'Inter', sans-serif !important;
         font-weight: 700 !important;
+        letter-spacing: -0.02em !important;
     }
     
-    /* Standard text elements */
-    p, li, label, .stMarkdown, .stText {
-        color: #000000 !important;
-    }
+    h1 { font-size: 2.25rem !important; background: -webkit-linear-gradient(45deg, #2563eb, #1e40af); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    h2 { font-size: 1.5rem !important; margin-top: 2rem !important; border-bottom: 2px solid #e2e8f0; padding-bottom: 0.5rem; }
+    h3 { font-size: 1.25rem !important; margin-top: 1.5rem !important; }
     
-    /* Ensure markdown container text is black */
-    [data-testid="stMarkdownContainer"] p {
-        color: #000000 !important;
-    }
-    
-    /* Tabs */
-    .stTabs [data-baseweb="tab-list"] {
-        gap: 8px;
-        background: #f5f5f5 !important;
-        padding: 8px !important;
-        border-radius: 8px !important;
-    }
-    
-    .stTabs [data-baseweb="tab"] {
-        background: transparent !important;
-        color: #000000 !important;
-        padding: 12px 24px !important;
-        font-weight: 600 !important;
-        border-radius: 6px !important;
-    }
-    
-    .stTabs [data-baseweb="tab"]:hover {
-        background: #e0e0e0 !important;
-    }
-    
-    .stTabs [aria-selected="true"] {
-        background: #ffffff !important;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
-    }
-    
-    /* Buttons - Preserve White Text */
-    .stButton button {
-        background: #2196F3 !important;
-        color: #ffffff !important;
-        padding: 12px 32px !important;
-        border-radius: 8px !important;
-        font-weight: 600 !important;
-        border: none !important;
-    }
-    
-    .stButton button:hover {
-        background: #1976D2 !important;
-        transform: translateY(-1px) !important;
-    }
-    
-    .stButton button p {
-        color: #ffffff !important;
-    }
-    
-    /* Dropdowns & Selects */
-    [data-baseweb="select"] div {
-        background: #ffffff !important;
-        color: #000000 !important;
-    }
-    
-    [role="option"] {
-        background: #ffffff !important;
-        color: #000000 !important;
-    }
-    
-    [role="option"]:hover {
-        background: #e3f2fd !important;
-        color: #000000 !important;
-    }
-    
-    [aria-selected="true"][role="option"] {
-        background: #2196F3 !important;
-        color: #ffffff !important;
-    }
-    
-    /* Inputs */
-    input, textarea, select {
-        background: #ffffff !important;
-        color: #000000 !important;
-        border: 2px solid #e0e0e0 !important;
-    }
-    
-    /* Code blocks */
-    code {
-        color: #d63384 !important;
-        background: #f8f9fa !important;
-    }
-    
-    /* Metrics */
-    [data-testid="stMetric"] {
-        background: #f5f5f5 !important;
-        padding: 15px !important;
-        border-radius: 8px !important;
-        border: 1px solid #e0e0e0 !important;
-    }
-    
-    [data-testid="stMetric"] label {
-        color: #555555 !important;
-    }
-    
-    [data-testid="stMetric"] div {
-        color: #000000 !important;
+    p, label, .stMarkdown p, .stText, span, li, .stMarkdown li {
+        color: #334155 !important; /* Slate 700 */
+        font-size: 1rem !important;
+        line-height: 1.6 !important;
     }
     
     /* SIDEBAR */
     .stSidebar {
-        background: #f8f9fa !important;
+        background-color: #ffffff !important;
+        box-shadow: 4px 0 24px rgba(0,0,0,0.02) !important;
+        border-right: 1px solid #e2e8f0 !important;
     }
     
-    .stSidebar [data-testid="stMarkdownContainer"] p, 
-    .stSidebar label {
-        color: #000000 !important;
-    }
-    
-    /* FILE UPLOADER */
-    [data-testid="stFileUploader"] {
-        background: #ffffff !important;
-        padding: 15px !important;
+    /* BUTTONS - Default (Primary-like) */
+    .stButton > button {
+        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%) !important;
+        color: white !important;
+        border: none !important;
         border-radius: 8px !important;
-        border: 1px solid #e0e0e0 !important;
+        padding: 0.6rem 1.4rem !important;
+        font-weight: 600 !important;
+        box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.4), 0 2px 4px -1px rgba(59, 130, 246, 0.2) !important;
+        transition: all 0.3s ease !important;
+    }
+    .stButton > button p {
+        color: white !important; /* Ensure internal text is white */
     }
     
-    [data-testid="stFileUploader"] label,
-    [data-testid="stFileUploader"] small {
-        color: #000000 !important;
+    .stButton > button:hover {
+        background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
+        box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.5) !important;
+        transform: translateY(-2px) !important;
+    }
+    
+    /* Sidebar specific button override (Reset System often secondary) */
+     div[data-testid="stSidebar"] .stButton > button {
+        width: 100%;
     }
 
-    [data-testid="stFileUploadDropzone"] {
-        background: #f0f2f6 !important;
+    /* CARDS & METRICS (Glassmorphism effect) */
+    [data-testid="stMetric"], [data-testid="stExpander"] {
+        background-color: rgba(255, 255, 255, 0.8) !important;
+        backdrop-filter: blur(10px);
+        padding: 1rem !important;
+        border-radius: 12px !important;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03) !important;
+        border: 1px solid rgba(255, 255, 255, 0.5) !important;
+    }
+    
+    /* Metric Text Visibility Fixes */
+    [data-testid="stMetricLabel"] {
+        font-size: 0.875rem !important;
+        color: #64748b !important; /* Slate 500 */
+        font-weight: 600 !important;
+    }
+    
+    [data-testid="stMetricValue"] {
+        font-size: 1.8rem !important;
+        color: #0f172a !important; /* Slate 900 */
+        font-weight: 700 !important;
+    }
+    
+    [data-testid="stMetricDelta"] {
+        color: #059669 !important; /* Green */
     }
 
-    
-    /* Markdown containers */
-    [data-testid="stMarkdownContainer"] {
-        color: #000000 !important;
+    [data-testid="stMetric"]:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05) !important;
     }
     
-    /* Expanders */
-    .streamlit-expanderHeader {
-        color: #000000 !important;
-        background: #f8f9fa !important;
+    /* INPUT FIELDS */
+    .stTextInput input, .stSelectbox div, .stNumberInput input {
+        border-radius: 8px !important;
+        border: 1px solid #cbd5e1 !important;
+        background-color: #ffffff !important;
+        color: #0f172a !important; /* Ensure input text is dark */
     }
     
-    /* Dataframes */
+    .stTextInput input:focus, .stSelectbox div:focus {
+        border-color: #3b82f6 !important;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+    }
+    
+    /* DATAFRAMES */
     [data-testid="stDataFrame"] {
-        background: #ffffff !important;
+        border: 1px solid #e2e8f0 !important;
+        border-radius: 8px !important;
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05) !important;
+        background: white !important;
     }
     
-    /* Info/warning/error boxes */
-    .stAlert {
-        background: #f8f9fa !important;
+    /* TABS */
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 16px;
+        background-color: transparent !important;
+        border-bottom: 2px solid #e2e8f0 !important;
+        padding-bottom: 0 !important;
     }
     
-    .stAlert * {
-        color: #000000 !important;
+    .stTabs [data-baseweb="tab"] {
+        height: 50px;
+        background-color: transparent !important;
+        border: none !important;
+        color: #64748b !important;
+        font-weight: 600 !important;
+        font-size: 1rem !important;
+    }
+    
+    .stTabs [aria-selected="true"] {
+        color: #2563eb !important;
+        border-bottom: 3px solid #2563eb !important;
+    }
+    
+    /* ALERTS */
+    .stSuccess, .stInfo, .stWarning, .stError {
+        border-radius: 8px !important;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05) !important;
+    }
+    
+    /* STEP INDICATOR */
+    .step-indicator {
+        background: linear-gradient(to right, #eff6ff, #ffffff);
+        border-left: 5px solid #3b82f6;
+        padding: 1rem 1.5rem;
+        border-radius: 0 8px 8px 0;
+        margin-bottom: 2rem;
+        color: #1e40af;
+        font-weight: 600;
+        font-size: 1.1rem;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    }
+    
+    /* ANIMATIONS */
+    @keyframes slideUp {
+        from { opacity: 0; transform: translateY(15px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .element-container {
+        animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
 </style>
 """, unsafe_allow_html=True)
@@ -226,6 +222,8 @@ def init_session():
         'training_results': [],
         'best_model': None,
         'best_model_name': None,
+        # Navigation State
+        'current_step': 1
     }
     for key, val in defaults.items():
         if key not in st.session_state:
@@ -235,42 +233,57 @@ init_session()
 
 # ==================== MAIN APP ====================
 def main():
-    st.title("🤖 CS-245 AutoML System")
+    st.title("CS-245 AutoML System")
     st.markdown("### Automated Classification Pipeline")
     st.markdown("---")
     
+    # SYSTEM STATUS CALCULATIONS
+    status_df = "✅ Loaded" if st.session_state.df is not None else "❌ Not Loaded"
+    status_profile = "✅ Done" if st.session_state.profile is not None else "❌ Pending"
+    status_pipe = "✅ Built" if st.session_state.X_processed is not None else "❌ Pending"
+    status_model = "✅ Trained" if st.session_state.best_model is not None else "❌ Pending"
+
     # Sidebar configuration
     with st.sidebar:
-        st.markdown("## ⚙️ Configuration")
+        st.markdown("## System Status")
+        col_s1, col_s2 = st.columns([1, 4])
+        
+        # Simple Status Tracker
+        st.markdown(f"**Data:** {status_df}")
+        st.markdown(f"**EDA:** {status_profile}")
+        st.markdown(f"**Pipeline:** {status_pipe}")
+        st.markdown(f"**Model:** {status_model}")
+        
         st.markdown("---")
         
-        st.markdown("### Preprocessing")
-        missing_strategy = st.selectbox(
-            "Missing Value Imputation",
-            ["median", "mean", "mode", "constant"],
-            help="Strategy for handling missing values"
-        )
+        st.markdown("## Configuration")
         
-        scaler_type = st.selectbox(
-            "Feature Scaling",
-            ["StandardScaler", "MinMaxScaler", "None"],
-            help="Method to scale numerical features"
-        )
-        
-        encoding_method = st.selectbox(
-            "Categorical Encoding",
-            ["One-Hot", "Ordinal"],
-            help="Method to encode categorical variables"
-        )
-        
-        test_size = st.slider(
-            "Test Set Size (%)",
-            min_value=10,
-            max_value=40,
-            value=20,
-            step=5,
-            help="Percentage of data for testing"
-        ) / 100
+        with st.expander("Preprocessing Config", expanded=False):
+            missing_strategy = st.selectbox(
+                "Missing Value Imputation",
+                ["median", "mean", "mode", "constant"],
+                help="Strategy for handling missing values"
+            )
+            
+            scaler_type = st.selectbox(
+                "Feature Scaling",
+                ["StandardScaler", "MinMaxScaler", "None"],
+                help="Method to scale numerical features"
+            )
+            
+            encoding_method = st.selectbox(
+                "Categorical Encoding",
+                ["One-Hot", "Ordinal"],
+                help="Method to encode categorical variables"
+            )
+            
+            test_size = st.slider(
+                "Test Set Size (%)",
+                min_value=10,
+                max_value=40,
+                value=20,
+                step=5
+            ) / 100
         
         st.session_state.preprocessing_config = {
             'missing_strategy': missing_strategy,
@@ -279,26 +292,31 @@ def main():
             'test_size': test_size
         }
         
-        st.markdown("---")
         st.markdown("### Model Training")
-        fast_mode = st.checkbox("Fast Mode", help="Train only quick models")
+        fast_mode = st.checkbox("Fast Mode", value=True, help="Train only quick models (Logistic Regression, Decision Tree) for speed.")
         
         st.markdown("---")
-        st.caption("CS-245 ML Project | AutoML System")
+        if st.button("Reset System", type="secondary"):
+            for key in list(st.session_state.keys()):
+                del st.session_state[key]
+            st.rerun()
+            
+        st.caption("CS-245 ML Project | v2.0")
     
     # Main tabs
     tabs = st.tabs([
-        "📤 Upload",
-        "📊 EDA & Issues",
-        "⚙️ Preprocessing",
-        "🎯 Training",
-        "📈 Results",
-        "🔮 Prediction",
-        "💾 Export"
+        "Upload",
+        "EDA & Issues",
+        "Preprocessing",
+        "Training",
+        "Results",
+        "Prediction",
+        "Export"
     ])
     
     # TAB 1: UPLOAD
     with tabs[0]:
+        st.markdown('<div class="step-indicator">Step 1: Data Ingestion</div>', unsafe_allow_html=True)
         st.markdown("## Dataset Upload")
         st.markdown("Upload a CSV file for classification")
         
@@ -316,7 +334,7 @@ def main():
                     
                     if df is not None:
                         st.session_state.df = df
-                        st.success(f"✅ Loaded: {len(df):,} rows × {df.shape[1]} columns")
+                        st.success(f"Loaded: {len(df):,} rows × {df.shape[1]} columns")
                         
                         col1, col2, col3 = st.columns(3)
                         with col1:
@@ -328,14 +346,14 @@ def main():
                             st.metric("Memory", f"{mem:.1f} MB")
                         
                         st.markdown("### Preview")
-                        st.dataframe(df.head(20), width="stretch")
+                        st.dataframe(df.head(20), use_container_width=True)
                         
                         st.markdown("### Column Types")
                         types_df = pd.DataFrame({
                             'Column': df.dtypes.index,
                             'Type': df.dtypes.values.astype(str)
                         })
-                        st.dataframe(types_df, width="stretch")
+                        st.dataframe(types_df, use_container_width=True)
                     else:
                         st.error("Failed to load dataset")
                 
@@ -345,6 +363,7 @@ def main():
     
     # TAB 2: EDA & ISSUES
     with tabs[1]:
+        st.markdown('<div class="step-indicator">Step 2: Exploratory Analysis</div>', unsafe_allow_html=True)
         st.markdown("## Exploratory Data Analysis & Issue Detection")
         
         if st.session_state.df is None:
@@ -428,7 +447,7 @@ def main():
                             })
                     
                     st.session_state.issues = issues
-                    st.success("✅ Analysis complete!")
+                    st.success("Analysis complete!")
             
             if st.session_state.profile:
                 profile = st.session_state.profile
@@ -470,12 +489,12 @@ def main():
                     missing_df = missing_df[missing_df['Missing'] > 0]
                     
                     if len(missing_df) > 0:
-                        st.dataframe(missing_df, width="stretch")
+                        st.dataframe(missing_df, use_container_width=True)
                     else:
-                        st.success("✅ No missing values")
+                        st.success("No missing values")
                     
                     # Outliers
-                    st.markdown("### 📐 Outlier Detection (IQR Method)")
+                    st.markdown("### Outlier Detection (IQR Method)")
                     numerical_cols = df.select_dtypes(include=[np.number]).columns
                     
                     if len(numerical_cols) == 0:
@@ -495,13 +514,13 @@ def main():
                                 })
                         
                         if outlier_data:
-                            st.dataframe(pd.DataFrame(outlier_data), width="stretch")
+                            st.dataframe(pd.DataFrame(outlier_data), use_container_width=True)
                         else:
-                            st.success("✅ No outliers detected")
+                            st.success("No outliers detected")
                         
                         # Correlation matrix
                         if len(numerical_cols) > 1:
-                            st.markdown("### 🔗 Correlation Matrix")
+                            st.markdown("### Correlation Matrix")
                             corr = df[numerical_cols].corr()
                             fig, ax = plt.subplots(figsize=(10, 8))
                             sns.heatmap(corr, annot=True, fmt='.2f', cmap='coolwarm', center=0, 
@@ -512,7 +531,7 @@ def main():
                             plt.close()
                         
                         # Distribution plots
-                        st.markdown("### 📊 Numerical Distributions")
+                        st.markdown("### Numerical Distributions")
                         display_cols = list(numerical_cols)[:4]
                         cols_per_row = 2
                         for i in range(0, len(display_cols), cols_per_row):
@@ -531,7 +550,7 @@ def main():
                     # Categorical plots
                     categorical_cols = df.select_dtypes(include=['object', 'category']).columns
                     if len(categorical_cols) > 0:
-                        st.markdown("### 📊 Categorical Distributions")
+                        st.markdown("### Categorical Distributions")
                         for cat_col in list(categorical_cols)[:3]:
                             value_counts = df[cat_col].value_counts().head(10)
                             fig, ax = plt.subplots(figsize=(10, 4))
@@ -550,35 +569,36 @@ def main():
                 
                 # Issues & user approval
                 if st.session_state.issues:
-                    st.markdown("### ⚠️ Detected Issues & Suggested Fixes")
+                    st.markdown("### Detected Issues & Suggested Fixes")
                     for issue in st.session_state.issues:
                         severity_color = {
-                            'High': '🔴',
-                            'Medium': '🟡',
-                            'Low': '🟢'
+                            'High': 'High',
+                            'Medium': 'Medium',
+                            'Low': 'Low'
                         }
                         with st.expander(f"{severity_color[issue['severity']]} {issue['type']} ({issue['severity']} Priority)"):
                             st.write(f"**Description:** {issue['description']}")
                             st.info(f"**Suggested Fix:** {issue['fix']}")
-                            if st.button(f"✅ Approve Fix", key=f"fix_{issue['type']}"):
+                            if st.button(f"Approve Fix", key=f"fix_{issue['type']}"):
                                 st.success(f"Fix approved for {issue['type']}")
     
     # TAB 3: PREPROCESSING
     with tabs[2]:
+        st.markdown('<div class="step-indicator">Step 3: Feature Engineering</div>', unsafe_allow_html=True)
         st.markdown("## Preprocessing Pipeline")
         
         if st.session_state.profile is None:
             st.info("Complete EDA first")
         else:
             # Intelligent Missing Value Handling Section
-            st.markdown("### 🧹 Data Cleaning & Preprocessing")
+            st.markdown("### Data Cleaning & Preprocessing")
             
             # Identify missing columns
             missing_cols = st.session_state.profile.get('missing', {}).get('missing_pct_by_column', {})
             actual_missing_cols = {k: v for k, v in missing_cols.items() if v > 0}
             
             if actual_missing_cols:
-                st.warning(f"⚠️ Found {len(actual_missing_cols)} columns with missing values.")
+                st.warning(f"Found {len(actual_missing_cols)} columns with missing values.")
                 
                 # Global Threshold Setting
                 threshold = st.slider(
@@ -603,7 +623,7 @@ def main():
                     
                     # Recommendation logic
                     recommendation = "Drop Column" if pct > threshold else "Impute"
-                    rec_icon = "🗑️" if pct > threshold else "💊"
+                    rec_icon = "Drop" if pct > threshold else "Impute"
                     
                     c1.write(f"{col_name}")
                     c2.write(f"{pct}%")
@@ -614,13 +634,13 @@ def main():
                         options=["Impute (Median/Mode)", "Drop Column", "Drop Rows"],
                         index=1 if recommendation == "Drop Column" else 0,
                         key=f"missing_action_{col_name}",
-                        help=f"AI Recommendation: {rec_icon} {recommendation}"
+                        help=f"Suggestion: {rec_icon} {recommendation}"
                     )
                     handling_decisions[col_name] = decision
                 
                 st.markdown("---")
             else:
-                st.success("✅ No missing values detected in dataset.")
+                st.success("No missing values detected in dataset.")
                 handling_decisions = {}
 
             st.markdown("### Pipeline Configuration")
@@ -633,7 +653,8 @@ def main():
                 st.metric("Encoding", config['encoding'])
                 st.metric("Test Split", f"{config['test_size']*100:.0f}%")
             
-            if st.button("⚙️ Build Pipeline", type="primary"):
+            can_build = st.session_state.df is not None and st.session_state.profile is not None
+            if st.button("Build Pipeline", type="primary", disabled=not can_build):
                 with st.spinner("Building..."):
                     try:
                         # Apply user decisions first
@@ -668,7 +689,7 @@ def main():
                                 encoder = LabelEncoder()
                                 y = encoder.fit_transform(y)
                                 st.session_state.label_encoder = encoder
-                                st.info(f"ℹ️ Target variable encoded: {list(encoder.classes_)}")
+                                st.info(f"Target variable encoded: {list(encoder.classes_)}")
                             elif 'label_encoder' in st.session_state:
                                 del st.session_state['label_encoder']
                                 
@@ -679,7 +700,7 @@ def main():
                             st.session_state.y = y
                             st.session_state.pipeline = pipeline
                             
-                            st.success("✅ Pipeline built!")
+                            st.success("Pipeline built!")
                             X, y, _ = builder.prepare_data(st.session_state.df, target_col)
                             
                             # Encode target if categorical
@@ -687,7 +708,7 @@ def main():
                                 encoder = LabelEncoder()
                                 y = encoder.fit_transform(y)
                                 st.session_state.label_encoder = encoder
-                                st.info(f"ℹ️ Target variable encoded: {list(encoder.classes_)}")
+                                st.info(f"Target variable encoded: {list(encoder.classes_)}")
                             elif 'label_encoder' in st.session_state:
                                 del st.session_state['label_encoder']
                                 
@@ -698,7 +719,7 @@ def main():
                             st.session_state.y = y
                             st.session_state.pipeline = pipeline
                             
-                            st.success("✅ Pipeline built!")
+                            st.success("Pipeline built!")
                             
                             col1, col2, col3 = st.columns(3)
                             with col1:
@@ -713,12 +734,14 @@ def main():
     
     # TAB 4: TRAINING
     with tabs[3]:
+        st.markdown('<div class="step-indicator">Step 4: Model Training</div>', unsafe_allow_html=True)
         st.markdown("## Model Training")
         
         if st.session_state.X_processed is None:
-            st.info("Build preprocessing pipeline first")
-        else:
-            if st.button("🎯 Train Models", type="primary"):
+            st.info("⚠️ Please build the preprocessing pipeline first (Tab 3)")
+        
+        can_train = st.session_state.X_processed is not None
+        if st.button("Train Models", type="primary", disabled=not can_train):
                 trainer = ModelTrainer(st.session_state.config)
                 task_type = st.session_state.profile['target']['task_type']
                 
@@ -745,10 +768,10 @@ def main():
                     st.session_state.best_model_name = trainer.best_model_name
                     
                     progress.progress(100)
-                    status.success("✅ Training complete!")
+                    status.success("Training complete!")
                     
                     if trainer.best_model_name:
-                        st.markdown(f"### 🏆 Best Model: {trainer.best_model_name}")
+                        st.markdown(f"### Best Model: {trainer.best_model_name}")
                         st.metric("Score", f"{trainer.best_score:.4f}")
                 
                 except Exception as e:
@@ -756,6 +779,7 @@ def main():
     
     # TAB 5: RESULTS
     with tabs[4]:
+        st.markdown('<div class="step-indicator">Step 5: Evaluation</div>', unsafe_allow_html=True)
         st.markdown("## Model Comparison & Results")
         
         if st.session_state.training_results:
@@ -764,7 +788,7 @@ def main():
             
             if successful:
                 # Metrics table
-                st.markdown("### 📊 Model Comparison")
+                st.markdown("### Model Comparison")
                 
                 task_type = st.session_state.profile['target'].get('task_type', 'classification')
                 
@@ -801,12 +825,12 @@ def main():
                 else:
                     results_df = results_df.sort_values('R2 Score', ascending=False)
                     
-                st.dataframe(results_df, width="stretch")
+                st.dataframe(results_df, use_container_width=True)
                 
                 # Download CSV
                 csv = results_df.to_csv(index=False)
                 st.download_button(
-                    "📥 Download Results CSV",
+                    "Download Results CSV",
                     csv,
                     "model_results.csv",
                     "text/csv",
@@ -814,7 +838,7 @@ def main():
                 )
                 
                 # Metric comparison bar chart
-                st.markdown("### 📈 Metric Comparison")
+                st.markdown("### Metric Comparison")
                 fig, ax = plt.subplots(figsize=(12, 6))
                 x = np.arange(len(results_df))
                 
@@ -849,7 +873,7 @@ def main():
                                hasattr(st.session_state.best_model, 'predict_proba')
                 
                 if st.session_state.best_model and is_clf_model:
-                    st.markdown("### 🎯 Best Model Confusion Matrix")
+                    st.markdown("### Best Model Confusion Matrix")
                     try:
                         trainer = ModelTrainer(st.session_state.config)
                         trainer.best_model = st.session_state.best_model
@@ -900,7 +924,7 @@ def main():
                     
                 # ROC Curve (Binary Classification Only)
                 if len(np.unique(st.session_state.y)) == 2 and task_type == 'classification':
-                    st.markdown("### 📈 ROC Curves")
+                    st.markdown("### ROC Curves")
                     st.info("ROC (Receiver Operating Characteristic) curves show the trade-off between true positive rate and false positive rate")
                     
                     from sklearn.model_selection import train_test_split
@@ -941,7 +965,7 @@ def main():
                 if st.session_state.best_model:
                     best_model = st.session_state.best_model
                     if hasattr(best_model, 'feature_importances_'):
-                        st.markdown("### 🎯 Feature Importance")
+                        st.markdown("### Feature Importance")
                         st.info("Shows which features contribute most to predictions (higher = more important)")
                         
                         # Get feature names
@@ -980,14 +1004,14 @@ def main():
         
         if st.session_state.best_model:
             # Executive Summary
-            st.markdown("## 📋 Executive Summary")
+            st.markdown("## Executive Summary")
             
             with st.expander("View Summary Before Generating Report", expanded=True):
                 profile = st.session_state.profile
                 successful_results = [r for r in st.session_state.training_results if r.get('status') == 'success']
                 
                 # Dataset info
-                st.markdown("### 📊 Dataset Overview")
+                st.markdown("### Dataset Overview")
                 col1, col2, col3 = st.columns(3)
                 with col1:
                     st.metric("Total Samples", f"{profile['basic']['n_rows']:,}")
@@ -997,7 +1021,7 @@ def main():
                     st.metric("Task Type", profile['target']['task_type'].title())
                 
                 # Best model info
-                st.markdown("### 🏆 Best Performing Model")
+                st.markdown("### Best Performing Model")
                 best_result = max(successful_results, key=lambda x: x['metrics'].get('test_accuracy', 0))
                 
                 col1, col2, col3 = st.columns(3)
@@ -1010,7 +1034,7 @@ def main():
                     st.metric("Training Time", f"{best_result['training_time']:.2f}s")
                 
                 # Key insights
-                st.markdown("### 💡 Key Insights")
+                st.markdown("### Key Insights")
                 insights = []
                 
                 # Data quality - use DataFrame directly instead of profile
@@ -1018,26 +1042,26 @@ def main():
                 missing_total = df.isnull().sum().sum()
                 
                 if missing_total > 0:
-                    insights.append(f"⚠️ Dataset has {missing_total} missing values across features")
+                    insights.append(f"Dataset has {missing_total} missing values across features")
                 else:
-                    insights.append("✅ No missing values detected")
+                    insights.append("No missing values detected")
                 
                 # Model performance
                 if best_result['metrics'].get('test_accuracy', 0) > 0.9:
-                    insights.append("✅ Excellent model performance (>90% accuracy)")
+                    insights.append("Excellent model performance (>90% accuracy)")
                 elif best_result['metrics'].get('test_accuracy', 0) > 0.8:
-                    insights.append("✅ Good model performance (>80% accuracy)")
+                    insights.append("Good model performance (>80% accuracy)")
                 else:
-                    insights.append("⚠️ Model performance could be improved")
+                    insights.append("Model performance could be improved")
                 
                 # Model count
-                insights.append(f"✅ Successfully trained {len(successful_results)} out of {len(st.session_state.training_results)} models")
+                insights.append(f"Successfully trained {len(successful_results)} out of {len(st.session_state.training_results)} models")
                 
                 for insight in insights:
                     st.write(insight)
                 
                 # Recommendations
-                st.markdown("### 🎯 Recommendations")
+                st.markdown("### Recommendations")
                 recommendations = []
                 
                 if best_result['model_name'] in ['random_forest', 'decision_tree']:
@@ -1057,7 +1081,8 @@ def main():
     
     # TAB 5: PREDICTION PLAYGROUND
     with tabs[5]:
-        st.markdown("## 🔮 Prediction Playground")
+        st.markdown('<div class="step-indicator">Step 6: Inference</div>', unsafe_allow_html=True)
+        st.markdown("## Prediction Playground")
         st.markdown("Test your model with 'What-If' scenarios")
         
         if st.session_state.best_model is None:
@@ -1108,7 +1133,7 @@ def main():
                                     help=f"{len(unique_vals)} options"
                                 )
                     
-                    submitted = st.form_submit_button("🚀 Predict", type="primary")
+                    submitted = st.form_submit_button("Predict", type="primary")
                     
                     if submitted:
                         st.markdown("### 2. Result")
@@ -1173,26 +1198,49 @@ def main():
     # TAB 6: RESULTS (Export)
     with tabs[6]:
         # Report generation
-        st.markdown("## 💾 Export & Reports")
+        st.markdown('<div class="step-indicator">Step 7: Reporting</div>', unsafe_allow_html=True)
+        st.markdown("## Export & Reports")
         
         st.markdown("---")
-        if st.button("📄 Generate Full Report", type="primary"):
+        if st.button("Generate Full Report", type="primary"):
             if st.session_state.best_model:
-                with st.spinner("⏳ Generating comprehensive report..."):
+                with st.spinner("Generating comprehensive report..."):
                     try:
+                        # Prepare results dictionary matching ReportGenerator expectations
+                        task_type = st.session_state.profile['target']['task_type']
+                        best_score = 0
+                        
+                        # Find score of best model
+                        if st.session_state.training_results:
+                            for res in st.session_state.training_results:
+                                if res.get('model_name') == st.session_state.best_model_name:
+                                    metrics = res.get('metrics', {})
+                                    if task_type == 'classification':
+                                        best_score = metrics.get('test_accuracy', 0)
+                                    else:
+                                        best_score = metrics.get('test_r2', 0)
+                                    break
+                        
+                        report_results = {
+                            'all_results': st.session_state.training_results,
+                            'task_type': task_type,
+                            'best_model_name': st.session_state.best_model_name,
+                            'best_score': best_score
+                        }
+
                         report_gen = ReportGenerator(st.session_state.config)
                         report_path = report_gen.generate_report(
                             profile=st.session_state.profile,
                             preprocessing_steps=[str(step) for step in st.session_state.pipeline.steps] if st.session_state.pipeline else [],
-                            training_results=st.session_state.training_results,
+                            training_results=report_results,
                             target_col=st.session_state.profile.get('target_column', 'target')
                         )
                         
-                        st.success(f"✅ Report generated: {report_path}")
+                        st.success(f"Report generated: {report_path}")
                         
                         with open(report_path, 'rb') as f:
                             st.download_button(
-                                "⬇️ Download PDF Report",
+                                "Download PDF Report",
                                 f,
                                 file_name=os.path.basename(report_path),
                                 mime="application/pdf"

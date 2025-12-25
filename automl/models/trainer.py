@@ -218,8 +218,14 @@ class ModelTrainer:
         stratify = None
         if self.task_type == 'classification':
             # Check if we have enough samples per class
-            value_counts = y.value_counts()
-            min_samples = value_counts.min()
+            # Handle numpy array case
+            if isinstance(y, np.ndarray):
+                # Convert to series for value_counts or use np.unique
+                unique, counts = np.unique(y, return_counts=True)
+                min_samples = counts.min()
+            else:
+                value_counts = y.value_counts()
+                min_samples = value_counts.min()
             
             if min_samples >= 2:
                 stratify = y
