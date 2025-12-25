@@ -1,0 +1,242 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoML Report</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+        
+        h2 {
+            color: #34495e;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            border-left: 4px solid #3498db;
+            padding-left: 15px;
+        }
+        
+        h3 {
+            color: #7f8c8d;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        
+        .summary-box {
+            background: #ecf0f1;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .metric-card {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        .metric-card .value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #3498db;
+        }
+        
+        .metric-card .label {
+            color: #7f8c8d;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+        
+        .warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 3px;
+        }
+        
+        .error {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 3px;
+        }
+        
+        .info {
+            background: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 3px;
+        }
+        
+        .success {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 3px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        th {
+            background: #3498db;
+            color: white;
+            font-weight: 600;
+        }
+        
+        tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .best-model {
+            background: #d4edda !important;
+        }
+        
+        ul {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+        
+        li {
+            margin: 8px 0;
+        }
+        
+        .timestamp {
+            text-align: right;
+            color: #7f8c8d;
+            font-size: 0.9em;
+            margin-top: 40px;
+        }
+        
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .code-block {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🤖 AutoML System Report</h1>
+
+
+        <div class="summary-box">
+            <h2>📊 Executive Summary</h2>
+            <p><strong>Target Column:</strong> <code>Age</code></p>
+            <p><strong>Task Type:</strong> Regression</p>
+            <p><strong>Best Model:</strong> lasso (Score: -0.0056)</p>
+            
+            <div class="metric-grid">
+                <div class="metric-card">
+                    <div class="value">700</div>
+                    <div class="label">Rows</div>
+                </div>
+                <div class="metric-card">
+                    <div class="value">9</div>
+                    <div class="label">Columns</div>
+                </div>
+                <div class="metric-card">
+                    <div class="value">0.1 MB</div>
+                    <div class="label">Memory Usage</div>
+                </div>
+                <div class="metric-card">
+                    <div class="value">79</div>
+                    <div class="label">Target Classes/Values</div>
+                </div>
+            </div>
+        </div>
+
+<h2>🔍 Data Quality Analysis</h2>
+        <h3>Missing Values</h3>
+        <p>Total missing values: <strong>109</strong></p>
+        <h3>Data Quality Warnings</h3><div class="warning">WARNING: Column 'PassengerId' has very high cardinality (700 unique values, 100.0%) - likely an ID column</div><div class="warning">WARNING: Column 'Fare' has very high cardinality (695 unique values, 99.3%) - likely an ID column</div><div class="error">CRITICAL: Target column 'Age' has 94 missing values - these rows will be dropped</div>
+<h2>⚙️ Preprocessing Pipeline</h2><p>The following preprocessing steps were applied:</p><ol><li>('handle_missing', MissingValueHandler(config=<automl.config.settings.AutoMLConfig object at 0x000001595A94D850>))</li><li>('remove_constant', ConstantFeatureRemover(config=<automl.config.settings.AutoMLConfig object at 0x000001595A94D850>))</li><li>('collapse_rare', RareCategoryCollapser(config=<automl.config.settings.AutoMLConfig object at 0x000001595A94D850>))</li><li>('convert_types', DataTypeConverter())</li><li>('handle_outliers', OutlierHandler(config=<automl.config.settings.AutoMLConfig object at 0x000001595A94D850>))</li><li>('encode_categorical', CategoricalEncoder())</li><li>('scale_numeric', NumericScaler())</li><li>('feature_engineering', FeatureEngineer(create_polynomials=True))</li></ol>
+<h2>🎯 Model Training Results</h2><table><thead><tr><th>Model</th><th>Status</th><th>Training Time (s)</th><th>Test RMSE</th><th>Test MAE</th><th>Test R²</th></tr></thead><tbody><tr><td><strong>dummy</strong></td><td>✓ Success</td><td>0.01</td><td>23.3576</td><td>20.4965</td><td>-0.0056</td></tr><tr><td><strong>linear_regression</strong></td><td>✓ Success</td><td>0.01</td><td>24.1827</td><td>21.1998</td><td>-0.0779</td></tr><tr><td><strong>ridge</strong></td><td>✓ Success</td><td>0.13</td><td>23.9729</td><td>21.028</td><td>-0.0593</td></tr><tr class="best-model"><td><strong>lasso</strong></td><td>✓ Success</td><td>0.13</td><td>23.3576</td><td>20.4965</td><td>-0.0056</td></tr><tr><td><strong>elastic_net</strong></td><td>✓ Success</td><td>0.49</td><td>23.667</td><td>20.7853</td><td>-0.0324</td></tr><tr><td><strong>decision_tree</strong></td><td>✓ Success</td><td>0.63</td><td>23.7121</td><td>20.9056</td><td>-0.0364</td></tr><tr><td><strong>knn</strong></td><td>✓ Success</td><td>0.73</td><td>25.0607</td><td>21.8315</td><td>-0.1576</td></tr><tr><td><strong>random_forest</strong></td><td>✓ Success</td><td>18.72</td><td>23.8371</td><td>20.941</td><td>-0.0473</td></tr><tr><td><strong>gradient_boosting</strong></td><td>✓ Success</td><td>10.42</td><td>23.3852</td><td>20.6023</td><td>-0.008</td></tr><tr><td><strong>adaboost</strong></td><td>✓ Success</td><td>6.76</td><td>23.4774</td><td>20.657</td><td>-0.016</td></tr><tr><td><strong>svm</strong></td><td>✓ Success</td><td>0.63</td><td>23.7818</td><td>20.9065</td><td>-0.0425</td></tr><tr><td><strong>xgboost</strong></td><td>✓ Success</td><td>6.15</td><td>23.5947</td><td>20.7714</td><td>-0.0261</td></tr><tr><td><strong>lightgbm</strong></td><td>✓ Success</td><td>2.50</td><td>23.4489</td><td>20.6695</td><td>-0.0135</td></tr></tbody></table>
+        <div class="success">
+            <strong>🏆 Best Model:</strong> lasso with score -0.0056
+        </div>
+
+<h2>💡 Recommendations & Next Steps</h2><h3>Data Quality Improvements</h3><ul><li>INFO: Column 'Pclass' has very low variance (3 unique values)</li><li>INFO: Column 'Sex' has very low variance (2 unique values)</li><li>INFO: Column 'SibSp' has very low variance (4 unique values)</li><li>INFO: Column 'Parch' has very low variance (3 unique values)</li><li>INFO: Column 'Embarked' has very low variance (3 unique values)</li><li>INFO: Column 'Survived' has very low variance (2 unique values)</li><li>INFO: Column 'PassengerId' appears to be an ID - will be excluded from training</li></ul><h3>Model Improvement Suggestions</h3><ul><li>Try feature engineering to create domain-specific features</li><li>Collect more data if possible (especially for minority classes)</li><li>Consider ensemble methods for better performance</li><li>Perform more extensive hyperparameter tuning</li><li>Check for data leakage in features</li></ul>
+        <h3>How to Use This Model</h3>
+        <div class="code-block">
+            <pre><code>import joblib
+
+# Load the model
+model = joblib.load('best_model.pkl')
+
+# Make predictions
+predictions = model.predict(X_new)
+</code></pre>
+        </div>
+
+
+        <div class="timestamp">
+            Report generated on 2025-12-25 13:59:22 by AutoML System v1.0
+        </div>
+    </div>
+</body>
+</html>
