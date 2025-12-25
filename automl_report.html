@@ -186,9 +186,9 @@
 
         <div class="summary-box">
             <h2>📊 Executive Summary</h2>
-            <p><strong>Target Column:</strong> <code>Age</code></p>
+            <p><strong>Target Column:</strong> <code>PassengerId</code></p>
             <p><strong>Task Type:</strong> Regression</p>
-            <p><strong>Best Model:</strong> lasso (Score: -0.0056)</p>
+            <p><strong>Best Model:</strong> lasso (Score: -0.0125)</p>
             
             <div class="metric-grid">
                 <div class="metric-card">
@@ -204,7 +204,7 @@
                     <div class="label">Memory Usage</div>
                 </div>
                 <div class="metric-card">
-                    <div class="value">79</div>
+                    <div class="value">700</div>
                     <div class="label">Target Classes/Values</div>
                 </div>
             </div>
@@ -213,14 +213,14 @@
 <h2>🔍 Data Quality Analysis</h2>
         <h3>Missing Values</h3>
         <p>Total missing values: <strong>109</strong></p>
-        <h3>Data Quality Warnings</h3><div class="warning">WARNING: Column 'PassengerId' has very high cardinality (700 unique values, 100.0%) - likely an ID column</div><div class="warning">WARNING: Column 'Fare' has very high cardinality (695 unique values, 99.3%) - likely an ID column</div><div class="error">CRITICAL: Target column 'Age' has 94 missing values - these rows will be dropped</div>
-<h2>⚙️ Preprocessing Pipeline</h2><p>The following preprocessing steps were applied:</p><ol><li>('handle_missing', MissingValueHandler(config=<automl.config.settings.AutoMLConfig object at 0x000001595A94D850>))</li><li>('remove_constant', ConstantFeatureRemover(config=<automl.config.settings.AutoMLConfig object at 0x000001595A94D850>))</li><li>('collapse_rare', RareCategoryCollapser(config=<automl.config.settings.AutoMLConfig object at 0x000001595A94D850>))</li><li>('convert_types', DataTypeConverter())</li><li>('handle_outliers', OutlierHandler(config=<automl.config.settings.AutoMLConfig object at 0x000001595A94D850>))</li><li>('encode_categorical', CategoricalEncoder())</li><li>('scale_numeric', NumericScaler())</li><li>('feature_engineering', FeatureEngineer(create_polynomials=True))</li></ol>
-<h2>🎯 Model Training Results</h2><table><thead><tr><th>Model</th><th>Status</th><th>Training Time (s)</th><th>Test RMSE</th><th>Test MAE</th><th>Test R²</th></tr></thead><tbody><tr><td><strong>dummy</strong></td><td>✓ Success</td><td>0.01</td><td>23.3576</td><td>20.4965</td><td>-0.0056</td></tr><tr><td><strong>linear_regression</strong></td><td>✓ Success</td><td>0.01</td><td>24.1827</td><td>21.1998</td><td>-0.0779</td></tr><tr><td><strong>ridge</strong></td><td>✓ Success</td><td>0.13</td><td>23.9729</td><td>21.028</td><td>-0.0593</td></tr><tr class="best-model"><td><strong>lasso</strong></td><td>✓ Success</td><td>0.13</td><td>23.3576</td><td>20.4965</td><td>-0.0056</td></tr><tr><td><strong>elastic_net</strong></td><td>✓ Success</td><td>0.49</td><td>23.667</td><td>20.7853</td><td>-0.0324</td></tr><tr><td><strong>decision_tree</strong></td><td>✓ Success</td><td>0.63</td><td>23.7121</td><td>20.9056</td><td>-0.0364</td></tr><tr><td><strong>knn</strong></td><td>✓ Success</td><td>0.73</td><td>25.0607</td><td>21.8315</td><td>-0.1576</td></tr><tr><td><strong>random_forest</strong></td><td>✓ Success</td><td>18.72</td><td>23.8371</td><td>20.941</td><td>-0.0473</td></tr><tr><td><strong>gradient_boosting</strong></td><td>✓ Success</td><td>10.42</td><td>23.3852</td><td>20.6023</td><td>-0.008</td></tr><tr><td><strong>adaboost</strong></td><td>✓ Success</td><td>6.76</td><td>23.4774</td><td>20.657</td><td>-0.016</td></tr><tr><td><strong>svm</strong></td><td>✓ Success</td><td>0.63</td><td>23.7818</td><td>20.9065</td><td>-0.0425</td></tr><tr><td><strong>xgboost</strong></td><td>✓ Success</td><td>6.15</td><td>23.5947</td><td>20.7714</td><td>-0.0261</td></tr><tr><td><strong>lightgbm</strong></td><td>✓ Success</td><td>2.50</td><td>23.4489</td><td>20.6695</td><td>-0.0135</td></tr></tbody></table>
+        <h3>Data Quality Warnings</h3><div class="warning">WARNING: Column 'PassengerId' has very high cardinality (700 unique values, 100.0%) - likely an ID column</div><div class="warning">WARNING: Column 'Fare' has very high cardinality (695 unique values, 99.3%) - likely an ID column</div>
+<h2>⚙️ Preprocessing Pipeline</h2><p>The following preprocessing steps were applied:</p><ol><li>('handle_missing', MissingValueHandler(config=<automl.config.settings.AutoMLConfig object at 0x0000020B2FA2BB10>))</li><li>('remove_constant', ConstantFeatureRemover(config=<automl.config.settings.AutoMLConfig object at 0x0000020B2FA2BB10>))</li><li>('collapse_rare', RareCategoryCollapser(config=<automl.config.settings.AutoMLConfig object at 0x0000020B2FA2BB10>))</li><li>('convert_types', DataTypeConverter())</li><li>('handle_outliers', OutlierHandler(config=<automl.config.settings.AutoMLConfig object at 0x0000020B2FA2BB10>))</li><li>('encode_categorical', CategoricalEncoder())</li><li>('scale_numeric', NumericScaler())</li><li>('feature_engineering', FeatureEngineer(create_polynomials=True))</li></ol>
+<h2>🎯 Model Training Results</h2><table><thead><tr><th>Model</th><th>Status</th><th>Training Time (s)</th><th>Test RMSE</th><th>Test MAE</th><th>Test R²</th></tr></thead><tbody><tr><td><strong>dummy</strong></td><td>✓ Success</td><td>0.01</td><td>210.5421</td><td>184.2626</td><td>-0.0167</td></tr><tr><td><strong>linear_regression</strong></td><td>✓ Success</td><td>0.02</td><td>211.1324</td><td>185.5178</td><td>-0.0224</td></tr><tr><td><strong>ridge</strong></td><td>✓ Success</td><td>0.16</td><td>211.3259</td><td>186.048</td><td>-0.0243</td></tr><tr class="best-model"><td><strong>lasso</strong></td><td>✓ Success</td><td>0.13</td><td>210.1075</td><td>184.7902</td><td>-0.0125</td></tr><tr><td><strong>elastic_net</strong></td><td>✓ Success</td><td>0.38</td><td>210.7537</td><td>185.444</td><td>-0.0188</td></tr><tr><td><strong>decision_tree</strong></td><td>✓ Success</td><td>0.61</td><td>212.869</td><td>184.8314</td><td>-0.0393</td></tr><tr><td><strong>adaboost</strong></td><td>✓ Success</td><td>5.76</td><td>212.5477</td><td>186.5141</td><td>-0.0362</td></tr><tr><td><strong>lightgbm</strong></td><td>✓ Success</td><td>1.11</td><td>210.515</td><td>184.2572</td><td>-0.0164</td></tr></tbody></table>
         <div class="success">
-            <strong>🏆 Best Model:</strong> lasso with score -0.0056
+            <strong>🏆 Best Model:</strong> lasso with score -0.0125
         </div>
 
-<h2>💡 Recommendations & Next Steps</h2><h3>Data Quality Improvements</h3><ul><li>INFO: Column 'Pclass' has very low variance (3 unique values)</li><li>INFO: Column 'Sex' has very low variance (2 unique values)</li><li>INFO: Column 'SibSp' has very low variance (4 unique values)</li><li>INFO: Column 'Parch' has very low variance (3 unique values)</li><li>INFO: Column 'Embarked' has very low variance (3 unique values)</li><li>INFO: Column 'Survived' has very low variance (2 unique values)</li><li>INFO: Column 'PassengerId' appears to be an ID - will be excluded from training</li></ul><h3>Model Improvement Suggestions</h3><ul><li>Try feature engineering to create domain-specific features</li><li>Collect more data if possible (especially for minority classes)</li><li>Consider ensemble methods for better performance</li><li>Perform more extensive hyperparameter tuning</li><li>Check for data leakage in features</li></ul>
+<h2>💡 Recommendations & Next Steps</h2><h3>Data Quality Improvements</h3><ul><li>INFO: Column 'Pclass' has very low variance (3 unique values)</li><li>INFO: Column 'Sex' has very low variance (2 unique values)</li><li>INFO: Column 'SibSp' has very low variance (4 unique values)</li><li>INFO: Column 'Parch' has very low variance (3 unique values)</li><li>INFO: Column 'Embarked' has very low variance (3 unique values)</li><li>INFO: Column 'Survived' has very low variance (2 unique values)</li></ul><h3>Model Improvement Suggestions</h3><ul><li>Try feature engineering to create domain-specific features</li><li>Collect more data if possible (especially for minority classes)</li><li>Consider ensemble methods for better performance</li><li>Perform more extensive hyperparameter tuning</li><li>Check for data leakage in features</li></ul>
         <h3>How to Use This Model</h3>
         <div class="code-block">
             <pre><code>import joblib
@@ -235,7 +235,7 @@ predictions = model.predict(X_new)
 
 
         <div class="timestamp">
-            Report generated on 2025-12-25 13:59:22 by AutoML System v1.0
+            Report generated on 2025-12-25 14:09:29 by AutoML System v1.0
         </div>
     </div>
 </body>
