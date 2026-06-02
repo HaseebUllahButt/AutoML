@@ -1,285 +1,134 @@
-# CS-245 AutoML System for Classification
+# 🤖 Production-Grade AutoML System for Classification & Regression
 
-A comprehensive automated machine learning system built with Streamlit for classification tasks.
+A comprehensive, clean-architecture Automated Machine Learning (AutoML) platform designed to automate end-to-end machine learning pipelines. Built with a modular Python backend and an interactive Streamlit frontend, this system handles messy, real-world datasets with extreme edge-case resilience and zero-config deployment.
 
-## 🎯 Project Overview
+🔗 **[Live Demo App](https://haseeb-automl.streamlit.app)**
 
-This AutoML system provides end-to-end automation for classification machine learning pipelines, from data upload to model deployment. Built as part of CS-245 Machine Learning course requirements.
+---
 
-## ✨ Features
+## 🏗️ Clean Architecture Overview
 
-### ✅ Complete CS-245 Requirements
+This project is built using decoupled software design patterns. It separates data validation, profiling, preprocessing, model registry, hyperparameter tuning, and reporting into distinct modules adhering to SOLID principles.
 
-- **Dataset Upload & Basic Info**
-  - CSV file support
-  - Automatic metadata display (rows, columns, types, memory)
-  - Summary statistics
-  - Class distribution visualization
+```mermaid
+graph TD
+    A[Raw CSV/TSV File] --> B[Data Ingestor]
+    B -->|BOM, Encodings, Delimiters Handled| C[Data Profiler]
+    C -->|EDA & Quality Profiling| D[Issue Detector]
+    D -->|User Approval Workflow| E[Preprocessing Pipeline Builder]
+    E -->|Clean, Encoded & Scaled Data| F[Model Trainer]
+    F -->|Model Registry / HP Tuning| G[Evaluation Dashboard]
+    G -->|Comparison Metrics, Confusion Matrix| H[Best Model & Standalone HTML Report]
+```
 
-- **Comprehensive EDA**
-  - Missing value analysis with visualizations
-  - Outlier detection (IQR method)
-  - Correlation matrix heatmap
-  - Distribution plots for numerical features
-  - Bar charts for categorical features
-  - Train/test split summary
+---
 
-- **Issue Detection & User Approval**
-  - Automatic detection of data quality issues
-  - Missing values flagging
-  - Outlier detection
-  - Class imbalance detection
-  - High cardinality warnings
-  - User approval workflow for fixes
+## 🌟 Core Features & Engineering Highlights
 
-- **Preprocessing Options**
-  - User-selectable missing value imputation (mean/median/mode/constant)
-  - Outlier handling (removal/capping)
-  - Feature scaling (StandardScaler/MinMaxScaler)
-  - Categorical encoding (One-Hot/Ordinal)
-  - Configurable train-test split (default 80/20)
+### 1. 📥 Robust Data Ingestion
+- **Automatic Encoding Detection**: Leverages `chardet` alongside multi-encoding attempts (`utf-8`, `latin-1`, etc.) to read files without Unicode errors.
+- **Smart Delimiter Detection**: Samples file lines and uses statistical consistency (mean/std ratio) to automatically detect commas, semicolons, tabs, and pipes.
+- **Compression & Format Support**: Seamlessly extracts and reads `.zip` and `.gzip` files, and automatically detects if an Excel or HTML file is incorrectly disguised with a `.csv` extension.
+- **Pre-Clean Safeguards**: Detects and strips Byte Order Marks (BOM), removes duplicate/empty column names, and discards repeated headers.
 
-- **Model Training**
-  - 7 classification algorithms:
-    1. Logistic Regression
-    2. K-Nearest Neighbors
-    3. Decision Tree
-    4. Naive Bayes
-    5. Random Forest
-    6. Support Vector Machine
-    7. Rule-based Classifier (Dummy)
-  - Hyperparameter optimization (Grid/Random Search)
-  - Comprehensive metrics:
-    - Accuracy
-    - Precision, Recall, F1-score
-    - Confusion matrix
-    - ROC-AUC (binary classification)
-    - Training time
+### 2. 🔍 Automated Profiling & Data Quality Checks
+- **Exploratory Data Analysis (EDA)**: Automatic calculation of dataset statistics, missing value ratios, and outlier ratios.
+- **Visualizations**: Matplotlib & Seaborn-powered correlation matrix heatmaps, numerical distribution histograms, and categorical frequency bar charts.
+- **Intelligent Issue Detection**: Identifies critical dataset concerns:
+  - **Dataset Feasibility**: High-dimensionality warnings ($features > samples$) and small sample counts.
+  - **Class Imbalance**: Flags skew in class distribution.
+  - **Outliers & Cardinality**: Detects extreme values and flags high-cardinality columns.
+- **User-in-the-Loop Fixes**: A dedicated Streamlit interface allowing users to review and approve suggested preprocessing fixes.
 
-- **Model Comparison Dashboard**
-  - Sortable comparison table
-  - Bar charts for metric visualization
-  - Confusion matrix heatmap
-  - Downloadable CSV results
-  - Best model ranking
+### 3. ⚙️ Preprocessing Pipeline
+- **Dynamic Imputation**: Custom strategies for mean, median, mode, or constant imputation.
+- **Currency & Unit Cleaning**: Automatically detects currency symbols and units of measurement (e.g., "kg", "ft", "$") in string columns, parses them, and cleans them into floating point values.
+- **Categorical Encoders**: Smart One-Hot and Ordinal encoding with automatic rare category collapsing.
+- **Feature Leakage Prevention**: Identifies and automatically drops identifier columns (e.g., `id`, `uuid`, `index`).
+- **Feature Scaling**: Configurable Standard and Min-Max scaling.
 
-- **Auto-Generated Report**
-  - PDF/HTML export
-  - Dataset overview
-  - EDA findings
-  - Detected issues
-  - Preprocessing decisions
-  - Model configurations
-  - Comparison tables
-  - Best model justification
+### 4. 🎯 Model Registry & Trainer Suite
+- **Comprehensive Algorithm Support**: Fits up to 9 classification and 11 regression algorithms:
+  - Linear/Logistic Regression, Random Forests, Gradient Boosting (AdaBoost, XGBoost, LightGBM), K-Nearest Neighbors, SVMs, and Naive Bayes.
+  - Baseline `Dummy` classifiers and regressors are used as control variables to measure exact value add.
+- **Randomized Hyperparameter Tuning**: Automatically optimizes models via randomized grid search cross-validation.
+- **Resource Guardrails**: Enforces time limits (`MAX_TRAINING_TIME_SECONDS`), limits training rows on large datasets, and manages parallel job counts to prevent memory overflows.
 
-## 🚀 Quick Start
+### 5. 📊 Evaluation Dashboard & Reporting
+- **Metric Dashboards**: Shows sortable comparison tables of training time, accuracy, precision, recall, F1-score, RMSE, MAE, and $R^2$.
+- **Interactive Visuals**: Confusion matrices, class distribution plots, and correlation matrices.
+- **Automated Report Generation**: Generates standalone HTML executive summaries detailing the data quality profile, preprocessing steps, training configurations, and next steps for loading the model.
 
-### Prerequisites
+---
 
-- Python 3.8 or higher
-- pip package manager
+## 📁 Project Directory Structure
 
-### Installation
+```
+AutoML/
+├── app.py                      # Interactive Streamlit Web Interface
+├── requirements.txt            # Python Dependencies
+├── README.md                   # System Documentation
+│
+├── automl/                     # Core Backend Framework
+│   ├── config/
+│   │   └── settings.py        # Centralized system settings and thresholds
+│   ├── data/
+│   │   ├── ingestion.py       # Robust file ingestion and format resolution
+│   │   ├── profiling.py       # Statistical profiling and EDA
+│   │   └── validation.py      # Column-level validation & unit/currency cleaner
+│   ├── preprocessing/
+│   │   ├── cleaners.py        # Missing value, outlier, and variance cleaners
+│   │   ├── encoders.py        # Scalers, categorical encoders, and feature engineering
+│   │   └── pipeline_builder.py# Scikit-learn Pipeline orchestrator
+│   ├── models/
+│   │   ├── trainer.py         # Cross-validation, tuning, and evaluation
+│   │   └── model_registry.py  # Model configurations and parameter spaces
+│   ├── reports/
+│   │   └── report_generator.py# HTML report generator engine
+│   └── utils/
+│       ├── error_handlers.py  # Customized exceptions and error boundaries
+│       └── logger.py          # Unified logger settings
+│
+└── sample_data/               # Pre-bundled datasets (Iris, Titanic, Wine)
+```
 
-1. Clone the repository:
+---
+
+## 🚀 Getting Started
+
+### 1. Installation
+Clone the repository:
 ```bash
 git clone https://github.com/HaseebUllahButt/AutoML.git
 cd AutoML
 ```
 
-2. Create virtual environment:
+Create and activate a virtual environment:
 ```bash
 python -m venv .venv
-source .venv/bin/activate  # On Windows: .venv\\Scripts\\activate
+source .venv/bin/activate  # On Windows use: .venv\Scripts\activate
 ```
 
-3. Install dependencies:
+Install dependencies:
 ```bash
 pip install -r requirements.txt
 ```
 
-4. Run the application:
+### 2. Run the Web Interface
+Launch the Streamlit app:
 ```bash
 streamlit run app.py
 ```
+The interface will automatically load at `http://localhost:8501`.
 
-The app will open at `http://localhost:8501`
-
-## 📖 Usage Guide
-
-### Step 1: Upload Dataset
-- Navigate to "📤 Upload" tab
-- Upload CSV file (max 500MB)
-- Review dataset preview and metadata
-
-### Step 2: EDA & Issue Detection
-- Go to "�� EDA & Issues" tab
-- Select target column
-- Click "🔍 Analyze Dataset"
-- Review:
-  - Missing values
-  - Outliers (IQR method)
-  - Correlation matrix
-  - Feature distributions
-  - Detected issues
-- Approve suggested fixes
-
-### Step 3: Configure Preprocessing
-- Use sidebar to select:
-  - Missing value strategy
-  - Scaling method
-  - Encoding method
-  - Train-test split ratio
-- Go to "⚙️ Preprocessing" tab
-- Click "⚙️ Build Pipeline"
-
-### Step 4: Train Models
-- Navigate to "🎯 Training" tab
-- Optional: Enable fast mode for quick training
-- Click "🎯 Train Models"
-- Monitor progress
-- View best model
-
-### Step 5: Compare Results
-- Go to "📈 Results" tab
-- Review model comparison table
-- View metric bar charts
-- Check confusion matrix
-- Download results CSV
-
-### Step 6: Export Report
-- Navigate to "💾 Export" tab
-- Click "📄 Generate Report"
-- Download PDF report
-
-## 🏗️ Project Structure
-
-```
-AutoML/
-├── app.py                    # Main Streamlit application
-├── requirements.txt          # Python dependencies
-├── README.md                # This file
-│
-├── automl/                  # Core AutoML modules
-│   ├── config/
-│   │   └── settings.py      # Configuration
-│   ├── data/
-│   │   ├── ingestion.py     # Data loading
-│   │   └── profiling.py     # EDA analysis
-│   ├── preprocessing/
-│   │   └── pipeline_builder.py  # Preprocessing
-│   ├── models/
-│   │   ├── trainer.py       # Model training
-│   │   └── model_registry.py    # Model configs
-│   ├── reports/
-│   │   └── report_generator.py  # PDF generation
-│   └── utils/
-│       └── error_handlers.py    # Error handling
-│
-├── sample_data/             # Test datasets
-│   ├── iris.csv
-│   ├── titanic.csv
-│   └── wine.csv
-│
-└── outputs/                 # Generated reports
-```
-
-## 🔧 Configuration
-
-Preprocessing options can be configured via the sidebar:
-
-- **Missing Value Imputation**: mean, median, mode, constant
-- **Feature Scaling**: StandardScaler, MinMaxScaler, None
-- **Categorical Encoding**: One-Hot, Ordinal
-- **Test Set Size**: 10-40% (default: 20%)
-- **Fast Mode**: Train only quick models (LR, NB, DT)
-
-## 📦 Dependencies
-
-- streamlit >= 1.28.0
-- pandas >= 2.0.0
-- numpy >= 1.24.0
-- scikit-learn >= 1.3.0
-- matplotlib >= 3.7.0
-- seaborn >= 0.12.0
-- scipy >= 1.10.0
-
-See `requirements.txt` for complete list.
-
-## 🌐 Streamlit Cloud Deployment
-
-### Deploy to Streamlit Cloud:
-
-1. Push code to GitHub
-2. Go to [share.streamlit.io](https://share.streamlit.io/)
-3. Connect your repository
-4. Select `app.py` as main file
-5. Click "Deploy"
-
-### Live Demo
-
-🔗 [Live App](https://haseeb-automl.streamlit.app)
-
-## 📊 Sample Datasets
-
-Test datasets are provided in `sample_data/`:
-- **iris.csv**: Classic flower classification (150 samples, 4 features)
-- **titanic.csv**: Survival prediction (891 samples, 11 features)
-- **wine.csv**: Wine quality classification (178 samples, 13 features)
-
-## 🎓 CS-245 Requirements Coverage
-
-| Requirement | Status | Location |
-|------------|--------|----------|
-| Dataset Upload | ✅ | Tab 1 |
-| Basic Metadata | ✅ | Tab 1 |
-| Missing Value Analysis | ✅ | Tab 2 |
-| Outlier Detection | ✅ | Tab 2 |
-| Correlation Matrix | ✅ | Tab 2 |
-| Distribution Plots | ✅ | Tab 2 |
-| Categorical Bar Plots | ✅ | Tab 2 |
-| Issue Detection | ✅ | Tab 2 |
-| User Approval Workflow | ✅ | Tab 2 |
-| Preprocessing Options | ✅ | Sidebar + Tab 3 |
-| 7 Classification Models | ✅ | Tab 4 |
-| Hyperparameter Optimization | ✅ | Tab 4 |
-| Model Metrics | ✅ | Tab 5 |
-| Comparison Dashboard | ✅ | Tab 5 |
-| Downloadable CSV | ✅ | Tab 5 |
-| Confusion Matrix | ✅ | Tab 5 |
-| PDF Report | ✅ | Tab 6 |
-| Streamlit Cloud Ready | ✅ | Yes |
-
-## 🐛 Troubleshooting
-
-**Issue**: Plots not showing
-- **Solution**: Restart the app, clear browser cache
-
-**Issue**: Training takes too long
-- **Solution**: Enable "Fast Mode" in sidebar
-
-**Issue**: Out of memory
-- **Solution**: Reduce dataset size or increase system RAM
+---
 
 ## 👥 Contributors
 
-- Haseeb Ullah Butt
+- **Haseeb Ullah Butt**
+
+---
 
 ## 📝 License
 
 This project is created for educational purposes as part of CS-245 Machine Learning course.
-
-## 🙏 Acknowledgments
-
-- CS-245 Course Instructors
-- Streamlit Documentation
-- scikit-learn Community
-- Open-source ML Community
-
----
-
-**Course**: CS-245 Machine Learning  
-**Project**: AutoML System for Classification  
-**Date**: December 2025  
-**Status**: ✅ Complete & Deployed
