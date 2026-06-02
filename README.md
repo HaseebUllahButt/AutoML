@@ -126,7 +126,7 @@ The interface will automatically load at `http://localhost:8501`.
 ## 👥 Contributors
 
 - **Haseeb Ullah Butt**
-
+- **Ali Mubashir**
 ---
 
 ## 📝 License
