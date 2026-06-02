@@ -84,8 +84,8 @@ This AutoML system provides end-to-end automation for classification machine lea
 
 1. Clone the repository:
 ```bash
-git clone <repository-url>
-cd proj
+git clone https://github.com/HaseebUllahButt/AutoML.git
+cd AutoML
 ```
 
 2. Create virtual environment:
@@ -156,7 +156,7 @@ The app will open at `http://localhost:8501`
 ## 🏗️ Project Structure
 
 ```
-proj/
+AutoML/
 ├── app.py                    # Main Streamlit application
 ├── requirements.txt          # Python dependencies
 ├── README.md                # This file
@@ -218,8 +218,8 @@ See `requirements.txt` for complete list.
 5. Click "Deploy"
 
 ### Live Demo
-<!-- Add your Streamlit Cloud URL here after deployment -->
-🔗 [Live App](https://your-app-url.streamlit.app)
+
+🔗 [Live App](https://haseeb-automl.streamlit.app)
 
 ## 📊 Sample Datasets
 
@@ -264,9 +264,7 @@ Test datasets are provided in `sample_data/`:
 
 ## 👥 Contributors
 
-- Your Name
-- Team Member 2 (if applicable)
-- Team Member 3 (if applicable)
+- Haseeb Ullah Butt
 
 ## 📝 License
 
