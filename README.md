@@ -3,19 +3,115 @@
 A comprehensive, clean-architecture Automated Machine Learning (AutoML) platform designed to automate end-to-end machine learning pipelines. Built with a modular Python backend and an interactive Streamlit frontend, this system handles messy, real-world datasets with extreme edge-case resilience and zero-config deployment.
 ---
 
-## 🏗️ Clean Architecture Overview
+## 🏗️ System Architecture
 
-This project is built using decoupled software design patterns. It separates data validation, profiling, preprocessing, model registry, hyperparameter tuning, and reporting into distinct modules adhering to SOLID principles.
+### Pipeline Flow
 
 ```mermaid
-graph TD
-    A[Raw CSV/TSV File] --> B[Data Ingestor]
-    B -->|BOM, Encodings, Delimiters Handled| C[Data Profiler]
-    C -->|EDA & Quality Profiling| D[Issue Detector]
-    D -->|User Approval Workflow| E[Preprocessing Pipeline Builder]
-    E -->|Clean, Encoded & Scaled Data| F[Model Trainer]
-    F -->|Model Registry / HP Tuning| G[Evaluation Dashboard]
-    G -->|Comparison Metrics, Confusion Matrix| H[Best Model & Standalone HTML Report]
+flowchart TD
+    U(["👤 User"]):::user
+
+    subgraph UI["🖥️ Streamlit Frontend  (app.py)"]
+        direction TB
+        T1["📤 Upload Tab"]
+        T2["🔍 EDA & Issues Tab"]
+        T3["⚙️ Preprocessing Tab"]
+        T4["🎯 Training Tab"]
+        T5["📈 Results Tab"]
+        T6["💾 Export Tab"]
+    end
+
+    subgraph INGEST["📥 Data Layer  (automl/data/)"]
+        direction TB
+        DI["DataIngestor\n─────────────────\n• Encoding detection\n• Delimiter heuristics\n• Compression handling\n• BOM & header cleanup"]
+        DP["DataProfiler\n─────────────────\n• Summary statistics\n• Missing value ratios\n• Outlier detection (IQR)\n• Class distribution"]
+        DV["ColumnValidator\n─────────────────\n• Currency & unit stripping\n• Boolean inference\n• Mixed-type coercion"]
+    end
+
+    subgraph PREP["⚙️ Preprocessing Layer  (automl/preprocessing/)"]
+        direction TB
+        CL["Cleaners\n─────────────────\n• MissingValueHandler\n• OutlierHandler (IQR/Z)\n• ConstantFeatureRemover\n• HighCardinalityHandler\n• RareCategoryCollapser"]
+        EN["Encoders\n─────────────────\n• CategoricalEncoder (OHE/Ordinal)\n• NumericScaler (Standard/MinMax)\n• FeatureEngineer (Polynomial)"]
+        PB["PipelineBuilder\n─────────────────\n• sklearn.Pipeline orchestration\n• Leakage column removal\n• Duplicate row removal\n• fit_transform / transform"]
+    end
+
+    subgraph MODELS["🎯 Model Layer  (automl/models/)"]
+        direction TB
+        MR["ModelRegistry\n─────────────────\n• Logistic / Linear Regression\n• Decision Tree / Random Forest\n• KNN / Naive Bayes / SVM\n• GradBoost / AdaBoost\n• XGBoost / LightGBM"]
+        MT["ModelTrainer\n─────────────────\n• RandomizedSearchCV tuning\n• StratifiedKFold CV\n• Timeout & resource guardrails\n• Best-model selection vs Dummy"]
+    end
+
+    subgraph REPORT["📊 Output Layer  (automl/reports/)"]
+        RG["ReportGenerator\n─────────────────\n• HTML executive summary\n• EDA findings\n• Preprocessing steps log\n• Model comparison table\n• Next-steps & code snippet"]
+    end
+
+    subgraph CFG["🔧 Cross-Cutting  (automl/config/ & utils/)"]
+        direction LR
+        S["AutoMLConfig\n(settings.py)"]
+        E["ErrorHandlers\n(error_handlers.py)"]
+        L["Logger\n(logger.py)"]
+    end
+
+    U --> T1
+    T1 -->|CSV upload| DI
+    DI -->|clean DataFrame| DP
+    DP -->|profile dict| DV
+    DV -->|validated df| T2
+    T2 -->|issues + approval| T3
+    T3 -->|config choices| CL
+    CL --> EN
+    EN --> PB
+    PB -->|X_processed, y| T4
+    T4 --> MR
+    MR -->|model configs + param grids| MT
+    MT -->|all_results, best_model| T5
+    T5 --> T6
+    T6 --> RG
+    RG -->|automl_report.html| U
+
+    CFG -. "settings & error boundaries" .-> INGEST
+    CFG -. "settings & error boundaries" .-> PREP
+    CFG -. "settings & error boundaries" .-> MODELS
+
+    classDef user fill:#6366f1,color:#fff,stroke:none,rx:8
+    classDef layer fill:#1e293b,color:#94a3b8,stroke:#334155
+    classDef mod fill:#0f172a,color:#e2e8f0,stroke:#1e293b,rx:6
+```
+
+### Module Dependency Map
+
+```mermaid
+graph LR
+    APP["app.py"]
+
+    APP --> DI2["data/ingestion.py"]
+    APP --> DP2["data/profiling.py"]
+    APP --> PB2["preprocessing/pipeline_builder.py"]
+    APP --> MT2["models/trainer.py"]
+    APP --> RG2["reports/report_generator.py"]
+
+    PB2 --> CL2["preprocessing/cleaners.py"]
+    PB2 --> EN2["preprocessing/encoders.py"]
+    PB2 --> DP2
+    PB2 --> DV2["data/validation.py"]
+
+    MT2 --> MR2["models/model_registry.py"]
+
+    DI2 --> CFG2["config/settings.py"]
+    DP2 --> CFG2
+    PB2 --> CFG2
+    MT2 --> CFG2
+    RG2 --> CFG2
+
+    DI2 --> EH["utils/error_handlers.py"]
+    DP2 --> EH
+    PB2 --> EH
+    MT2 --> EH
+    RG2 --> EH
+
+    style APP fill:#6366f1,color:#fff,stroke:none
+    style CFG2 fill:#0ea5e9,color:#fff,stroke:none
+    style EH fill:#f59e0b,color:#fff,stroke:none
 ```
 
 ---
