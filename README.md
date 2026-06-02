@@ -1,9 +1,6 @@
 # 🤖 Production-Grade AutoML System for Classification & Regression
 
 A comprehensive, clean-architecture Automated Machine Learning (AutoML) platform designed to automate end-to-end machine learning pipelines. Built with a modular Python backend and an interactive Streamlit frontend, this system handles messy, real-world datasets with extreme edge-case resilience and zero-config deployment.
-
-🔗 **[Live Demo App](https://haseeb-automl.streamlit.app)**
-
 ---
 
 ## 🏗️ Clean Architecture Overview
